@@ -25,7 +25,8 @@ For more detailed instructions, see the [User Guide](https://se-education.org/ad
 * Delete contacts
 * For the detailed documentation of this project, see the **[CLIentTracker Product Website](https://se-education.org/addressbook-level3)**. 
 
-This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
+*Acknowledgment: This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org)*
 
 Test CI Image(first fork)
 [![codecov](https://codecov.io/github/AY2526S2-CS2103T-T14-2/tp/branch/CI/graph/badge.svg?token=V1JGR23D01)](https://codecov.io/github/AY2526S2-CS2103T-T14-2/tp)
+
