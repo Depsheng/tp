@@ -476,13 +476,24 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-
-*{More to be added}*
+4. The application should _respond to user commands_ within 1 second for typical operations (e.g., add, delete, edit, list, search) under normal load
+5. The system should _persist all data_ locally so that client information is retained after the application is closed and reopened
+6. The application should _gracefully handle invalid inputs_ by displaying clear error messages without crashing
+7. The system should _maintain data_ integrity, ensuring that duplicate contacts or invalid fields are prevented according to validation rules
+8. The application should _automatically_ save changes to storage after any command that modifies the data
+9. The application should maintain _readability and maintainability of code_, following standard Java coding conventions and modular architecture
+10. The system should be designed so that _new commands or features can be added with minimal modification to existing components_
 
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Client** A person whose contact information and interaction details are managed by the application
+* **Contact** The stored record containing a client’s information such as name, phone number, email, address, and other relevant details
+* **Filtered List** A subset of contacts displayed after applying search or filter commands.
+* **Command** A text instruction entered by the user to perform an operation in the system (e.g., add, delete, edit, list).
+* **Persistence** The capability of the application to save data to storage so it remains available across application restarts.
+* **Index** The number assigned to a contact in the displayed list, used to identify that contact when performing commands like delete or edit.
 
 --------------------------------------------------------------------------------------------------------------------
 
