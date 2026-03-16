@@ -1,0 +1,223 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. See https://docs.gradle.org/7.4.2/userguide/gradle_daemon.html#sec:disabling_the_daemon.
+Daemon will be stopped at the end of the build
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :checkstyleMain UP-TO-DATE
+
+> Task :compileTestJava
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:5: error: cannot find symbol
+import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_AMY;
+^
+  symbol:   static VALID_REMARK_AMY
+  location: class CommandTestUtil
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:6: error: cannot find symbol
+import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_BOB;
+^
+  symbol:   static VALID_REMARK_BOB
+  location: class CommandTestUtil
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\DeleteCommandTest.java:33: error: incompatible types: Index cannot be converted to Phone
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
+                                                        ^
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\DeleteCommandTest.java:47: error: incompatible types: Index cannot be converted to Phone
+        DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
+                                                        ^
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\DeleteCommandTest.java:57: error: incompatible types: Index cannot be converted to Phone
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
+                                                        ^
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\DeleteCommandTest.java:77: error: incompatible types: Index cannot be converted to Phone
+        DeleteCommand deleteCommand = new DeleteCommand(outOfBoundIndex);
+                                                        ^
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\DeleteCommandTest.java:84: error: incompatible types: Index cannot be converted to Phone
+        DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST_PERSON);
+                                                             ^
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\DeleteCommandTest.java:85: error: incompatible types: Index cannot be converted to Phone
+        DeleteCommand deleteSecondCommand = new DeleteCommand(INDEX_SECOND_PERSON);
+                                                              ^
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\DeleteCommandTest.java:91: error: incompatible types: Index cannot be converted to Phone
+        DeleteCommand deleteFirstCommandCopy = new DeleteCommand(INDEX_FIRST_PERSON);
+                                                                 ^
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\DeleteCommandTest.java:107: error: incompatible types: Index cannot be converted to Phone
+        DeleteCommand deleteCommand = new DeleteCommand(targetIndex);
+                                                        ^
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:38: error: cannot find symbol
+        Person editedPerson = new PersonBuilder(firstPerson).withRemark(REMARK_STUB).build();
+                                                            ^
+  symbol:   method withRemark(String)
+  location: class PersonBuilder
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:40: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON, new Remark(editedPerson.getRemark().value));
+        ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:40: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON, new Remark(editedPerson.getRemark().value));
+                                          ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:40: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON, new Remark(editedPerson.getRemark().value));
+                                                                                                   ^
+  symbol:   method getRemark()
+  location: variable editedPerson of type Person
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:42: error: cannot find symbol
+        String expectedMessage = String.format(RemarkCommand.MESSAGE_ADD_REMARK_SUCCESS, editedPerson);
+                                               ^
+  symbol:   variable RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:53: error: cannot find symbol
+        Person editedPerson = new PersonBuilder(firstPerson).withRemark("").build();
+                                                            ^
+  symbol:   method withRemark(String)
+  location: class PersonBuilder
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:55: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON,
+        ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:55: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON,
+                                          ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:56: error: cannot find symbol
+                new Remark(editedPerson.getRemark().toString()));
+                                       ^
+  symbol:   method getRemark()
+  location: variable editedPerson of type Person
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:58: error: cannot find symbol
+        String expectedMessage = String.format(RemarkCommand.MESSAGE_DELETE_REMARK_SUCCESS, editedPerson);
+                                               ^
+  symbol:   variable RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:72: error: cannot find symbol
+                .withRemark(REMARK_STUB).build();
+                ^
+  symbol:   method withRemark(String)
+  location: class PersonBuilder
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:74: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON, new Remark(editedPerson.getRemark().value));
+        ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:74: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON, new Remark(editedPerson.getRemark().value));
+                                          ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:74: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(INDEX_FIRST_PERSON, new Remark(editedPerson.getRemark().value));
+                                                                                                   ^
+  symbol:   method getRemark()
+  location: variable editedPerson of type Person
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:76: error: cannot find symbol
+        String expectedMessage = String.format(RemarkCommand.MESSAGE_ADD_REMARK_SUCCESS, editedPerson);
+                                               ^
+  symbol:   variable RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:87: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(outOfBoundIndex, new Remark(VALID_REMARK_BOB));
+        ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:87: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(outOfBoundIndex, new Remark(VALID_REMARK_BOB));
+                                          ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:87: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(outOfBoundIndex, new Remark(VALID_REMARK_BOB));
+                                                                                    ^
+  symbol:   variable VALID_REMARK_BOB
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:103: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(outOfBoundIndex, new Remark(VALID_REMARK_BOB));
+        ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:103: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(outOfBoundIndex, new Remark(VALID_REMARK_BOB));
+                                          ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:103: error: cannot find symbol
+        RemarkCommand remarkCommand = new RemarkCommand(outOfBoundIndex, new Remark(VALID_REMARK_BOB));
+                                                                                    ^
+  symbol:   variable VALID_REMARK_BOB
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:110: error: cannot find symbol
+        final RemarkCommand standardCommand = new RemarkCommand(INDEX_FIRST_PERSON,
+              ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:110: error: cannot find symbol
+        final RemarkCommand standardCommand = new RemarkCommand(INDEX_FIRST_PERSON,
+                                                  ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:111: error: cannot find symbol
+                new Remark(VALID_REMARK_AMY));
+                           ^
+  symbol:   variable VALID_REMARK_AMY
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:114: error: cannot find symbol
+        RemarkCommand commandWithSameValues = new RemarkCommand(INDEX_FIRST_PERSON,
+        ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:114: error: cannot find symbol
+        RemarkCommand commandWithSameValues = new RemarkCommand(INDEX_FIRST_PERSON,
+                                                  ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:115: error: cannot find symbol
+                new Remark(VALID_REMARK_AMY));
+                           ^
+  symbol:   variable VALID_REMARK_AMY
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:128: error: cannot find symbol
+        assertFalse(standardCommand.equals(new RemarkCommand(INDEX_SECOND_PERSON,
+                                               ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:129: error: cannot find symbol
+                new Remark(VALID_REMARK_AMY))));
+                           ^
+  symbol:   variable VALID_REMARK_AMY
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:132: error: cannot find symbol
+        assertFalse(standardCommand.equals(new RemarkCommand(INDEX_FIRST_PERSON,
+                                               ^
+  symbol:   class RemarkCommand
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\commands\RemarkCommandTest.java:133: error: cannot find symbol
+                new Remark(VALID_REMARK_BOB))));
+                           ^
+  symbol:   variable VALID_REMARK_BOB
+  location: class RemarkCommandTest
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\parser\AddressBookParserTest.java:53: error: incompatible types: Index cannot be converted to Phone
+        assertEquals(new DeleteCommand(INDEX_FIRST_PERSON), command);
+                                       ^
+C:\Users\hw\IdeaProjects\tp\src\test\java\seedu\address\logic\parser\DeleteCommandParserTest.java:25: error: incompatible types: Index cannot be converted to Phone
+        assertParseSuccess(parser, "1", new DeleteCommand(INDEX_FIRST_PERSON));
+                                                          ^
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+43 errors
+
+
+> Task :compileTestJava FAILED
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileTestJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org
+
+BUILD FAILED in 11s
+4 actionable tasks: 1 executed, 3 up-to-date

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.PhoneContainsKeywordPredicate;
 
 public class FindCommandParserTest {
 
@@ -29,6 +30,23 @@ public class FindCommandParserTest {
 
         // multiple whitespaces between keywords
         assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_validPhoneArg_returnsFindCommand() {
+        // phone search with p/ prefix
+        FindCommand expectedFindCommand =
+                new FindCommand(new PhoneContainsKeywordPredicate(Arrays.asList("9876543210")));
+        assertParseSuccess(parser, "p/9876543210", expectedFindCommand);
+
+        // phone search with leading/trailing whitespaces
+        assertParseSuccess(parser, "  p/9876543210  ", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_emptyPhoneArg_throwsParseException() {
+        assertParseFailure(parser, "p/", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "p/   ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
 }
