@@ -6,12 +6,12 @@ import java.util.function.Predicate;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person}'s {@code Phone} matches any of the keywords given.
+ * Tests that a {@code Person}'s {@code Phone} contains any of the keywords given.
  */
-public class PhoneContainsKeywordsPredicate implements Predicate<Person> {
+public class PhoneContainsKeywordPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
-    public PhoneContainsKeywordsPredicate(List<String> keywords) {
+    public PhoneContainsKeywordPredicate(List<String> keywords) {
         this.keywords = keywords;
     }
 
@@ -27,12 +27,13 @@ public class PhoneContainsKeywordsPredicate implements Predicate<Person> {
             return true;
         }
 
-        if (!(other instanceof PhoneContainsKeywordsPredicate)) {
+        // instanceof handles nulls
+        if (!(other instanceof PhoneContainsKeywordPredicate)) {
             return false;
         }
 
-        PhoneContainsKeywordsPredicate otherPhoneContainsKeywordsPredicate = (PhoneContainsKeywordsPredicate) other;
-        return keywords.equals(otherPhoneContainsKeywordsPredicate.keywords);
+        PhoneContainsKeywordPredicate otherPhoneContainsKeywordPredicate = (PhoneContainsKeywordPredicate) other;
+        return keywords.equals(otherPhoneContainsKeywordPredicate.keywords);
     }
 
     @Override

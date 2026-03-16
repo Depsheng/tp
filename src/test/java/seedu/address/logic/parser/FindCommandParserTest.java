@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
-import seedu.address.model.person.PhoneContainsKeywordsPredicate;
+import seedu.address.model.person.PhoneContainsKeywordPredicate;
 
 public class FindCommandParserTest {
 
@@ -33,22 +33,20 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validPhoneArgs_returnsFindCommand() {
-        // Phone search with /t prefix
+    public void parse_validPhoneArg_returnsFindCommand() {
+        // phone search with p/ prefix
         FindCommand expectedFindCommand =
-                new FindCommand(new PhoneContainsKeywordsPredicate(Arrays.asList("98765432")));
-        assertParseSuccess(parser, "/t 98765432", expectedFindCommand);
+                new FindCommand(new PhoneContainsKeywordPredicate(Arrays.asList("9876543210")));
+        assertParseSuccess(parser, "p/9876543210", expectedFindCommand);
 
-        // Multiple phone numbers
-        FindCommand expectedFindCommandMultiple =
-                new FindCommand(new PhoneContainsKeywordsPredicate(Arrays.asList("98765432", "91234567")));
-        assertParseSuccess(parser, "/t 98765432 91234567", expectedFindCommandMultiple);
+        // phone search with leading/trailing whitespaces
+        assertParseSuccess(parser, "  p/9876543210  ", expectedFindCommand);
     }
 
     @Test
-    public void parse_invalidPhoneArgs_throwsParseException() {
-        // /t without phone numbers
-        assertParseFailure(parser, "/t ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    public void parse_emptyPhoneArg_throwsParseException() {
+        assertParseFailure(parser, "p/", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "p/   ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
 }

@@ -1,13 +1,14 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 
 import java.util.Arrays;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
-import seedu.address.model.person.PhoneContainsKeywordsPredicate;
+import seedu.address.model.person.PhoneContainsKeywordPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -26,15 +27,14 @@ public class FindCommandParser implements Parser<FindCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        // Check if user is searching by phone number using /t prefix
-        if (trimmedArgs.startsWith("/t ")) {
-            String phoneKeywords = trimmedArgs.substring(3).trim();
-            if (phoneKeywords.isEmpty()) {
+        // Check if searching by phone
+        if (trimmedArgs.startsWith(PREFIX_PHONE.getPrefix())) {
+            String phoneKeyword = trimmedArgs.substring(PREFIX_PHONE.getPrefix().length()).trim();
+            if (phoneKeyword.isEmpty()) {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
             }
-            String[] phoneNumbers = phoneKeywords.split("\\s+");
-            return new FindCommand(new PhoneContainsKeywordsPredicate(Arrays.asList(phoneNumbers)));
+            return new FindCommand(new PhoneContainsKeywordPredicate(Arrays.asList(phoneKeyword)));
         }
 
         // Default: search by name

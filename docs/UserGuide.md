@@ -116,7 +116,7 @@ Finds persons whose names or phone numbers contain the given keywords.
 
 Format: 
 * Name search: `find KEYWORD [MORE_KEYWORDS]`
-* Phone search: `find /t PHONE_NUMBER [MORE_PHONE_NUMBERS]`
+* Phone search: `find p/PHONE_NUMBER`
 
 **For name search:**
 * The search is case-insensitive. e.g `hans` will match `Hans`
@@ -126,11 +126,10 @@ Format:
 * Persons matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
-**For phone search (using `/t` prefix):**
+**For phone search (using `p/` prefix):**
 * Searches by phone number instead of name.
-* Supports partial phone number matching. e.g. `find /t 9876` will match `98765432`, `98760000`, etc.
-* Multiple phone numbers can be searched at once (i.e. `OR` search).
-  e.g. `find /t 98765432 91234567` will return all persons with phone numbers containing either `98765432` or `91234567`
+* Supports partial phone number matching. e.g. `find p/9876` will match `98765432`, `98760000`, etc.
+* Only a single phone number search is supported per command.
 
 Examples (Name Search):
 * `find John` returns `john` and `John Doe`
@@ -138,9 +137,8 @@ Examples (Name Search):
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
 Examples (Phone Search):
-* `find /t 98765432` returns all persons with phone number containing `98765432`
-* `find /t 9876` returns all persons with phone numbers containing `9876`
-* `find /t 98765432 91234567` returns all persons with phone numbers matching either number
+* `find p/98765432` returns all persons with phone number containing `98765432`
+* `find p/9876` returns all persons with phone numbers containing `9876`
 
 ### Deleting a person : `delete`
 
@@ -209,6 +207,6 @@ Action | Format, Examples
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find** | `find KEYWORD [MORE_KEYWORDS]` for name search<br> `find /t PHONE_NUMBER [MORE_PHONE_NUMBERS]` for phone search<br> e.g., `find James Jake` or `find /t 98765432`
+**Find** | `find KEYWORD [MORE_KEYWORDS]` for name search<br> `find p/PHONE_NUMBER` for phone search<br> e.g., `find James Jake` or `find p/98765432`
 **List** | `list`
 **Help** | `help`
