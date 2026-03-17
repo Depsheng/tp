@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
@@ -13,6 +14,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.address.testutil.TypicalPersons.AMY;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
@@ -183,6 +185,41 @@ public class EditCommandTest {
         String expected = EditCommand.class.getCanonicalName() + "{index=" + index + ", editPersonDescriptor="
                 + editPersonDescriptor + "}";
         assertEquals(expected, editCommand.toString());
+    }
+
+    @Test
+    public void execute_duplicatePerson_throwsCommandException() {
+        // Add AMY to model
+        Person amy = new PersonBuilder(AMY).build();
+        model.addPerson(amy);
+
+        // Try to edit BOB to have same phone as AMY (which makes them duplicates)
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withPhone(VALID_PHONE_AMY).build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model, String.format(EditCommand.MESSAGE_DUPLICATE_PERSON,
+                Messages.format(amy)));
+    }
+
+    @Test
+    public void editPersonDescriptorEqualsDifferentDetailsReturnsFalse() {
+        EditPersonDescriptor descriptor1 = new EditPersonDescriptorBuilder()
+                .withDetails("Details 1").build();
+        EditPersonDescriptor descriptor2 = new EditPersonDescriptorBuilder()
+                .withDetails("Details 2").build();
+
+        assertFalse(descriptor1.equals(descriptor2));
+    }
+
+    @Test
+    public void editPersonDescriptorEqualsSameDetailsReturnsTrue() {
+        EditPersonDescriptor descriptor1 = new EditPersonDescriptorBuilder()
+                .withDetails("Same details").build();
+        EditPersonDescriptor descriptor2 = new EditPersonDescriptorBuilder()
+                .withDetails("Same details").build();
+
+        assertTrue(descriptor1.equals(descriptor2));
     }
 
 }

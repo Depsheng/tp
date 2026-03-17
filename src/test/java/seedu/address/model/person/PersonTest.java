@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
@@ -94,7 +95,36 @@ public class PersonTest {
     @Test
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
-                + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", tags=" + ALICE.getTags() + "}";
+                + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", details=" + ALICE.getDetails()
+                + ", tags=" + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
+    }
+
+    @Test
+    public void equals_sameDetails_returnsTrue() {
+        Person person1 = new PersonBuilder(ALICE).withDetails("Same details").build();
+        Person person2 = new PersonBuilder(ALICE).withDetails("Same details").build();
+        assertTrue(person1.equals(person2));
+    }
+
+    @Test
+    public void equals_differentDetails_returnsFalse() {
+        Person person1 = new PersonBuilder(ALICE).withDetails("Details 1").build();
+        Person person2 = new PersonBuilder(ALICE).withDetails("Details 2").build();
+        assertFalse(person1.equals(person2));
+    }
+
+    @Test
+    public void hashCode_sameDetails_sameHashCode() {
+        Person person1 = new PersonBuilder(ALICE).withDetails("Same details").build();
+        Person person2 = new PersonBuilder(ALICE).withDetails("Same details").build();
+        assertEquals(person1.hashCode(), person2.hashCode());
+    }
+
+    @Test
+    public void hashCode_differentDetails_differentHashCode() {
+        Person person1 = new PersonBuilder(ALICE).withDetails("Details 1").build();
+        Person person2 = new PersonBuilder(ALICE).withDetails("Details 2").build();
+        assertNotEquals(person1.hashCode(), person2.hashCode());
     }
 }

@@ -10,7 +10,8 @@ title: Developer Guide
 ## **Acknowledgements**
 
 * Used Windsurf to generate some of the JavaDocs
-* Used Windsurf to help with some tests
+* Used Windsurf to help with most tests
+* Used AI to generate sample data
 
 --------------------------------------------------------------------------------------------------------------------
 
