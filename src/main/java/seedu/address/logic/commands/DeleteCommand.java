@@ -46,6 +46,9 @@ public class DeleteCommand extends Command {
         throw new CommandException(String.format(MESSAGE_PHONE_NOT_FOUND, targetPhone));
     }
 
+    /**
+     * Checks if the target phone number exists in the address book.
+     */
     public boolean isValidTarget(Model model) {
         requireNonNull(model);
 
@@ -59,6 +62,9 @@ public class DeleteCommand extends Command {
         return false;
     }
 
+    /**
+     * Generates an error message when the target phone number is not found in the address book.
+     */
     public String getNotFoundMessage() {
         return String.format(MESSAGE_PHONE_NOT_FOUND, targetPhone);
     }
