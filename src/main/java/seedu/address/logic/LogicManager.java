@@ -52,16 +52,13 @@ public class LogicManager implements Logic {
 
         if (pendingCommand != null) {
             if (commandText.equalsIgnoreCase("y")) {
-                // If confirmed, execute the delete logic
                 Command command = pendingCommand;
-                pendingCommand = null;  // Clear the pending command
+                pendingCommand = null;
                 commandResult = command.execute(model);
             } else if (commandText.equalsIgnoreCase("n")) {
-                // If canceled, just clear the pending command
                 pendingCommand = null;
                 commandResult = new CommandResult("Deletion cancelled.");
             } else {
-                // If input is not 'y' or 'n', prompt for a valid response
                 return new CommandResult("Please enter 'y' to confirm or 'n' to cancel.");
             }
             return commandResult;
