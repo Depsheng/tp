@@ -15,14 +15,17 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     private static final String NAME_FIELD = "name";
     private static final String PHONE_FIELD = "phone";
     private static final String ADDRESS_FIELD = "address";
+    private static final String EMAIL_FIELD = "email";
 
     private static final String NAME_PREFIX = "n/";
     private static final String PHONE_PREFIX = "p/";
     private static final String ADDRESS_PREFIX = "a/";
+    private static final String EMAIL_PREFIX = "e/";
 
     private final List<String> nameKeywords = new ArrayList<>();
     private final List<String> phoneKeywords = new ArrayList<>();
     private final List<String> addressKeywords = new ArrayList<>();
+    private final List<String> emailKeywords = new ArrayList<>();
     private final List<String> generalKeywords = new ArrayList<>();
 
     /**
@@ -52,6 +55,12 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
 
             if (isPrefix(token, ADDRESS_PREFIX)) {
                 currentField = ADDRESS_FIELD;
+                addKeyword(token, getKeywordList(currentField), true);
+                continue;
+            }
+
+            if (isPrefix(token, EMAIL_PREFIX)) {
+                currentField = EMAIL_FIELD;
                 addKeyword(token, getKeywordList(currentField), true);
                 continue;
             }
@@ -95,6 +104,8 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
             return phoneKeywords;
         case ADDRESS_FIELD:
             return addressKeywords;
+        case EMAIL_FIELD:
+            return emailKeywords;
         default:
             return generalKeywords;
         }
@@ -116,16 +127,18 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         if (generalKeywords.isEmpty()
-                && nameKeywords.isEmpty()
-                && phoneKeywords.isEmpty()
-                && addressKeywords.isEmpty()) {
+            && nameKeywords.isEmpty()
+            && phoneKeywords.isEmpty()
+            && addressKeywords.isEmpty()
+            && emailKeywords.isEmpty()) {
             return false;
         }
 
         if (!generalKeywords.isEmpty()
                 && nameKeywords.isEmpty()
                 && phoneKeywords.isEmpty()
-                && addressKeywords.isEmpty()) {
+                && addressKeywords.isEmpty()
+                && emailKeywords.isEmpty()) {
             return generalKeywords.stream().anyMatch(keyword ->
                     StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword)
                             || StringUtil.containsWordIgnoreCase(person.getPhone().value, keyword)
@@ -135,15 +148,38 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
 
         return matches(person.getName().fullName, nameKeywords)
                 && matches(person.getPhone().value, phoneKeywords)
-                && matches(person.getAddress().value, addressKeywords);
+                && matches(person.getAddress().value, addressKeywords)
+                && matches(person.getEmail().value, emailKeywords);
     }
 
+    /**
+     * Returns {@code true} if the given {@code value} matches at least one of the
+     * specified {@code keywords}.
+     *
+     * <p>If the keyword list is empty, this method returns {@code true} (i.e. no
+     * restriction is applied for that field). Otherwise, the method checks if any
+     * keyword is contained as a word within the value, ignoring case.</p>
+     *
+     * @param value The string value to be tested against.
+     * @param keywords The list of keywords to match.
+     * @return {@code true} if the value matches any keyword, or if the keyword list is empty.
+     */
     private boolean matches(String value, List<String> keywords) {
         return keywords.isEmpty()
                 || keywords.stream().anyMatch(keyword ->
                 StringUtil.containsWordIgnoreCase(value, keyword));
     }
 
+    /**
+     * Returns {@code true} if this predicate is equal to the given object.
+     *
+     * <p>Two {@code PersonContainsKeywordsPredicate} objects are considered equal
+     * if they contain the same sets of keywords for all fields (general, name,
+     * phone, address, and email).</p>
+     *
+     * @param other The object to compare with.
+     * @return {@code true} if the given object represents an equivalent predicate.
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -158,9 +194,18 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         return nameKeywords.equals(otherPredicate.nameKeywords)
             && phoneKeywords.equals(otherPredicate.phoneKeywords)
             && addressKeywords.equals(otherPredicate.addressKeywords)
-            && generalKeywords.equals(otherPredicate.generalKeywords);
+            && generalKeywords.equals(otherPredicate.generalKeywords)
+            && emailKeywords.equals(otherPredicate.emailKeywords);
     }
 
+    /**
+     * Returns a string representation of this predicate for debugging purposes.
+     *
+     * <p>The returned string includes all keyword lists (general, name, phone,
+     * address, and email) stored in this predicate.</p>
+     *
+     * @return A string describing the current state of this predicate.
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -168,6 +213,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
             .add("nameKeywords", nameKeywords)
             .add("phoneKeywords", phoneKeywords)
             .add("addressKeywords", addressKeywords)
+            .add("emailKeywords", emailKeywords)
             .toString();
     }
 }
