@@ -82,7 +82,6 @@ public class DeleteCommandTest {
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
         assertFalse(expectedModel.hasPerson(ALICE));
     }
-    
 
     @Test
     public void toStringMethod() {
