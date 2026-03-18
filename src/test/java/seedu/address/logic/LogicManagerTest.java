@@ -188,4 +188,45 @@ public class LogicManagerTest {
         expectedModel.addPerson(expectedPerson);
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
     }
+
+    @Test
+    public void execute_deleteCommand_withConfirmation() throws Exception {
+        String deleteCommand = "delete 12345678";
+        String confirmCommand = "y";
+
+        Person personToDelete = new PersonBuilder(AMY).withTags().withDetails("No details")
+                .withPhone("12345678").build();
+        model.addPerson(personToDelete);
+
+        String expectedConfirmationMessage = String.format(DeleteCommand.MESSAGE_CONFIRMATION_PROMPT,
+                Messages.format(personToDelete));
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(personToDelete));
+
+        Model expectedModelAfterDeleteCommand = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModelAfterConfirmation = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModelAfterConfirmation.deletePerson(personToDelete);
+
+        assertCommandSuccess(deleteCommand, expectedConfirmationMessage, expectedModelAfterDeleteCommand);
+        assertCommandSuccess(confirmCommand, expectedMessage, expectedModelAfterConfirmation);
+    }
+
+    @Test
+    public void execute_deleteCommand_withoutConfirmation() throws Exception {
+        String deleteCommand = "delete 12345678";
+        String confirmCommand = "n";
+
+        Person personToDelete = new PersonBuilder(AMY).withTags().withDetails("No details")
+                .withPhone("12345678").build();
+        model.addPerson(personToDelete);
+
+        String expectedConfirmationMessage = String.format(DeleteCommand.MESSAGE_CONFIRMATION_PROMPT,
+                Messages.format(personToDelete));
+        String expectedMessage = DeleteCommand.MESSAGE_DELETION_CANCELLED;
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        assertCommandSuccess(deleteCommand, expectedConfirmationMessage, expectedModel);
+        assertCommandSuccess(confirmCommand, expectedMessage, expectedModel);
+    }
 }

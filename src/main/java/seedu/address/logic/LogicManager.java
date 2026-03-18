@@ -33,7 +33,6 @@ public class LogicManager implements Logic {
     private final Model model;
     private final Storage storage;
     private final AddressBookParser addressBookParser;
-    private Command pendingCommand = null;
 
     /**
      * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
@@ -50,17 +49,9 @@ public class LogicManager implements Logic {
 
         CommandResult commandResult;
 
-        if (pendingCommand != null) {
-            if (commandText.equalsIgnoreCase("y")) {
-                Command command = pendingCommand;
-                pendingCommand = null;
-                commandResult = command.execute(model);
-            } else if (commandText.equalsIgnoreCase("n")) {
-                pendingCommand = null;
-                commandResult = new CommandResult("Deletion cancelled.");
-            } else {
-                return new CommandResult("Please enter 'y' to confirm or 'n' to cancel.");
-            }
+        if (DeleteCommand.hasPendingConfirmation()) {
+            commandResult = DeleteCommand.confirmationCommand(model, commandText);
+            saveAddressBook();
             return commandResult;
         }
 
@@ -68,15 +59,16 @@ public class LogicManager implements Logic {
 
         if (command instanceof DeleteCommand) {
             DeleteCommand deleteCommand = (DeleteCommand) command;
-            if (!deleteCommand.isValidTarget(model)) {
-                throw new CommandException(deleteCommand.getNotFoundMessage());
-            }
-            pendingCommand = command;
-            return new CommandResult("Are you sure you want to delete this contact? (y/n)");
+            return deleteCommand.requestConfirmation(model);
         }
 
         commandResult = command.execute(model);
+        saveAddressBook();
 
+        return commandResult;
+    }
+
+    private void saveAddressBook() throws CommandException {
         try {
             storage.saveAddressBook(model.getAddressBook());
         } catch (AccessDeniedException e) {
@@ -84,8 +76,6 @@ public class LogicManager implements Logic {
         } catch (IOException ioe) {
             throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
         }
-
-        return commandResult;
     }
 
     @Override
