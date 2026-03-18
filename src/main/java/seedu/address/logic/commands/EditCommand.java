@@ -106,8 +106,10 @@ public class EditCommand extends Command {
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Details updatedDetails = editPersonDescriptor.getDetails().orElse(personToEdit.getDetails());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+        boolean updatedIsFavourite = personToEdit.getIsFavourite();
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedDetails, updatedTags);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress,
+                updatedDetails, updatedTags, updatedIsFavourite);
     }
 
     @Override
@@ -145,6 +147,8 @@ public class EditCommand extends Command {
         private Address address;
         private Details details;
         private Set<Tag> tags;
+        private boolean isFavourite;
+
 
         public EditPersonDescriptor() {}
 
@@ -159,6 +163,7 @@ public class EditCommand extends Command {
             setAddress(toCopy.address);
             setDetails(toCopy.details);
             setTags(toCopy.tags);
+            setIsFavourite(toCopy.isFavourite);
         }
 
         /**
@@ -207,6 +212,15 @@ public class EditCommand extends Command {
         public Optional<Details> getDetails() {
             return Optional.ofNullable(details);
         }
+
+        public void setIsFavourite(boolean isFavourite) {
+            this.isFavourite = isFavourite;
+        }
+
+        public boolean getIsFavourite() {
+            return isFavourite;
+        }
+
 
         /**
          * Sets {@code tags} to this object's {@code tags}.

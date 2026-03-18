@@ -22,6 +22,7 @@ public class PersonBuilder {
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_DETAILS = "No details";
+    public static final boolean DEFAULT_ISFAVOURITE = false;
 
     private Name name;
     private Phone phone;
@@ -29,6 +30,7 @@ public class PersonBuilder {
     private Address address;
     private Details details;
     private Set<Tag> tags;
+    private boolean isFavourite;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -40,6 +42,8 @@ public class PersonBuilder {
         address = new Address(DEFAULT_ADDRESS);
         details = new Details(DEFAULT_DETAILS);
         tags = new HashSet<>();
+        isFavourite = DEFAULT_ISFAVOURITE;
+
     }
 
     /**
@@ -103,7 +107,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, phone, email, address, details, tags);
+        return new Person(name, phone, email, address, details, tags, isFavourite);
     }
 
 }

@@ -61,7 +61,7 @@ public class AddCommandParser implements Parser<AddCommand> {
                 .orElse("No details"));
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
-        Person person = new Person(name, phone, email, address, details, tagList);
+        Person person = new Person(name, phone, email, address, details, tagList, false);
 
         return new AddCommand(person);
     }

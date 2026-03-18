@@ -31,6 +31,7 @@ class JsonAdaptedPerson {
     private final String address;
     private String details;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
+    private final boolean isFavourite;
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -38,7 +39,8 @@ class JsonAdaptedPerson {
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("details") String details, @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+            @JsonProperty("details") String details, @JsonProperty("tags") List<JsonAdaptedTag> tags,
+            @JsonProperty("isFavourite") boolean isFavourite) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -47,6 +49,7 @@ class JsonAdaptedPerson {
         if (tags != null) {
             this.tags.addAll(tags);
         }
+        this.isFavourite = isFavourite;
     }
 
     /**
@@ -61,6 +64,7 @@ class JsonAdaptedPerson {
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
+        isFavourite = source.getIsFavourite();
     }
 
     /**
@@ -115,7 +119,9 @@ class JsonAdaptedPerson {
         final Details modelDetails = new Details(details.trim());
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelDetails, modelTags);
+
+        final boolean modelIsFavourite = isFavourite;
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelDetails, modelTags, modelIsFavourite);
     }
 
 }
