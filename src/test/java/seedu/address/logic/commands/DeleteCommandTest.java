@@ -82,18 +82,7 @@ public class DeleteCommandTest {
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
         assertFalse(expectedModel.hasPerson(ALICE));
     }
-
-//    @Test
-//    public void execute_invalidPhoneDoesNotExist_iteratesAndFails() {
-//        Phone invalidPhone = new Phone("99999999");
-//        DeleteCommand deleteCommand = new DeleteCommand(invalidPhone);
-//
-//        String expectedMessage = String.format(DeleteCommand.MESSAGE_PHONE_NOT_FOUND, invalidPhone);
-//        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-//        expectedModel.deletePerson(ALICE);
-//        assertCommandFailure(deleteCommand, model, String.format(DeleteCommand.MESSAGE_PHONE_NOT_FOUND, invalidPhone));
-//        assertFalse(expectedModel.hasPerson(new Person(new Name("NonExistent"), invalidPhone)));
-//    }
+    
 
     @Test
     public void toStringMethod() {
