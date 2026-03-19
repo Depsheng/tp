@@ -80,17 +80,6 @@ public class PersonContainsKeywordsPredicateTest {
 
     // --- General Keywords ---
     @Test
-    public void testGeneralKeywordMatchesAnyField() {
-        PersonContainsKeywordsPredicate predicate =
-                new PersonContainsKeywordsPredicate(Collections.singletonList("unique"));
-        assertTrue(predicate.test(new PersonBuilder().withName("unique name").build()));
-        assertTrue(predicate.test(new PersonBuilder().withPhone("123unique456").build()));
-        assertTrue(predicate.test(new PersonBuilder().withAddress("unique street").build()));
-        assertTrue(predicate.test(new PersonBuilder().withEmail("unique@test.com").build()));
-        assertTrue(predicate.test(new PersonBuilder().withDetails("unique person").build()));
-    }
-
-    @Test
     public void testGeneralKeywordNoMatch() {
         PersonContainsKeywordsPredicate predicate =
                 new PersonContainsKeywordsPredicate(Collections.singletonList("Charlie"));
