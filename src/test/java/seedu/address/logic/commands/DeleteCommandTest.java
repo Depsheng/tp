@@ -59,8 +59,8 @@ public class DeleteCommandTest {
     @Test
     public void confirmationCommand_noPendingDelete_throwsIllegalStateException() {
         assertThrows(IllegalStateException.class,
-                "No pending delete command to confirm.",
-                () -> DeleteCommand.confirmationCommand(model, "y"));
+                "No pending delete command to confirm.", () ->
+                        DeleteCommand.confirmationCommand(model, "y"));
     }
 
     @Test
