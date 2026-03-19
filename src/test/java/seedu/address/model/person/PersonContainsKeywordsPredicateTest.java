@@ -228,5 +228,59 @@ public class PersonContainsKeywordsPredicateTest {
         PersonContainsKeywordsPredicate predicate =
                 new PersonContainsKeywordsPredicate(Arrays.asList("n/Alice", "p/9123", "friend"));
         String result = predicate.toString();
+
+        // Check that all keyword lists are represented
         assertTrue(result.contains("Alice"));
-        assertTrue(result.contains("
+        assertTrue(result.contains("9123"));
+        assertTrue(result.contains("friend"));
+        assertTrue(result.contains("generalKeywords"));
+        assertTrue(result.contains("nameKeywords"));
+        assertTrue(result.contains("phoneKeywords"));
+        assertTrue(result.contains("addressKeywords"));
+        assertTrue(result.contains("emailKeywords"));
+        assertTrue(result.contains("detailsKeywords"));
+    }
+
+    @Test
+    public void toString_emptyKeywords_returnsExpectedString() {
+        PersonContainsKeywordsPredicate predicate =
+                new PersonContainsKeywordsPredicate(Collections.emptyList());
+        String result = predicate.toString();
+
+        // All lists should be empty
+        assertTrue(result.contains("generalKeywords=[]"));
+        assertTrue(result.contains("nameKeywords=[]"));
+        assertTrue(result.contains("phoneKeywords=[]"));
+        assertTrue(result.contains("addressKeywords=[]"));
+        assertTrue(result.contains("emailKeywords=[]"));
+        assertTrue(result.contains("detailsKeywords=[]"));
+    }
+
+    @Test
+    public void equals_sameFieldKeywords_returnsTrue() {
+        PersonContainsKeywordsPredicate predicate1 =
+                new PersonContainsKeywordsPredicate(Arrays.asList("n/Alice", "p/9123"));
+        PersonContainsKeywordsPredicate predicate2 =
+                new PersonContainsKeywordsPredicate(Arrays.asList("n/Alice", "p/9123"));
+        assertEquals(predicate1, predicate2);
+    }
+
+    @Test
+    public void equals_differentFieldKeywords_returnsFalse() {
+        PersonContainsKeywordsPredicate predicate1 =
+                new PersonContainsKeywordsPredicate(Arrays.asList("n/Alice", "p/9123"));
+        PersonContainsKeywordsPredicate predicate2 =
+                new PersonContainsKeywordsPredicate(Arrays.asList("n/Bob", "p/9123"));
+        assertNotEquals(predicate1, predicate2);
+    }
+
+    @Test
+    public void equals_differentFieldTypes_returnsFalse() {
+        PersonContainsKeywordsPredicate predicate1 =
+                new PersonContainsKeywordsPredicate(Arrays.asList("n/Alice"));
+        PersonContainsKeywordsPredicate predicate2 =
+                new PersonContainsKeywordsPredicate(Arrays.asList("e/Alice"));
+        assertNotEquals(predicate1, predicate2);
+    }
+
+}
