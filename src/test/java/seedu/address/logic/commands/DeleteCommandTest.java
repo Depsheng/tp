@@ -5,13 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -24,6 +27,13 @@ import seedu.address.model.person.Phone;
 public class DeleteCommandTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+    @AfterEach
+    public void clearPendingConfirmation() throws CommandException {
+        if (DeleteCommand.hasPendingConfirmation()) {
+            DeleteCommand.confirmationCommand(model, "n");
+        }
+    }
 
     @Test
     public void execute_validPhoneUnfilteredList_success() {
@@ -47,6 +57,40 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void confirmationCommand_noPendingDelete_throwsIllegalStateException() {
+        assertThrows(IllegalStateException.class,
+                "No pending delete command to confirm.", () ->
+                        DeleteCommand.confirmationCommand(model, "y"));
+    }
+
+    @Test
+    public void confirmationCommand_invalidInput_returnsConfirmationRequired() throws CommandException {
+        DeleteCommand deleteCommand = new DeleteCommand(ALICE.getPhone());
+        deleteCommand.requestConfirmation(model);
+
+        CommandResult result = DeleteCommand.confirmationCommand(model, "maybe");
+
+        assertEquals(DeleteCommand.MESSAGE_CONFIRMATION_REQUIRED, result.getFeedbackToUser());
+        assertTrue(DeleteCommand.hasPendingConfirmation());
+    }
+
+    @Test
+    public void isValidTarget_nullModel_throwsNullPointerException() {
+        DeleteCommand deleteCommand = new DeleteCommand(ALICE.getPhone());
+
+        assertThrows(NullPointerException.class, () -> deleteCommand.isValidTarget(null));
+    }
+
+    @Test
+    public void isValidTarget_existingAndMissingPhone_returnsExpectedResult() {
+        DeleteCommand validDeleteCommand = new DeleteCommand(ALICE.getPhone());
+        DeleteCommand invalidDeleteCommand = new DeleteCommand(new Phone("99999999"));
+
+        assertTrue(validDeleteCommand.isValidTarget(model));
+        assertFalse(invalidDeleteCommand.isValidTarget(model));
+    }
+
+    @Test
     public void equals() {
         DeleteCommand deleteAliceCommand = new DeleteCommand(ALICE.getPhone());
         DeleteCommand deleteBensonCommand = new DeleteCommand(BENSON.getPhone());
@@ -66,6 +110,21 @@ public class DeleteCommandTest {
 
         // different person -> returns false
         assertFalse(deleteAliceCommand.equals(deleteBensonCommand));
+    }
+
+
+    @Test
+    public void execute_validPhoneInList_iteratesAndDeletes() {
+        DeleteCommand deleteCommand = new DeleteCommand(ALICE.getPhone());
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(ALICE));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(ALICE);
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+        assertFalse(expectedModel.hasPerson(ALICE));
     }
 
     @Test

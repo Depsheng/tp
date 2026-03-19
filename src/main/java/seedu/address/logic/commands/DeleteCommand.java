@@ -24,6 +24,11 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_PHONE_NOT_FOUND = "No person found with phone number: %1$s";
+    public static final String MESSAGE_CONFIRMATION_PROMPT = "Are you sure you want to delete this contact? %1$s (y/n)";
+    public static final String MESSAGE_CONFIRMATION_REQUIRED = "Please enter 'y' to confirm or 'n' to cancel.";
+    public static final String MESSAGE_DELETION_CANCELLED = "Deletion cancelled.";
+
+    private static DeleteCommand pendingDeleteCommand;
 
     private final Phone targetPhone;
 
@@ -34,9 +39,8 @@ public class DeleteCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
-
-        for (Person person : lastShownList) {
+        List<Person> fullList = model.getAddressBook().getPersonList();
+        for (Person person : fullList) {
             if (person.getPhone().equals(targetPhone)) {
                 model.deletePerson(person);
                 return new CommandResult(
@@ -47,6 +51,85 @@ public class DeleteCommand extends Command {
         throw new CommandException(String.format(MESSAGE_PHONE_NOT_FOUND, targetPhone));
     }
 
+    /**
+     * Stores this command as the pending delete and returns the confirmation prompt.
+     */
+    public CommandResult requestConfirmation(Model model) throws CommandException {
+        requireNonNull(model);
+
+        Person personToDelete = getTargetPerson(model);
+
+        pendingDeleteCommand = this;
+        return new CommandResult(String.format(MESSAGE_CONFIRMATION_PROMPT, Messages.format(personToDelete)));
+    }
+
+    /**
+     * Returns true if a delete confirmation is pending.
+     */
+    public static boolean hasPendingConfirmation() {
+        return pendingDeleteCommand != null;
+    }
+
+    /**
+     * Handles the confirmation input for the pending delete command.
+     */
+    public static CommandResult confirmationCommand(Model model, String commandText) throws CommandException {
+        requireNonNull(model);
+        requireNonNull(commandText);
+
+        if (pendingDeleteCommand == null) {
+            throw new IllegalStateException("No pending delete command to confirm.");
+        }
+
+        if (commandText.equalsIgnoreCase("y")) {
+            DeleteCommand commandToExecute = pendingDeleteCommand;
+            pendingDeleteCommand = null;
+            return commandToExecute.execute(model);
+        }
+
+        if (commandText.equalsIgnoreCase("n")) {
+            pendingDeleteCommand = null;
+            return new CommandResult(MESSAGE_DELETION_CANCELLED);
+        }
+
+        return new CommandResult(MESSAGE_CONFIRMATION_REQUIRED);
+    }
+
+    /**
+     * Checks if the target phone number exists in the address book.
+     */
+    public boolean isValidTarget(Model model) {
+        requireNonNull(model);
+
+        return getTargetPersonOrNull(model) != null;
+    }
+
+    /**
+     * Generates an error message when the target phone number is not found in the address book.
+     */
+    public String getNotFoundMessage() {
+        return String.format(MESSAGE_PHONE_NOT_FOUND, targetPhone);
+    }
+
+    private Person getTargetPerson(Model model) throws CommandException {
+        Person person = getTargetPersonOrNull(model);
+        if (person == null) {
+            throw new CommandException(getNotFoundMessage());
+        }
+        return person;
+    }
+
+    private Person getTargetPersonOrNull(Model model) {
+        List<Person> fullList = model.getAddressBook().getPersonList();
+
+        for (Person person : fullList) {
+            if (person.getPhone().equals(targetPhone)) {
+                return person;
+            }
+        }
+
+        return null;
+    }
 
     @Override
     public boolean equals(Object other) {

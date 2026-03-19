@@ -10,6 +10,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -47,9 +48,27 @@ public class LogicManager implements Logic {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
         CommandResult commandResult;
-        Command command = addressBookParser.parseCommand(commandText);
-        commandResult = command.execute(model);
 
+        if (DeleteCommand.hasPendingConfirmation()) {
+            commandResult = DeleteCommand.confirmationCommand(model, commandText);
+            saveAddressBook();
+            return commandResult;
+        }
+
+        Command command = addressBookParser.parseCommand(commandText);
+
+        if (command instanceof DeleteCommand) {
+            DeleteCommand deleteCommand = (DeleteCommand) command;
+            return deleteCommand.requestConfirmation(model);
+        }
+
+        commandResult = command.execute(model);
+        saveAddressBook();
+
+        return commandResult;
+    }
+
+    private void saveAddressBook() throws CommandException {
         try {
             storage.saveAddressBook(model.getAddressBook());
         } catch (AccessDeniedException e) {
@@ -57,8 +76,6 @@ public class LogicManager implements Logic {
         } catch (IOException ioe) {
             throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
         }
-
-        return commandResult;
     }
 
     @Override
