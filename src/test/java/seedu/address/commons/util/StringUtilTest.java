@@ -46,6 +46,44 @@ public class StringUtilTest {
     }
 
 
+    //---------------- Tests for containsSubstringIgnoreCase --------------------------------------
+
+    @Test
+    public void containsSubstringIgnoreCase_nullSubstring_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () ->
+            StringUtil.containsSubstringIgnoreCase("typical sentence", null));
+    }
+
+    @Test
+    public void containsSubstringIgnoreCase_emptySubstring_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, "Substring parameter cannot be empty", ()
+            -> StringUtil.containsSubstringIgnoreCase("typical sentence", "  "));
+    }
+
+    @Test
+    public void containsSubstringIgnoreCase_nullSentence_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> StringUtil.containsSubstringIgnoreCase(null, "abc"));
+    }
+
+    @Test
+    public void containsSubstringIgnoreCase_validInputs_correctResult() {
+        // Empty sentence
+        assertFalse(StringUtil.containsSubstringIgnoreCase("", "abc"));
+
+        // Substring matches
+        assertTrue(StringUtil.containsSubstringIgnoreCase("Amy Anderson", "ers")); // Substring in last name
+        assertTrue(StringUtil.containsSubstringIgnoreCase("Amy Anderson", "Amy")); // Substring at start
+        assertTrue(StringUtil.containsSubstringIgnoreCase("Amy Anderson", "son")); // Substring at end
+        assertTrue(StringUtil.containsSubstringIgnoreCase("Amy Anderson", "derso")); // Substring in middle
+        // Case insensitive
+        assertTrue(StringUtil.containsSubstringIgnoreCase("AMY ANDERSON", "ers"));
+        assertTrue(StringUtil.containsSubstringIgnoreCase("Amy Anderson", "ANDERSON"));
+        assertTrue(StringUtil.containsSubstringIgnoreCase("amy anderson", "AMY"));
+        // Substring not found
+        assertFalse(StringUtil.containsSubstringIgnoreCase("Amy Anderson", "xyz"));
+        assertFalse(StringUtil.containsSubstringIgnoreCase("Amy Anderson", "bob"));
+    }
+
     //---------------- Tests for containsWordIgnoreCase --------------------------------------
 
     /*

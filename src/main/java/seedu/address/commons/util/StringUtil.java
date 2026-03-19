@@ -13,6 +13,27 @@ import java.util.Arrays;
 public class StringUtil {
 
     /**
+     * Returns true if the {@code sentence} contains the {@code word} as a substring.
+     *   Ignores case.
+     *   <br>examples:<pre>
+     *       containsSubstringIgnoreCase("Amy Anderson", "ers") == true
+     *       containsSubstringIgnoreCase("ABc def", "BC") == true
+     *       containsSubstringIgnoreCase("ABc def", "xyz") == false
+     *       </pre>
+     * @param sentence cannot be null
+     * @param substring cannot be null, cannot be empty
+     */
+    public static boolean containsSubstringIgnoreCase(String sentence, String substring) {
+        requireNonNull(sentence);
+        requireNonNull(substring);
+
+        String preppedSubstring = substring.trim();
+        checkArgument(!preppedSubstring.isEmpty(), "Substring parameter cannot be empty");
+
+        return sentence.toLowerCase().contains(preppedSubstring.toLowerCase());
+    }
+
+    /**
      * Returns true if the {@code sentence} contains the {@code word}.
      *   Ignores case, but a full word match is required.
      *   <br>examples:<pre>

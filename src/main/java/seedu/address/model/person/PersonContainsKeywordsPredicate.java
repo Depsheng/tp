@@ -156,11 +156,11 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
             && emailKeywords.isEmpty()
             && detailsKeywords.isEmpty()) {
             return generalKeywords.stream().anyMatch(keyword ->
-                StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword)
-                    || StringUtil.containsWordIgnoreCase(person.getPhone().value, keyword)
-                    || StringUtil.containsWordIgnoreCase(person.getAddress().value, keyword)
-                    || StringUtil.containsWordIgnoreCase(person.getEmail().value, keyword)
-                    || StringUtil.containsWordIgnoreCase(person.getDetails().value, keyword));
+                StringUtil.containsSubstringIgnoreCase(person.getName().fullName, keyword)
+                    || StringUtil.containsSubstringIgnoreCase(person.getPhone().value, keyword)
+                    || StringUtil.containsSubstringIgnoreCase(person.getAddress().value, keyword)
+                    || StringUtil.containsSubstringIgnoreCase(person.getEmail().value, keyword)
+                    || StringUtil.containsSubstringIgnoreCase(person.getDetails().value, keyword));
         }
 
         return matches(person.getName().fullName, nameKeywords)
@@ -176,7 +176,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
      *
      * <p>If the keyword list is empty, this method returns {@code true} (i.e. no
      * restriction is applied for that field). Otherwise, the method checks if any
-     * keyword is contained as a word within the value, ignoring case.</p>
+     * keyword is contained as a substring within the value, ignoring case.</p>
      *
      * @param value The string value to be tested against.
      * @param keywords The list of keywords to match.
@@ -185,7 +185,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     private boolean matches(String value, List<String> keywords) {
         return keywords.isEmpty()
             || keywords.stream().anyMatch(keyword ->
-            StringUtil.containsWordIgnoreCase(value, keyword));
+            StringUtil.containsSubstringIgnoreCase(value, keyword));
     }
 
     /**
