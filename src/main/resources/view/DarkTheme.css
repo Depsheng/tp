@@ -132,7 +132,7 @@
     -fx-text-fill: #010504;
 }
 
-.cell_big_label_wrap {
+.cell_small_label_wrap {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 13px;
     -fx-text-fill: #010504;
