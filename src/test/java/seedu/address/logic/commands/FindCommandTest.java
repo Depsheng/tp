@@ -12,6 +12,8 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -24,15 +26,17 @@ import seedu.address.model.person.PersonContainsKeywordsPredicate;
  * Contains integration tests (interaction with the Model) for {@code FindCommand}.
  */
 public class FindCommandTest {
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-    private Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void equals() {
         PersonContainsKeywordsPredicate firstPredicate =
-                new PersonContainsKeywordsPredicate(Collections.singletonList("first"));
+                new PersonContainsKeywordsPredicate(
+                        Map.of(PersonContainsKeywordsPredicate.GENERAL_KEY, List.of("first")));
         PersonContainsKeywordsPredicate secondPredicate =
-                new PersonContainsKeywordsPredicate(Collections.singletonList("second"));
+                new PersonContainsKeywordsPredicate(
+                        Map.of(PersonContainsKeywordsPredicate.GENERAL_KEY, List.of("second")));
 
         FindCommand findFirstCommand = new FindCommand(firstPredicate);
         FindCommand findSecondCommand = new FindCommand(secondPredicate);
@@ -50,7 +54,7 @@ public class FindCommandTest {
         // null -> returns false
         assertFalse(findFirstCommand.equals(null));
 
-        // different person -> returns false
+        // different command -> returns false
         assertFalse(findFirstCommand.equals(findSecondCommand));
     }
 
@@ -60,6 +64,7 @@ public class FindCommandTest {
         PersonContainsKeywordsPredicate predicate = preparePredicate(" ");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
+
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.emptyList(), model.getFilteredPersonList());
     }
@@ -70,22 +75,34 @@ public class FindCommandTest {
         PersonContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
+
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredPersonList());
     }
 
     @Test
     public void toStringMethod() {
-        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(Arrays.asList("keyword"));
+        PersonContainsKeywordsPredicate predicate =
+                new PersonContainsKeywordsPredicate(
+                        Map.of(PersonContainsKeywordsPredicate.GENERAL_KEY, List.of("keyword")));
         FindCommand findCommand = new FindCommand(predicate);
         String expected = FindCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, findCommand.toString());
     }
 
     /**
-     * Parses {@code userInput} into a {@code NameContainsKeywordsPredicate}.
+     * Parses {@code userInput} into a {@code PersonContainsKeywordsPredicate}
+     * for general untagged search.
      */
     private PersonContainsKeywordsPredicate preparePredicate(String userInput) {
-        return new PersonContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
+        String trimmedInput = userInput.trim();
+
+        if (trimmedInput.isEmpty()) {
+            return new PersonContainsKeywordsPredicate(Collections.emptyMap());
+        }
+
+        return new PersonContainsKeywordsPredicate(
+                Map.of(PersonContainsKeywordsPredicate.GENERAL_KEY,
+                        Arrays.asList(trimmedInput.split("\\s+"))));
     }
 }
