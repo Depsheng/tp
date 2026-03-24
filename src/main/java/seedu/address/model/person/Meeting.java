@@ -12,7 +12,8 @@ import java.time.format.DateTimeFormatter;
 public class Meeting {
 
     public static final String MESSAGE_MEETING_IN_PAST = "Meeting cannot be scheduled in the past";
-    public static final String MESSAGE_MEETING_DATETIME_CONSTRAINTS = "Meeting date and time must be valid and not in the past";
+    public static final String MESSAGE_MEETING_DATETIME_CONSTRAINTS = "Meeting date and time must be"
+            + "valid and not in the past";
 
     private static final DateTimeFormatter DISPLAY_FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy h:mm a");
 

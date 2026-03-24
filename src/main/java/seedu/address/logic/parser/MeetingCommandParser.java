@@ -1,10 +1,8 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.commons.util.DateTimeUtil.MESSAGE_DATE_TIME_PAST;
 import static seedu.address.commons.util.DateTimeUtil.MESSAGE_INVALID_DATE_TIME_FORMAT;
-
-import java.time.format.DateTimeParseException;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.DateTimeUtil;
@@ -44,13 +42,13 @@ public class MeetingCommandParser implements Parser<MeetingCommand> {
 
         try {
             Index index = ParserUtil.parseIndex(parts[0]);
-            
+
             // Combine all remaining parts as the date/time string
             String dateTimeStr = String.join(" ", java.util.Arrays.copyOfRange(parts, 1, parts.length));
-            
+
             DateTimeUtil.DateTimeParseResult result = DateTimeUtil.parseDateTime(dateTimeStr);
             Meeting meeting = new Meeting(result.getDateTime());
-            
+
             return new MeetingCommand(index, meeting);
         } catch (IllegalArgumentException exception) {
             String message = exception.getMessage();

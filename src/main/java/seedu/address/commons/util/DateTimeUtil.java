@@ -20,7 +20,8 @@ import java.util.Locale;
 public class DateTimeUtil {
 
     public static final String MESSAGE_DATE_TIME_PAST = "Date and time cannot be in the past";
-    public static final String MESSAGE_INVALID_DATE_TIME_FORMAT = "Invalid date/time format. Supported formats include:\n"
+    public static final String MESSAGE_INVALID_DATE_TIME_FORMAT = "Invalid date/time format."
+            + " Supported formats include:\n"
             + "- 15 Mar 2025 4pm\n"
             + "- 15 Mar 2025 4:30pm\n"
             + "- 15 Mar 2025 4.30pm\n"
@@ -156,7 +157,7 @@ public class DateTimeUtil {
         checkArgument(dateTimeStr != null && !dateTimeStr.trim().isEmpty(), "Date/time string cannot be null or empty");
 
         String trimmedStr = dateTimeStr.trim();
-        
+
         // Handle relative dates first
         if (trimmedStr.toLowerCase().startsWith("today")) {
             return parseRelativeDate(trimmedStr, 0);
@@ -172,14 +173,14 @@ public class DateTimeUtil {
                 TemporalAccessor temporal = formatter.parse(trimmedStr);
                 LocalDate date = LocalDate.from(temporal);
                 LocalTime time = extractTime(temporal, trimmedStr.contains("am") || trimmedStr.contains("pm"));
-                
+
                 LocalDateTime dateTime = LocalDateTime.of(date, time);
-                
+
                 // Validate not in the past
                 if (dateTime.isBefore(LocalDateTime.now())) {
                     throw new IllegalArgumentException(MESSAGE_DATE_TIME_PAST);
                 }
-                
+
                 return new DateTimeParseResult(date, time);
             } catch (DateTimeParseException e) {
                 // Continue to next format
@@ -200,7 +201,7 @@ public class DateTimeUtil {
         checkArgument(dateStr != null && !dateStr.trim().isEmpty(), "Date string cannot be null or empty");
 
         String trimmedStr = dateStr.trim();
-        
+
         // Handle relative dates
         if (trimmedStr.equalsIgnoreCase("today")) {
             return LocalDate.now();
@@ -212,31 +213,31 @@ public class DateTimeUtil {
 
         // Try date-only formats with year first
         String[] dateWithYearFormats = {"d MMM yyyy", "d MMMM yyyy", "d/M/yyyy", "d-M-yyyy", "d.M.yyyy",
-                                       "dd/MM/yyyy", "dd-MM-yyyy", "dd.MM.yyyy"};
-        
+            "dd/MM/yyyy", "dd-MM-yyyy", "dd.MM.yyyy"};
+
         for (String pattern : dateWithYearFormats) {
             try {
                 DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                         .parseCaseInsensitive()
                         .appendPattern(pattern)
                         .toFormatter(Locale.ENGLISH);
-                
+
                 LocalDate date = LocalDate.parse(trimmedStr, formatter);
-                
+
                 // Validate not in the past
                 if (date.isBefore(LocalDate.now())) {
                     throw new IllegalArgumentException(MESSAGE_DATE_TIME_PAST);
                 }
-                
+
                 return date;
             } catch (DateTimeParseException e) {
                 // Continue to next format
             }
         }
-        
+
         // Try date-only formats without year (default to current year)
         String[] dateWithoutYearFormats = {"d MMM", "d MMMM"};
-        
+
         for (String pattern : dateWithoutYearFormats) {
             try {
                 DateTimeFormatter formatter = new DateTimeFormatterBuilder()
@@ -244,14 +245,14 @@ public class DateTimeUtil {
                         .appendPattern(pattern)
                         .parseDefaulting(ChronoField.YEAR, LocalDate.now().getYear())
                         .toFormatter(Locale.ENGLISH);
-                
+
                 LocalDate date = LocalDate.parse(trimmedStr, formatter);
-                
+
                 // Validate not in the past
                 if (date.isBefore(LocalDate.now())) {
                     throw new IllegalArgumentException(MESSAGE_DATE_TIME_PAST);
                 }
-                
+
                 return date;
             } catch (DateTimeParseException e) {
                 // Continue to next format
@@ -273,23 +274,23 @@ public class DateTimeUtil {
 
         String trimmedStr = timeStr.trim();
         String[] timeFormats = {
-                "h:mm a",   // 1:30 pm
-                "h.mm a",   // 1.30 pm
-                "h a",      // 1 pm
-                "h:mma",    // 1:30pm
-                "h.mma",    // 1.30pm
-                "ha",       // 1pm
-                "HH:mm",    // 13:30
-                "HHmm"      // 1330
+            "h:mm a", // 1:30 pm
+            "h.mm a", // 1.30 pm
+            "h a", // 1 pm
+            "h:mma", // 1:30pm
+            "h.mma", // 1.30pm
+            "ha", // 1pm
+            "HH:mm", // 13:30
+            "HHmm" // 1330
         };
-        
+
         for (String pattern : timeFormats) {
             try {
                 DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                         .parseCaseInsensitive()
                         .appendPattern(pattern)
                         .toFormatter(Locale.ENGLISH);
-                
+
                 return LocalTime.parse(trimmedStr, formatter);
             } catch (DateTimeParseException e) {
                 // Continue to next format
@@ -301,9 +302,9 @@ public class DateTimeUtil {
 
     private static boolean isWeekday(String input) {
         String lowerInput = input.toLowerCase().trim();
-        String[] weekdays = {"monday", "mon", "tuesday", "tue", "wednesday", "wed", 
-                           "thursday", "thu", "friday", "fri", "saturday", "sat", "sunday", "sun"};
-        
+        String[] weekdays = {"monday", "mon", "tuesday", "tue", "wednesday", "wed",
+            "thursday", "thu", "friday", "fri", "saturday", "sat", "sunday", "sun"};
+
         for (String weekday : weekdays) {
             if (lowerInput.startsWith(weekday)) {
                 return true;
@@ -317,10 +318,10 @@ public class DateTimeUtil {
         if (parts.length < 1) {
             throw new IllegalArgumentException("Invalid weekday format");
         }
-        
+
         DayOfWeek dayOfWeek = parseDayOfWeek(parts[0].toLowerCase());
         LocalDate targetDate = LocalDate.now().with(TemporalAdjusters.next(dayOfWeek));
-        
+
         if (parts.length == 1) {
             // Only weekday, default to 12:00 AM (midnight)
             return new DateTimeParseResult(targetDate, LocalTime.of(0, 0));
@@ -334,7 +335,7 @@ public class DateTimeUtil {
     private static DateTimeParseResult parseRelativeDate(String input, int daysToAdd) {
         String[] parts = input.split("\\s+", 2);
         LocalDate date = LocalDate.now().plusDays(daysToAdd);
-        
+
         if (parts.length == 1) {
             // Only date, default to 12:00 AM (midnight)
             return new DateTimeParseResult(date, LocalTime.of(0, 0));
@@ -342,11 +343,11 @@ public class DateTimeUtil {
             // Date + time
             LocalTime time = parseTime(parts[1]);
             LocalDateTime dateTime = LocalDateTime.of(date, time);
-            
+
             if (dateTime.isBefore(LocalDateTime.now())) {
                 throw new IllegalArgumentException(MESSAGE_DATE_TIME_PAST);
             }
-            
+
             return new DateTimeParseResult(date, time);
         }
     }
@@ -356,36 +357,36 @@ public class DateTimeUtil {
         if (parts.length < 1) {
             throw new IllegalArgumentException("Invalid weekday format");
         }
-        
+
         DayOfWeek dayOfWeek = parseDayOfWeek(parts[0].toLowerCase());
         return LocalDate.now().with(TemporalAdjusters.next(dayOfWeek));
     }
 
     private static DayOfWeek parseDayOfWeek(String weekday) {
         switch (weekday) {
-            case "monday":
-            case "mon":
-                return DayOfWeek.MONDAY;
-            case "tuesday":
-            case "tue":
-                return DayOfWeek.TUESDAY;
-            case "wednesday":
-            case "wed":
-                return DayOfWeek.WEDNESDAY;
-            case "thursday":
-            case "thu":
-                return DayOfWeek.THURSDAY;
-            case "friday":
-            case "fri":
-                return DayOfWeek.FRIDAY;
-            case "saturday":
-            case "sat":
-                return DayOfWeek.SATURDAY;
-            case "sunday":
-            case "sun":
-                return DayOfWeek.SUNDAY;
-            default:
-                throw new IllegalArgumentException("Invalid weekday: " + weekday);
+        case "monday":
+        case "mon":
+            return DayOfWeek.MONDAY;
+        case "tuesday":
+        case "tue":
+            return DayOfWeek.TUESDAY;
+        case "wednesday":
+        case "wed":
+            return DayOfWeek.WEDNESDAY;
+        case "thursday":
+        case "thu":
+            return DayOfWeek.THURSDAY;
+        case "friday":
+        case "fri":
+            return DayOfWeek.FRIDAY;
+        case "saturday":
+        case "sat":
+            return DayOfWeek.SATURDAY;
+        case "sunday":
+        case "sun":
+            return DayOfWeek.SUNDAY;
+        default:
+            throw new IllegalArgumentException("Invalid weekday: " + weekday);
         }
     }
 
@@ -395,20 +396,20 @@ public class DateTimeUtil {
         } else if (isAmPmFormat && temporal.isSupported(ChronoField.HOUR_OF_AMPM)) {
             // Handle AM/PM format
             int hour = temporal.get(ChronoField.HOUR_OF_AMPM);
-            int minute = temporal.isSupported(ChronoField.MINUTE_OF_HOUR) ? 
-                        temporal.get(ChronoField.MINUTE_OF_HOUR) : 0;
-            
+            int minute = temporal.isSupported(ChronoField.MINUTE_OF_HOUR)
+                        ? temporal.get(ChronoField.MINUTE_OF_HOUR) : 0;
+
             // Check if it's PM (this is a simplified approach)
             String amPm = temporal.query(t -> {
-                // This is a bit tricky with DateTimeFormatterBuilder, 
+                // This is a bit tricky with DateTimeFormatterBuilder,
                 // so we'll default to reasonable times
                 return null;
             });
-            
+
             // Default to reasonable times (this could be enhanced)
             return LocalTime.of(hour % 12 + (hour >= 12 ? 12 : 0), minute);
         }
-        
+
         // Default to 12:00 AM (midnight) if no time specified
         return LocalTime.of(0, 0);
     }
@@ -420,6 +421,9 @@ public class DateTimeUtil {
         private final LocalDate date;
         private final LocalTime time;
 
+        /**
+         * Constructor for DateTimeParseResult.
+         */
         public DateTimeParseResult(LocalDate date, LocalTime time) {
             this.date = date;
             this.time = time;

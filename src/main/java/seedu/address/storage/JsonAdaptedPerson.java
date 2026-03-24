@@ -140,7 +140,7 @@ class JsonAdaptedPerson {
         final Set<Tag> modelTags = new HashSet<>(personTags);
 
         final boolean modelIsFavourite = isFavourite;
-        
+
         Meeting modelMeeting = null;
         if (meeting != null) {
             try {
