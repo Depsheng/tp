@@ -41,6 +41,7 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Details;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
@@ -215,7 +216,7 @@ public class EditCommandParserTest {
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().build();
 
         // empty details - should throw validation exception
-        assertThrows(ParseException.class, "Details can take any values, and it should not be blank", () ->
+        assertThrows(ParseException.class, Details.MESSAGE_CONSTRAINTS, () ->
                 parser.parse(userInput));
     }
 
@@ -226,7 +227,7 @@ public class EditCommandParserTest {
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().build();
 
         // blank details - should throw validation exception
-        assertThrows(ParseException.class, "Details can take any values, and it should not be blank", () ->
+        assertThrows(ParseException.class, Details.MESSAGE_CONSTRAINTS, () ->
                 parser.parse(userInput));
     }
 

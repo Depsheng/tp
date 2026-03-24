@@ -132,9 +132,12 @@
     -fx-text-fill: #010504;
 }
 
-.meeting_label {
-    -fx-text-fill: #0b5d1e;
-    -fx-font-family: "Segoe UI Semibold";
+.cell_small_label_wrap {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-text-fill: #010504;
+    -fx-wrap-text: true;
+    -fx-max-width: 800px;
 }
 
 .stack-pane {

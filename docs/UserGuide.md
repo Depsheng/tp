@@ -105,7 +105,7 @@ Parameters:
   * `n/` : Name of the new contact
   * `e/` : Email of the new contact
   * `a/` : Address of the new contact
-  * `d/` : Details of the new contact [optional]
+  * `d/` : Details of the new contact [optional] (*Must be under 512 characters, cannot be empty*)
   * `t/` : Tags of the new contact [optional] (*Valid tags: "Renter", "Landlord", "Buyer", "Seller"*)
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
@@ -114,7 +114,8 @@ A person can have any number of tags (including 0)
 
 Behavior:
 * If a contact with the same phone number already exists, the new contact will not be added.
-  * Details will default to "No Details" if parameter not used or empty.
+  * Details will default to "No Details" if parameter not used.
+  * Details must be under 512 characters and cannot be empty.
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
@@ -134,7 +135,7 @@ Parameters:
   * `n/` : Name of the new contact
   * `e/` : Email of the new contact
   * `a/` : Address of the new contact
-  * `d/` : Details of the new contact [optional]
+  * `d/` : Details of the new contact [optional] (*Must be under 512 characters, cannot be empty*)
   * `t/` : Tags of the new contact [optional] (*Valid tags: "Renter", "Landlord", "Buyer", "Seller"*)
 
 Behavior:
@@ -145,7 +146,7 @@ Behavior:
   * You can remove all the person’s tags by typing `t/` without
       specifying any tags after it.
   * When editing details, the existing details of the person will be removed i.e adding of details is not cumulative.
-  * Details field cannot be empty, details will not be updated.
+  * Details field must be under 512 characters and cannot be empty, otherwise details will not be updated.
   * If a contact with the same phone number already exists, the contact will not be updated.
 
 Examples:
