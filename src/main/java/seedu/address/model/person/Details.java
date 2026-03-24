@@ -9,7 +9,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Details {
 
-    public static final String MESSAGE_CONSTRAINTS = "Details can take any values, and it should not be blank";
+    public static final String MESSAGE_CONSTRAINTS = "Details should be between 1 and 512 characters long";
 
     public static final String VALIDATION_REGEX = "[^\\s].*";
 
@@ -30,7 +30,7 @@ public class Details {
      * Returns true if a given string is a valid details.
      */
     public static boolean isValidDetails(String test) {
-        return test != null && test.matches(VALIDATION_REGEX);
+        return test != null && test.matches(VALIDATION_REGEX) && test.length() <= 512;
     }
 
     @Override
