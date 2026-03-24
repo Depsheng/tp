@@ -17,6 +17,7 @@ import seedu.address.model.person.Details;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.testutil.PersonBuilder;
 
 public class JsonAdaptedPersonTest {
     private static final String INVALID_NAME = "R@chel";
@@ -152,6 +153,42 @@ public class JsonAdaptedPersonTest {
                 NOT_FAVOURITE, VALID_MEETING_DATE, null);
         assertThrows(IllegalValueException.class,
                 "Meeting date and time must either both be present or both be absent.", person::toModelType);
+    }
+
+    @Test
+    public void toModelType_onlyMeetingTimePresent_throwsIllegalValueException() {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_DETAILS, VALID_TAGS,
+                NOT_FAVOURITE, null, VALID_MEETING_TIME);
+        assertThrows(IllegalValueException.class,
+                "Meeting date and time must either both be present or both be absent.", person::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidMeetingDateFormat_throwsIllegalValueException() {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_DETAILS, VALID_TAGS,
+                NOT_FAVOURITE, "23/03/2026", VALID_MEETING_TIME);
+        assertThrows(IllegalValueException.class,
+                "Meeting date/time must be stored in ISO-8601 format.", person::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidMeetingTimeFormat_throwsIllegalValueException() {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_DETAILS, VALID_TAGS,
+                NOT_FAVOURITE, VALID_MEETING_DATE, "2.30pm");
+        assertThrows(IllegalValueException.class,
+                "Meeting date/time must be stored in ISO-8601 format.", person::toModelType);
+    }
+
+    @Test
+    public void toModelType_nullTagsAndValidMeeting_returnsPerson() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_DETAILS, null,
+                NOT_FAVOURITE, VALID_MEETING_DATE, VALID_MEETING_TIME);
+        assertEquals(new PersonBuilder(BENSON).withTags().withMeeting("23/03/2026", "14:30").build(),
+                person.toModelType());
     }
 
 }
