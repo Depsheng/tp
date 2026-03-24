@@ -2,10 +2,10 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
@@ -19,17 +19,15 @@ import seedu.address.model.person.Person;
 public class MeetingCommand extends Command {
 
     public static final String COMMAND_WORD = "meeting";
-
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
-
+    public static final String MESSAGE_MEETING_ADDED =
+            "Added meeting for %1$s on %2$s at %3$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds a meeting date and time for the client identified by the displayed index.\n"
             + "Parameters: INDEX (must be a positive integer) DD/MM/YYYY HH:MM\n"
             + "Example: " + COMMAND_WORD + " 1 23/03/2026 14:30";
 
-    public static final String MESSAGE_MEETING_ADDED =
-            "Added meeting for %1$s on %2$s at %3$s";
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     private final Index index;
     private final LocalDate date;
