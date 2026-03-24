@@ -2,8 +2,6 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -29,28 +27,15 @@ public class Person {
     private final Details details;
     private final Set<Tag> tags = new HashSet<>();
     private final boolean isFavourite;
-    private final LocalDate meetingDate;
-    private final LocalTime meetingTime;
+    private final Meeting meeting;
 
     /**
-     * Every field must be present and not null.
-     */
-    public Person(Name name, Phone phone, Email email, Address address,
-                  Details details, Set<Tag> tags, boolean isFavourite) {
-        this(name, phone, email, address, details, tags, isFavourite, null, null);
-    }
-
-    /**
-     * Every non-meeting field must be present and not null. Meeting date/time are optional,
-     * but must either both be present or both be absent.
+     * Every field must be present and not null. Meeting is optional.
      */
     public Person(Name name, Phone phone, Email email, Address address,
                   Details details, Set<Tag> tags, boolean isFavourite,
-                  LocalDate meetingDate, LocalTime meetingTime) {
+                  Meeting meeting) {
         requireAllNonNull(name, phone, email, address, details, tags);
-        if ((meetingDate == null) != (meetingTime == null)) {
-            throw new IllegalArgumentException("Meeting date and time must either both be present or both be absent.");
-        }
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -58,8 +43,7 @@ public class Person {
         this.details = details;
         this.tags.addAll(tags);
         this.isFavourite = isFavourite;
-        this.meetingDate = meetingDate;
-        this.meetingTime = meetingTime;
+        this.meeting = meeting;
     }
 
     public Name getName() {
@@ -87,24 +71,17 @@ public class Person {
     }
 
     /**
-     * Returns the scheduled meeting date, if one has been assigned.
+     * Returns the scheduled meeting, if one has been assigned.
      */
-    public Optional<LocalDate> getMeetingDate() {
-        return Optional.ofNullable(meetingDate);
+    public Optional<Meeting> getMeeting() {
+        return Optional.ofNullable(meeting);
     }
 
     /**
-     * Returns the scheduled meeting time, if one has been assigned.
-     */
-    public Optional<LocalTime> getMeetingTime() {
-        return Optional.ofNullable(meetingTime);
-    }
-
-    /**
-     * Returns true if both a meeting date and meeting time have been assigned.
+     * Returns true if a meeting has been assigned.
      */
     public boolean hasMeeting() {
-        return meetingDate != null && meetingTime != null;
+        return meeting != null;
     }
 
     /**
@@ -151,8 +128,7 @@ public class Person {
                 && details.equals(otherPerson.details)
                 && tags.equals(otherPerson.tags)
                 && isFavourite == otherPerson.isFavourite
-                && Objects.equals(meetingDate, otherPerson.meetingDate)
-                && Objects.equals(meetingTime, otherPerson.meetingTime);
+                && Objects.equals(meeting, otherPerson.meeting);
     }
 
     /**
@@ -161,7 +137,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, details, tags, isFavourite, meetingDate, meetingTime);
+        return Objects.hash(name, phone, email, address, details, tags, isFavourite, meeting);
     }
 
     /**
@@ -177,8 +153,7 @@ public class Person {
                 .add("details", details)
                 .add("tags", tags)
                 .add("isFavourite", isFavourite)
-                .add("meetingDate", meetingDate)
-                .add("meetingTime", meetingTime)
+                .add("meeting", meeting)
                 .toString();
     }
 

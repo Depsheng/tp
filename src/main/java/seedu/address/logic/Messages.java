@@ -1,6 +1,5 @@
 package seedu.address.logic;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,9 +18,6 @@ public class Messages {
     public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The person index provided is invalid";
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
     public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command";
-
-    private static final DateTimeFormatter MEETING_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter MEETING_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     /**
      * Returns an error message indicating the duplicate prefixes.
@@ -53,9 +49,7 @@ public class Messages {
         person.getTags().forEach(builder::append);
         if (person.hasMeeting()) {
             builder.append("; Meeting: ")
-                    .append(person.getMeetingDate().orElseThrow().format(MEETING_DATE_FORMATTER))
-                    .append(" ")
-                    .append(person.getMeetingTime().orElseThrow().format(MEETING_TIME_FORMATTER));
+                    .append(person.getMeeting().orElseThrow().getFormattedDateTime());
         }
         return builder.toString();
     }

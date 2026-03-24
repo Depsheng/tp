@@ -77,18 +77,19 @@ CLIentTracker is built for agents who value **speed, reliability, and control**.
   * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
-Action | Description                                                   | Format, Examples
---------|---------------------------------------------------------------|------------------
-**Add** | [Adds a new person](#adding-a-person-add)                     | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [d/DETAILS] [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 d/Looking to buy in north t/BUYER`
-**Edit** | [Edits an existing person](#editing-a-person-edit)            | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com d/Updated work details`
-**Find** | [Finds persons by name or phone](#locating-persons-find)      | `find KEYWORD [MORE_KEYWORDS]` for name search<br> `find p/PHONE_NUMBER` for phone search<br> e.g., `find James Jake` or `find p/98765432`
-**Delete** | [Deletes a person](#deleting-a-person--delete)                | `delete PHONE`<br> e.g., `delete 91234567`
-**Clear** | [Clears all entries](#clearing-all-entries--clear)            | `clear`
-**Mark** | [Adds contact into favourites](#favourites-mark-and-unmark)   | `mark INDEX` <br> Example: `mark 1`
+Action | Description                                                    | Format, Examples
+--------|----------------------------------------------------------------|------------------
+**Add** | [Adds a new person](#adding-a-person-add)                      | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [d/DETAILS] [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 d/Looking to buy in north t/BUYER`
+**Edit** | [Edits an existing person](#editing-a-person-edit)             | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com d/Updated work details`
+**Find** | [Finds persons by name or phone](#locating-persons-find)       | `find KEYWORD [MORE_KEYWORDS]` for name search<br> `find p/PHONE_NUMBER` for phone search<br> e.g., `find James Jake` or `find p/98765432`
+**Delete** | [Deletes a person](#deleting-a-person--delete)                 | `delete PHONE`<br> e.g., `delete 91234567`
+**Clear** | [Clears all entries](#clearing-all-entries--clear)             | `clear`
+**Mark** | [Adds contact into favourites](#favourites-mark-and-unmark)    | `mark INDEX` <br> Example: `mark 1`
 **Unmark** | [Removes contact from favourites](#favourites-mark-and-unmark) | `unmark INDEX` <br> Example: `mark 1`
-**List** | [Lists all persons](#listing-all-persons-list)                | `list`
-**Help** | [Shows help message](#viewing-help-help)                      | `help`
-**Exit** | [Exits the app](#exiting-the-program-exit)                    | `exit`
+**Meeting** | [Adds meeting datetime to contact](#adding-a-meeting-meeting)  | `meeting INDEX DATE_TIME` <br> Example: `meeting 1 mon 2pm`
+**List** | [Lists all persons](#listing-all-persons-list)                 | `list`
+**Help** | [Shows help message](#viewing-help-help)                       | `help`
+**Exit** | [Exits the app](#exiting-the-program-exit)                     | `exit`
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -215,6 +216,56 @@ Examples (Combined Search):
   * `find alex p/9876` returns persons whose fields contain `alex` and whose phone contains `9876`
   * `find n/Alex Bob d/friend close` returns persons whose name contains `Alex` or `Bob`, and whose details contain `friend` or `close`
 
+
+### Adding a meeting: `meeting`
+Adds a meeting date and time for a client identified by the displayed index number.
+
+Format: `meeting INDEX DATE_TIME`
+
+* The **INDEX** refers to the index number shown in the displayed person list.
+* The **DATE_TIME** can be entered in various flexible formats:
+
+**Date formats:**
+- `15 Mar 2030` (day month year)
+- `15 March 2030` (full month name)
+- `15/3/2030` (slash separators)
+- `15-3-2030` (dash separators)
+- `15.3.2030` (dot separators)
+
+**Time formats:**
+- `4pm` (12-hour format)
+- `4:30pm` (12-hour with minutes)
+- `4.30pm` (12-hour with dot minutes)
+- `1600` (24-hour format)
+- `14:30` (24-hour with colon)
+
+**Combined examples:**
+- `meeting 1 15 Mar 2030 4pm`
+- `meeting 2 15 March 2030 4:30pm`
+- `meeting 3 15/3/2030 1600`
+- `meeting 4 15-3-2030 14:30`
+- `meeting 5 15.3.2030 1630`
+
+**Relative dates:**
+- `meeting 1 Today 4pm` (today's date)
+- `meeting 2 Tomorrow 9am` (tomorrow's date)
+- `meeting 3 Monday 2pm` (next Monday)
+
+**Weekday shortcuts:**
+- `meeting 1 Monday 2pm` or `meeting 1 Mon 2pm`
+- `meeting 2 Tuesday 2pm` or `meeting 2 Tue 2pm`
+- (Similar for Wed, Thu, Fri, Sat, Sun)
+
+**Important notes:**
+- Meeting dates and times must be in the future
+- If no time is specified, defaults to 12:00 AM (midnight)
+- All date/time inputs are case-insensitive
+
+Examples:
+* `meeting 1 25/03/2030 14:30` Adds meeting for 1st person
+* `meeting 2 15 Mar 2030 4pm` Adds meeting for 2nd person
+* `meeting 3 Today 2359` Adds meeting for today at 11:59 PM
+* `meeting 4 Monday 9am` Adds meeting for next Monday at 9:00 AM
 
 ### Deleting a person : `delete`
 

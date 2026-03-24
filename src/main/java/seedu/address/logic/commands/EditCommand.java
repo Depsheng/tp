@@ -25,6 +25,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Details;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Meeting;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -107,11 +108,10 @@ public class EditCommand extends Command {
         Details updatedDetails = editPersonDescriptor.getDetails().orElse(personToEdit.getDetails());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
         boolean updatedIsFavourite = personToEdit.getIsFavourite();
-        var updatedMeetingDate = personToEdit.getMeetingDate().orElse(null);
-        var updatedMeetingTime = personToEdit.getMeetingTime().orElse(null);
+        Meeting updatedMeeting = editPersonDescriptor.getMeeting().orElse(personToEdit.getMeeting().orElse(null));
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress,
-                updatedDetails, updatedTags, updatedIsFavourite, updatedMeetingDate, updatedMeetingTime);
+                updatedDetails, updatedTags, updatedIsFavourite, updatedMeeting);
     }
 
     @Override
@@ -150,6 +150,7 @@ public class EditCommand extends Command {
         private Details details;
         private Set<Tag> tags;
         private boolean isFavourite;
+        private Meeting meeting;
 
 
         public EditPersonDescriptor() {}
@@ -166,13 +167,14 @@ public class EditCommand extends Command {
             setDetails(toCopy.details);
             setTags(toCopy.tags);
             setIsFavourite(toCopy.isFavourite);
+            setMeeting(toCopy.meeting);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, details, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, details, tags, meeting);
         }
 
         public void setName(Name name) {
@@ -241,6 +243,14 @@ public class EditCommand extends Command {
             return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
         }
 
+        public void setMeeting(Meeting meeting) {
+            this.meeting = meeting;
+        }
+
+        public Optional<Meeting> getMeeting() {
+            return Optional.ofNullable(meeting);
+        }
+
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -258,7 +268,8 @@ public class EditCommand extends Command {
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(details, otherEditPersonDescriptor.details)
-                    && Objects.equals(tags, otherEditPersonDescriptor.tags);
+                    && Objects.equals(tags, otherEditPersonDescriptor.tags)
+                    && Objects.equals(meeting, otherEditPersonDescriptor.meeting);
         }
 
         @Override
@@ -270,6 +281,7 @@ public class EditCommand extends Command {
                     .add("address", address)
                     .add("details", details)
                     .add("tags", tags)
+                    .add("meeting", meeting)
                     .toString();
         }
     }

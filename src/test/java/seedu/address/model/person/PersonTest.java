@@ -13,8 +13,7 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -100,8 +99,7 @@ public class PersonTest {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", details=" + ALICE.getDetails()
                 + ", tags=" + ALICE.getTags() + ", isFavourite=" + ALICE.getIsFavourite()
-                + ", meetingDate=" + ALICE.getMeetingDate().orElse(null)
-                + ", meetingTime=" + ALICE.getMeetingTime().orElse(null) + "}";
+                + ", meeting=" + ALICE.getMeeting().orElse(null) + "}";
         assertEquals(expected, ALICE.toString());
     }
 
@@ -135,52 +133,22 @@ public class PersonTest {
 
     @Test
     public void equals_differentMeeting_returnsFalse() {
-        Person person1 = new PersonBuilder(ALICE).withMeeting("23/03/2026", "14:30").build();
+        Person person1 = new PersonBuilder(ALICE).withMeeting("23/03/2030", "14:30").build();
         Person person2 = new PersonBuilder(ALICE).withoutMeeting().build();
         assertFalse(person1.equals(person2));
-    }
-
-    @Test
-    public void constructor_onlyMeetingDatePresent_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new Person(
-                ALICE.getName(),
-                ALICE.getPhone(),
-                ALICE.getEmail(),
-                ALICE.getAddress(),
-                ALICE.getDetails(),
-                ALICE.getTags(),
-                ALICE.getIsFavourite(),
-                LocalDate.of(2026, 3, 23),
-                null));
-    }
-
-    @Test
-    public void constructor_onlyMeetingTimePresent_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new Person(
-                ALICE.getName(),
-                ALICE.getPhone(),
-                ALICE.getEmail(),
-                ALICE.getAddress(),
-                ALICE.getDetails(),
-                ALICE.getTags(),
-                ALICE.getIsFavourite(),
-                null,
-                LocalTime.of(14, 30)));
     }
 
     @Test
     public void hasMeeting_withoutMeeting_returnsFalse() {
         Person person = new PersonBuilder(ALICE).withoutMeeting().build();
         assertFalse(person.hasMeeting());
-        assertTrue(person.getMeetingDate().isEmpty());
-        assertTrue(person.getMeetingTime().isEmpty());
+        assertTrue(person.getMeeting().isEmpty());
     }
 
     @Test
     public void hasMeeting_withMeeting_returnsTrue() {
-        Person person = new PersonBuilder(ALICE).withMeeting("23/03/2026", "14:30").build();
+        Person person = new PersonBuilder(ALICE).withMeeting("25/03/2030", "14:30").build();
         assertTrue(person.hasMeeting());
-        assertEquals(LocalDate.of(2026, 3, 23), person.getMeetingDate().orElseThrow());
-        assertEquals(LocalTime.of(14, 30), person.getMeetingTime().orElseThrow());
+        assertEquals(LocalDateTime.of(2030, 3, 25, 14, 30), person.getMeeting().orElseThrow().getDateTime());
     }
 }

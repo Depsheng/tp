@@ -38,12 +38,12 @@ public class MessagesTest {
                 .withAddress("123, Jurong West Ave 6, #08-111")
                 .withDetails("No details")
                 .withTags()
-                .withMeeting("23/03/2026", "14:30")
+                .withMeeting("23/03/2030", "14:30")
                 .build();
 
         String formatted = Messages.format(person);
         assertEquals("Amy Bee; Phone: 85355255; Email: amy@gmail.com; Address: 123, Jurong West Ave 6, #08-111"
-                + "; Details: No details; Tags: ; Meeting: 23/03/2026 14:30", formatted);
-        assertTrue(formatted.contains("; Meeting: 23/03/2026 14:30"));
+                + "; Details: No details; Tags: ; Meeting: 23 Mar 2030 2:30 pm", formatted);
+        assertTrue(formatted.contains("; Meeting: 23 Mar 2030 2:30 pm"));
     }
 }

@@ -2,15 +2,14 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.util.DateTimeUtil;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.Meeting;
 import seedu.address.model.person.Person;
 
 /**
@@ -20,51 +19,37 @@ public class MeetingCommand extends Command {
 
     public static final String COMMAND_WORD = "meeting";
     public static final String MESSAGE_MEETING_ADDED =
-            "Added meeting for %1$s on %2$s at %3$s";
+            "Added meeting for %1$s on %2$s";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds a meeting date and time for the client identified by the displayed index.\n"
-            + "Parameters: INDEX (must be a positive integer) DD/MM/YYYY HH:MM\n"
-            + "Example: " + COMMAND_WORD + " 1 23/03/2026 14:30";
-
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+            + "Parameters: INDEX (must be a positive integer) DATE_TIME\n"
+            + DateTimeUtil.MESSAGE_INVALID_DATE_TIME_FORMAT;
 
     private final Index index;
-    private final LocalDate date;
-    private final LocalTime time;
+    private final Meeting meeting;
 
     /**
      * Creates a {@code MeetingCommand} for the person at the specified {@code index}.
      *
      * @param index Index of the person in the currently filtered list.
-     * @param date Meeting date to assign.
-     * @param time Meeting time to assign.
+     * @param meeting Meeting to assign.
      */
-    public MeetingCommand(Index index, LocalDate date, LocalTime time) {
+    public MeetingCommand(Index index, Meeting meeting) {
         requireNonNull(index);
-        requireNonNull(date);
-        requireNonNull(time);
+        requireNonNull(meeting);
         this.index = index;
-        this.date = date;
-        this.time = time;
+        this.meeting = meeting;
     }
 
     /**
-     * Returns the meeting date formatted for user-facing messages.
+     * Returns the meeting formatted for user-facing messages.
      */
-    public String getFormattedDate() {
-        return date.format(DATE_FORMATTER);
+    public String getFormattedMeeting() {
+        return meeting.getFormattedDateTime();
     }
 
     /**
-     * Returns the meeting time formatted for user-facing messages.
-     */
-    public String getFormattedTime() {
-        return time.format(TIME_FORMATTER);
-    }
-
-    /**
-     * Updates the person identified by the command index with the configured meeting date and time.
+     * Updates the person identified by the command index with the configured meeting.
      *
      * @param model {@code Model} which the command should operate on.
      * @return {@code CommandResult} describing the assigned meeting.
@@ -88,16 +73,15 @@ public class MeetingCommand extends Command {
                 personToEdit.getDetails(),
                 personToEdit.getTags(),
                 personToEdit.getIsFavourite(),
-                date,
-                time);
+                meeting);
 
         model.setPerson(personToEdit, updatedPerson);
         return new CommandResult(String.format(MESSAGE_MEETING_ADDED,
-                updatedPerson.getName(), getFormattedDate(), getFormattedTime()));
+                updatedPerson.getName(), getFormattedMeeting()));
     }
 
     /**
-     * Returns true if both commands target the same person and meeting slot.
+     * Returns true if both commands target the same person and meeting.
      */
     @Override
     public boolean equals(Object other) {
@@ -110,7 +94,6 @@ public class MeetingCommand extends Command {
         }
 
         return index.equals(otherCommand.index)
-                && date.equals(otherCommand.date)
-                && time.equals(otherCommand.time);
+                && meeting.equals(otherCommand.meeting);
     }
 }

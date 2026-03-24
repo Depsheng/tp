@@ -1,7 +1,6 @@
 package seedu.address.storage;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,6 +15,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Details;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Meeting;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -35,8 +35,7 @@ class JsonAdaptedPerson {
     private String details;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final boolean isFavourite;
-    private final String meetingDate;
-    private final String meetingTime;
+    private final String meeting;
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -48,16 +47,14 @@ class JsonAdaptedPerson {
      * @param details Serialized details field.
      * @param tags Serialized tags.
      * @param isFavourite Serialized favourite flag.
-     * @param meetingDate Serialized meeting date in ISO-8601 format, if present.
-     * @param meetingTime Serialized meeting time in ISO-8601 format, if present.
+     * @param meeting Serialized meeting date/time in ISO-8601 format, if present.
      */
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
             @JsonProperty("details") String details, @JsonProperty("tags") List<JsonAdaptedTag> tags,
             @JsonProperty("isFavourite") boolean isFavourite,
-            @JsonProperty("meetingDate") String meetingDate,
-            @JsonProperty("meetingTime") String meetingTime) {
+            @JsonProperty("meeting") String meeting) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -67,8 +64,7 @@ class JsonAdaptedPerson {
             this.tags.addAll(tags);
         }
         this.isFavourite = isFavourite;
-        this.meetingDate = meetingDate;
-        this.meetingTime = meetingTime;
+        this.meeting = meeting;
     }
 
     /**
@@ -86,8 +82,7 @@ class JsonAdaptedPerson {
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
         isFavourite = source.getIsFavourite();
-        meetingDate = source.getMeetingDate().map(LocalDate::toString).orElse(null);
-        meetingTime = source.getMeetingTime().map(LocalTime::toString).orElse(null);
+        meeting = source.getMeeting().map(meeting -> meeting.getDateTime().toString()).orElse(null);
     }
 
     /**
@@ -145,23 +140,18 @@ class JsonAdaptedPerson {
         final Set<Tag> modelTags = new HashSet<>(personTags);
 
         final boolean modelIsFavourite = isFavourite;
-        if ((meetingDate == null) != (meetingTime == null)) {
-            throw new IllegalValueException("Meeting date and time must either both be present or both be absent.");
-        }
 
-        LocalDate modelMeetingDate = null;
-        LocalTime modelMeetingTime = null;
-        if (meetingDate != null) {
+        Meeting modelMeeting = null;
+        if (meeting != null) {
             try {
-                modelMeetingDate = LocalDate.parse(meetingDate);
-                modelMeetingTime = LocalTime.parse(meetingTime);
+                modelMeeting = new Meeting(LocalDateTime.parse(meeting));
             } catch (DateTimeParseException exception) {
                 throw new IllegalValueException("Meeting date/time must be stored in ISO-8601 format.");
             }
         }
 
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelDetails,
-                modelTags, modelIsFavourite, modelMeetingDate, modelMeetingTime);
+                modelTags, modelIsFavourite, modelMeeting);
     }
 
 }

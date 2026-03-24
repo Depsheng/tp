@@ -9,8 +9,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +21,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.Meeting;
 import seedu.address.model.person.Person;
 
 public class MeetingCommandTest {
@@ -31,7 +31,8 @@ public class MeetingCommandTest {
     @Test
     public void execute_indexOutOfRange() {
         Index index = Index.fromOneBased(model.getAddressBook().getPersonList().size() + 10);
-        MeetingCommand meetingCommand = new MeetingCommand(index, LocalDate.of(2026, 3, 23), LocalTime.of(14, 30));
+        Meeting meeting = new Meeting(LocalDateTime.of(2030, 3, 25, 14, 30));
+        MeetingCommand meetingCommand = new MeetingCommand(index, meeting);
         assertThrows(CommandException.class, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, () ->
                 meetingCommand.execute(model));
     }
@@ -43,8 +44,8 @@ public class MeetingCommandTest {
         Index outOfBoundIndex = INDEX_SECOND_PERSON;
         assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getPersonList().size());
 
-        MeetingCommand meetingCommand =
-                new MeetingCommand(outOfBoundIndex, LocalDate.of(2026, 3, 23), LocalTime.of(14, 30));
+        Meeting meeting = new Meeting(LocalDateTime.of(2030, 3, 25, 14, 30));
+        MeetingCommand meetingCommand = new MeetingCommand(outOfBoundIndex, meeting);
         assertThrows(CommandException.class, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, () ->
                 meetingCommand.execute(model));
     }
@@ -57,6 +58,7 @@ public class MeetingCommandTest {
 
         List<Person> lastShownList = expectedModel.getFilteredPersonList();
         Person personToEdit = lastShownList.get(index.getZeroBased());
+        Meeting meeting = new Meeting(LocalDateTime.of(2030, 3, 25, 14, 30));
         Person updatedPerson = new Person(
                 personToEdit.getName(),
                 personToEdit.getPhone(),
@@ -65,56 +67,52 @@ public class MeetingCommandTest {
                 personToEdit.getDetails(),
                 personToEdit.getTags(),
                 personToEdit.getIsFavourite(),
-                LocalDate.of(2026, 3, 23),
-                LocalTime.of(14, 30));
+                meeting);
         expectedModel.setPerson(personToEdit, updatedPerson);
 
-        MeetingCommand command = new MeetingCommand(index, LocalDate.of(2026, 3, 23), LocalTime.of(14, 30));
+        MeetingCommand command = new MeetingCommand(index, meeting);
         CommandResult commandResult = command.execute(actualModel);
 
         assertEquals(String.format(MeetingCommand.MESSAGE_MEETING_ADDED, updatedPerson.getName(),
-                "23/03/2026", "14:30"), commandResult.getFeedbackToUser());
+                "25 Mar 2030 2:30 pm"), commandResult.getFeedbackToUser());
         assertEquals(expectedModel, actualModel);
     }
 
     @Test
     public void execute_nullModel_throwsNullPointerException() {
-        MeetingCommand meetingCommand = new MeetingCommand(Index.fromOneBased(1),
-                LocalDate.of(2026, 3, 23), LocalTime.of(14, 30));
+        Meeting meeting = new Meeting(LocalDateTime.of(2030, 3, 25, 14, 30));
+        MeetingCommand meetingCommand = new MeetingCommand(Index.fromOneBased(1), meeting);
         assertThrows(NullPointerException.class, () -> meetingCommand.execute(null));
     }
 
     @Test
     public void constructor_nullArguments_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new MeetingCommand(null,
-                LocalDate.of(2026, 3, 23), LocalTime.of(14, 30)));
-        assertThrows(NullPointerException.class, () -> new MeetingCommand(Index.fromOneBased(1),
-                null, LocalTime.of(14, 30)));
-        assertThrows(NullPointerException.class, () -> new MeetingCommand(Index.fromOneBased(1),
-                LocalDate.of(2026, 3, 23), null));
+        Meeting meeting = new Meeting(LocalDateTime.of(2030, 3, 25, 14, 30));
+        assertThrows(NullPointerException.class, () -> new MeetingCommand(null, meeting));
+        assertThrows(NullPointerException.class, () -> new MeetingCommand(Index.fromOneBased(1), null));
     }
 
     @Test
     public void getFormattedDateAndTime_returnsExpectedFormat() {
-        MeetingCommand meetingCommand =
-                new MeetingCommand(Index.fromOneBased(1), LocalDate.of(2026, 3, 23), LocalTime.of(14, 30));
+        Meeting meeting = new Meeting(LocalDateTime.of(2030, 3, 25, 14, 30));
+        MeetingCommand meetingCommand = new MeetingCommand(Index.fromOneBased(1), meeting);
 
-        assertEquals("23/03/2026", meetingCommand.getFormattedDate());
-        assertEquals("14:30", meetingCommand.getFormattedTime());
+        assertEquals("25 Mar 2030 2:30 pm", meeting.getFormattedDateTime());
     }
 
     @Test
     public void equals() {
-        MeetingCommand first = new MeetingCommand(Index.fromOneBased(1), LocalDate.of(2026, 3, 23),
-                LocalTime.of(14, 30));
-        MeetingCommand same = new MeetingCommand(Index.fromOneBased(1), LocalDate.of(2026, 3, 23),
-                LocalTime.of(14, 30));
-        MeetingCommand different = new MeetingCommand(Index.fromOneBased(2), LocalDate.of(2026, 3, 24),
-                LocalTime.of(15, 0));
-        MeetingCommand sameIndexDifferentDate = new MeetingCommand(Index.fromOneBased(1), LocalDate.of(2026, 3, 24),
-                LocalTime.of(14, 30));
-        MeetingCommand sameIndexAndDateDifferentTime = new MeetingCommand(Index.fromOneBased(1),
-                LocalDate.of(2026, 3, 23), LocalTime.of(15, 0));
+        Meeting meeting1 = new Meeting(LocalDateTime.of(2030, 3, 25, 14, 30));
+        Meeting meeting2 = new Meeting(LocalDateTime.of(2030, 3, 25, 14, 30));
+        Meeting meeting3 = new Meeting(LocalDateTime.of(2030, 3, 26, 15, 0));
+        Meeting meeting4 = new Meeting(LocalDateTime.of(2030, 3, 26, 14, 30));
+        Meeting meeting5 = new Meeting(LocalDateTime.of(2030, 3, 25, 15, 0));
+
+        MeetingCommand first = new MeetingCommand(Index.fromOneBased(1), meeting1);
+        MeetingCommand same = new MeetingCommand(Index.fromOneBased(1), meeting2);
+        MeetingCommand different = new MeetingCommand(Index.fromOneBased(2), meeting3);
+        MeetingCommand sameIndexDifferentDate = new MeetingCommand(Index.fromOneBased(1), meeting4);
+        MeetingCommand sameIndexAndDateDifferentTime = new MeetingCommand(Index.fromOneBased(1), meeting5);
         Object otherObject = new ArrayList<>();
 
         assertTrue(first.equals(first));

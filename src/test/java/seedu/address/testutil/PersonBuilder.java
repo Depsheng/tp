@@ -8,6 +8,7 @@ import java.util.Set;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Details;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Meeting;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -26,6 +27,7 @@ public class PersonBuilder {
     public static final String DEFAULT_DETAILS = "No details";
     public static final boolean DEFAULT_ISFAVOURITE = false;
 
+
     private Name name;
     private Phone phone;
     private Email email;
@@ -33,8 +35,7 @@ public class PersonBuilder {
     private Details details;
     private Set<Tag> tags;
     private boolean isFavourite;
-    private LocalDate meetingDate;
-    private LocalTime meetingTime;
+    private Meeting meeting;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -47,8 +48,7 @@ public class PersonBuilder {
         details = new Details(DEFAULT_DETAILS);
         tags = new HashSet<>();
         isFavourite = DEFAULT_ISFAVOURITE;
-        meetingDate = null;
-        meetingTime = null;
+        meeting = null;
     }
 
     /**
@@ -62,8 +62,7 @@ public class PersonBuilder {
         details = personToCopy.getDetails();
         tags = new HashSet<>(personToCopy.getTags());
         isFavourite = personToCopy.getIsFavourite();
-        meetingDate = personToCopy.getMeetingDate().orElse(null);
-        meetingTime = personToCopy.getMeetingTime().orElse(null);
+        meeting = personToCopy.getMeeting().orElse(null);
     }
 
     /**
@@ -126,8 +125,17 @@ public class PersonBuilder {
      * Sets the meeting date and time of the {@code Person} that we are building.
      */
     public PersonBuilder withMeeting(String date, String time) {
-        this.meetingDate = LocalDate.parse(date, java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        this.meetingTime = LocalTime.parse(time, java.time.format.DateTimeFormatter.ofPattern("HH:mm"));
+        LocalDate parsedDate = LocalDate.parse(date, java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalTime parsedTime = LocalTime.parse(time, java.time.format.DateTimeFormatter.ofPattern("HH:mm"));
+        this.meeting = new Meeting(parsedDate.atTime(parsedTime));
+        return this;
+    }
+
+    /**
+     * Sets the meeting of the {@code Person} that we are building.
+     */
+    public PersonBuilder withMeeting(Meeting meeting) {
+        this.meeting = meeting;
         return this;
     }
 
@@ -135,8 +143,7 @@ public class PersonBuilder {
      * Removes any assigned meeting date and time from the {@code Person} that we are building.
      */
     public PersonBuilder withoutMeeting() {
-        this.meetingDate = null;
-        this.meetingTime = null;
+        this.meeting = null;
         return this;
     }
 
@@ -144,7 +151,7 @@ public class PersonBuilder {
      * Builds and returns a {@code Person} with the configured fields.
      */
     public Person build() {
-        return new Person(name, phone, email, address, details, tags, isFavourite, meetingDate, meetingTime);
+        return new Person(name, phone, email, address, details, tags, isFavourite, meeting);
     }
 
 }

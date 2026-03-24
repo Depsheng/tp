@@ -1,6 +1,5 @@
 package seedu.address.ui;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
 import javafx.fxml.FXML;
@@ -16,8 +15,6 @@ import seedu.address.model.person.Person;
 public class PersonCard extends UiPart<Region> {
 
     private static final String FXML = "PersonListCard.fxml";
-    private static final DateTimeFormatter MEETING_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter MEETING_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -50,7 +47,7 @@ public class PersonCard extends UiPart<Region> {
 
     /**
      * Creates a {@code PersonCard} with the given {@code Person} and index to display.
-     * The meeting label is shown only when the person has both a meeting date and time.
+     * The meeting label is shown only when the person has a meeting.
      *
      * @param person Person to render.
      * @param displayedIndex One-based index shown on the card.
@@ -65,10 +62,7 @@ public class PersonCard extends UiPart<Region> {
         email.setText(person.getEmail().value);
         details.setText(person.getDetails().value);
         if (person.hasMeeting()) {
-            String meetingText = "Meeting: "
-                    + person.getMeetingDate().orElseThrow().format(MEETING_DATE_FORMATTER)
-                    + " "
-                    + person.getMeetingTime().orElseThrow().format(MEETING_TIME_FORMATTER);
+            String meetingText = "Meeting: " + person.getMeeting().orElseThrow().getFormattedDateTime();
             meeting.setText(meetingText);
             meeting.setManaged(true);
             meeting.setVisible(true);

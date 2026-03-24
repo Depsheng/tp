@@ -87,8 +87,7 @@ public class MarkAsFavouriteCommand extends Command {
                 personToEdit.getDetails(),
                 personToEdit.getTags(),
                 true,
-                personToEdit.getMeetingDate().orElse(null),
-                personToEdit.getMeetingTime().orElse(null));
+                personToEdit.getMeeting().orElse(null));
 
         model.setPerson(personToEdit, markedPerson);
 

@@ -93,9 +93,9 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_meeting() throws Exception {
         MeetingCommand command = (MeetingCommand) parser.parseCommand(
-                MeetingCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " 23/03/2026 14:30");
-        assertEquals(new MeetingCommand(INDEX_FIRST_PERSON, java.time.LocalDate.of(2026, 3, 23),
-                java.time.LocalTime.of(14, 30)), command);
+                MeetingCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " 25/03/2030 14:30");
+        assertEquals(new MeetingCommand(INDEX_FIRST_PERSON,
+                new seedu.address.model.person.Meeting(java.time.LocalDateTime.of(2030, 3, 25, 14, 30))), command);
     }
 
     @Test
