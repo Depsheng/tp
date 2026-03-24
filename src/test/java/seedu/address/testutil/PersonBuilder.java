@@ -114,23 +114,35 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the favourite status of the {@code Person} that we are building.
+     */
     public PersonBuilder withIsFavourite(boolean isFavourite) {
         this.isFavourite = isFavourite;
         return this;
     }
 
+    /**
+     * Sets the meeting date and time of the {@code Person} that we are building.
+     */
     public PersonBuilder withMeeting(String date, String time) {
         this.meetingDate = LocalDate.parse(date, java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         this.meetingTime = LocalTime.parse(time, java.time.format.DateTimeFormatter.ofPattern("HH:mm"));
         return this;
     }
 
+    /**
+     * Removes any assigned meeting date and time from the {@code Person} that we are building.
+     */
     public PersonBuilder withoutMeeting() {
         this.meetingDate = null;
         this.meetingTime = null;
         return this;
     }
 
+    /**
+     * Builds and returns a {@code Person} with the configured fields.
+     */
     public Person build() {
         return new Person(name, phone, email, address, details, tags, isFavourite, meetingDate, meetingTime);
     }
