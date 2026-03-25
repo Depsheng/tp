@@ -5,13 +5,19 @@ toc: true
 toc_label: "On this page"
 toc_icon: "list"
 ---
-CLIentTracker is a **desktop CRM designed for property agents, optimized for use via a Command Line Interface** (CLI) while still retaining the benefits of a simple visual interface. It allows agents to manage clients, listings, and notes quickly through commands such as `add`, `edit`, `find`, and `list`. If you can type fast, CLIentTracker lets you update and retrieve information significantly faster than traditional GUI-based CRM systems.
+CLIentTracker is a desktop CRM designed for property agents, optimized for use via a Command Line Interface (CLI) while 
+retaining a clean and simple visual interface. It enables efficient management of clients, property listings, notes, and
+meetings through commands such as add, edit, find, and list, allowing users to update and retrieve information faster 
+than traditional GUI-based systems. For agents who are comfortable with typing, this significantly improves productivity 
+in day-to-day operations.
 
+Unlike many web-based CRMs, CLIentTracker works fully offline, making it reliable in environments with poor or unstable 
+connectivity, such as property viewings or on-site visits. Core actions like searching, editing, or scheduling meetings 
+are performed instantly, without delays from loading or syncing. All data is automatically saved when the application 
+closes, ensuring records remain secure without manual intervention.
 
-Unlike many web-based CRMs, CLIentTracker works **fully offline**, allowing agents to continue working seamlessly in environments with poor or unstable connectivity, such as property viewings, new developments, or while on the move. Core operations like searching for clients or updating details can be done instantly without waiting for pages to load or systems to sync. When the application is closed, all data is automatically saved and archived, ensuring that records remain secure without requiring manual backups.
-
-
-CLIentTracker is built for agents who value **speed, reliability, and control**. By removing dependency on internet access and reducing interaction to simple, efficient commands, it enables agents to focus on their clients rather than their tools—making it especially effective in fast-paced, real-world selling environments where every second counts.
+Built for agents who value speed, reliability, and control, CLIentTracker helps users focus on clients rather than tools 
+in fast-paced environments.
 
 ## :page_facing_up: Contents
 - [:rocket: Quick Start](#quick-start)
@@ -156,66 +162,59 @@ Examples:
     *  `edit 3 d/Updated details about this person` Edits the details of the 3rd person to be `Updated details about this person`.
 
 ### Locating persons: `find`
-The find command searches across all details of a person — including name, phone number, email, address, and notes.
-It supports both substring matches and exact matches, and returns the entire person’s details when a match is found.
 
-Format Examples:
-* General search: `find KEYWORD`
-  * Name search: `find n/NAME_KEYWORD`
-  * Phone search: `find p/PHONE_NUMBER`
-  * Address search: `find a/ADDRESS_KEYWORD`
-  * Email search: `find e/EMAIL_KEYWORD`
+Search for persons using keywords across all fields or within specific fields.
 
-**For general search:**
-* case-insensitive search. e.g. `alex` will match `Alex`
-  * Keyword order does not matter (e.g. `Hans Bo` will match `Bo Hans`)
-  * Substring matches supported. e.g. `lex` will match `Alex`
-  * Persons matching at least one keyword will be returned (i.e. `OR` search).
-    e.g. `find alex` will return persons whose fields contain `alex`
+#### **Format:**
+- General search:  
+  `find KEYWORD...`
 
-Examples (General Search):
-* `find 9876` → returns the full details of persons with phone numbers 98765432, 98760000
-  * `find Street` → returns the full details of persons with addresses 123 Street Ave, Streetview Apartments
-  * `find example.com` → returns the full details of persons with emails like johndoe@example.com
-  * `find Updated` → returns the full details of persons with notes like Updated details about this person
+- Field-specific search:  
+  `find PREFIX/KEYWORD PREFIX/KEYWORD...`
 
-**For field-specific search (using prefixes):**
-* Searches only within the specified field.
-  * The search is case-insensitive.
-  * Partial matches are supported for all fields.
-  * Keywords within the same field are matched using **OR** logic.
-    e.g. `find n/Alex John` returns persons whose **name** contains `Alex` or `John`
-  * Different fields can be combined and are matched using **AND** logic.
-    e.g. `find n/Alex p/9123` returns persons whose **name** contains `Alex` and whose **phone** contains `9123`
-
-**Supported prefixes:**
-* `n/` — name
-  * `p/` — phone
-  * `a/` — address
-  * `e/` — email
-  * `d/` — details
-
-**Prefix behavior:**
-* Once a prefix is used, all following unprefixed keywords are treated as belonging to that same field until another prefix appears.
-  * e.g. `find n/Alex Bob` searches for persons whose **name** contains `Alex` or `Bob`
-  * e.g. `find n/Alex p/9123 Bob` searches for persons whose **name** contains `Alex`, and whose **phone** contains `9123` or `Bob`
+**Prefixes:**
+- `n/` — name
+- `p/` — phone
+- `a/` — address
+- `e/` — email
+- `d/` — details
 
 
-Examples (Field-Specific Search):
-* `find n/Alex David` returns persons whose name contains `Alex David`
-  * `find p/91032182 8743` returns persons whose phone contains `91032182 8743`
-  * `find p/9876` returns all persons with phone numbers containing `9876`
-  * `find a/Serangoon Geylang` returns persons whose address contains `Serangoon Geylang`
-  * `find e/example.com` returns persons whose email contains `example.com`
-  * `find d/friend` returns persons whose details contain `friend`
-   ![result for 'find alex david'](images/findAlexDavidResult.png)
+#### **General Search:**
+- Searches across **all fields**
+- Case-insensitive (`alex` = `Alex`)
+- Supports partial matches (`lex` → `Alex`)
+- Keywords must be **separated by commas**
+- Matches if **any keyword** is found (**OR** logic)
+- Examples:
+  - `find alex`
+  - `find alex, bob`
+  - `find 9876`
+  
+#### **Field-Specific Search:**
+- Searches only within specified field(s)
+- Case-insensitive and supports partial matches
+- Keywords must be **separated by commas**
+- Examples:
+  - `find n/Alex`
+  - `find p/9876`
+  - `find n/Alex, Bob p/9123`
+
+**Rules:**
+- Keywords within the same prefix use **OR**
+    - `find n/Alex, Bob` → name contains *Alex* or *Bob*
+- Different prefixes use **AND**
+    - `find n/Alex p/9123` → name contains *Alex* AND phone contains *9123*
+
+#### **Important Notes:**
+- You **cannot mix general search and prefix search**
+    - ❌ `find alex p/9876`
+- All keywords must be **comma-separated**
+    - ❌ `find n/Alex Bob`
+    - ✅ `find n/Alex, Bob`
 
 
-Examples (Combined Search):
-* `find n/Alex p/9123` returns persons whose name contains `Alex` and phone contains `9123`
-  * `find alex p/9876` returns persons whose fields contain `alex` and whose phone contains `9876`
-  * `find n/Alex Bob d/friend close` returns persons whose name contains `Alex` or `Bob`, and whose details contain `friend` or `close`
-
+---
 
 ### Adding a meeting: `meeting`
 Adds a meeting date and time for a client identified by the displayed index number.

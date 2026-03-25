@@ -137,11 +137,13 @@ public class FindCommandParser implements Parser<FindCommand> {
      * @param raw The raw string containing whitespace-separated values.
      */
     private void addGeneralValues(Map<String, List<String>> fieldMap, String raw) {
-        String[] values = raw.trim().split("\\s+");
+        String[] values = raw.split(",");
+
         fieldMap.putIfAbsent(PersonContainsKeywordsPredicate.GENERAL_KEY, new ArrayList<>());
 
         for (String value : values) {
             String cleaned = value.trim();
+
             if (!cleaned.isEmpty()) {
                 fieldMap.get(PersonContainsKeywordsPredicate.GENERAL_KEY).add(cleaned);
             }
