@@ -74,10 +74,9 @@ public class FindCommandParser implements Parser<FindCommand> {
             return fieldMap;
         }
 
-        /**
-         * Shouldn't have a prefix in the string and not start with it as it indicates that it is searching
-         * by general search first and then prefix search next
-         */
+
+        // Shouldn't have a prefix in the string and not start with it as it indicates that it is searching
+        // by general search first and then prefix search next
         if (!input.trim().matches("^[npaed]/.*")) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));

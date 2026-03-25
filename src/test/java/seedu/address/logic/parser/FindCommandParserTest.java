@@ -29,7 +29,7 @@ public class FindCommandParserTest {
         FindCommand expectedFindCommand = new FindCommand(
                 new PersonContainsKeywordsPredicate(
                         Map.of(PersonContainsKeywordsPredicate.GENERAL_KEY,
-                                Arrays.asList("Alice", "Bob"))));
+                                Arrays.asList("Alice Bob"))));
 
         assertParseSuccess(parser, "Alice Bob", expectedFindCommand);
     }
@@ -41,7 +41,7 @@ public class FindCommandParserTest {
                         Map.of(PersonContainsKeywordsPredicate.GENERAL_KEY,
                                 Arrays.asList("Alice", "Bob", "Charlie"))));
 
-        assertParseSuccess(parser, " \n Alice \t Bob   Charlie \n ", expectedFindCommand);
+        assertParseSuccess(parser, " \n Alice, \t Bob,   Charlie \n ", expectedFindCommand);
     }
 
     @Test
