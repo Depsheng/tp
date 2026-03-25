@@ -18,4 +18,12 @@ Person *--> Name
 Person *--> Phone
 Person *--> Email
 Person *--> Address
+Person *--> Details
+Person *--> "0..1" Meeting
+
+Meeting : -dateTime: LocalDateTime
+Meeting : +getDateTime(): LocalDateTime
+Meeting : +getFormattedDateTime(): String
+Meeting : +getCommandFormat(): String
+Meeting : DISPLAY_FORMATTER: DateTimeFormatter\n("dd MMM yyyy h:mm am/pm")
 @enduml

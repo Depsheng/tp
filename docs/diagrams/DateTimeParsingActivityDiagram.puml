@@ -1,0 +1,51 @@
+@startuml
+!include style.puml
+skin rose
+skinparam ActivityFontSize 15
+skinparam ArrowFontSize 12
+
+start
+:Input date/time string;
+
+if () then ([String starts with "today"?])
+    if () then ([Has time component?])
+        :Parse as 0 days + time;
+        :Validate not in past;
+    else ([else])
+        :Parse as 0 days + 12am;
+    endif
+else ([else])
+    if () then ([String starts with "tomorrow"?])
+        if () then ([Has time component?])
+            :Parse as 1 day + time;
+            :Validate not in past;
+        else ([else])
+            :Parse as 1 day + 12am;
+        endif
+    else ([else])
+        if () then ([String is weekday?])
+            if () then ([Has time component?])
+                :Parse as days to next weekday + time;
+            else ([else])
+                :Parse as days to next weekday (midnight);
+            endif
+        else ([else])
+            :Try all date/time formats;
+            if () then ([Format matches?])
+                if () then ([Has time component?])
+                    :Extract date and time;
+                else ([else])
+                    :Extract date + 12am;
+                endif
+                :Validate not in past;
+            else ([else])
+                :Throw InvalidFormatException;
+            endif
+        endif
+    endif
+endif
+
+:Return DateTimeParseResult;
+
+stop
+@enduml

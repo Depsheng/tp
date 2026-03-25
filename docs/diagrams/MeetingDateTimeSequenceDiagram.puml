@@ -1,0 +1,102 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":MeetingCommandParser" as MeetingCommandParser LOGIC_COLOR
+participant "m:MeetingCommand" as MeetingCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box "Commons Util" LOGIC_COLOR_T1
+participant "DateTimeUtil" as DateTimeUtil LOGIC_COLOR
+participant "result:DateTimeParseResult" as ParseResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "meeting:Meeting" as Meeting MODEL_COLOR
+participant "model:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("meeting 1 15 Mar 2026 4pm")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("meeting 1 15 Mar 2026 4pm")
+activate AddressBookParser
+
+create MeetingCommandParser
+AddressBookParser -> MeetingCommandParser : MeetingCommandParser()
+activate MeetingCommandParser
+
+MeetingCommandParser --> AddressBookParser
+deactivate MeetingCommandParser
+
+AddressBookParser -> MeetingCommandParser : parse("1 15 Mar 2026 4pm")
+activate MeetingCommandParser
+
+MeetingCommandParser -> DateTimeUtil : parseDateTime("15 Mar 2026 4pm")
+activate DateTimeUtil
+
+create ParseResult
+DateTimeUtil -> ParseResult : DateTimeParseResult(date, time)
+activate ParseResult
+
+ParseResult --> DateTimeUtil
+deactivate ParseResult
+
+DateTimeUtil --> MeetingCommandParser
+deactivate DateTimeUtil
+
+create Meeting
+MeetingCommandParser -> Meeting : Meeting(result.getDateTime())
+activate Meeting
+
+Meeting --> MeetingCommandParser
+deactivate Meeting
+
+create MeetingCommand
+MeetingCommandParser -> MeetingCommand : MeetingCommand(index, meeting)
+activate MeetingCommand
+
+MeetingCommand --> MeetingCommandParser
+deactivate MeetingCommand
+
+MeetingCommandParser --> AddressBookParser : m
+deactivate MeetingCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+MeetingCommandParser -[hidden]-> AddressBookParser
+destroy MeetingCommandParser
+
+AddressBookParser --> LogicManager : m
+deactivate AddressBookParser
+
+LogicManager -> MeetingCommand : execute(model)
+activate MeetingCommand
+
+MeetingCommand -> Model : getFilteredPersonList()
+activate Model
+
+Model --> MeetingCommand
+deactivate Model
+
+MeetingCommand -> Model : setPerson(personToEdit, updatedPerson)
+activate Model
+
+Model --> MeetingCommand
+deactivate Model
+
+create CommandResult
+MeetingCommand -> CommandResult : CommandResult(feedbackToUser)
+activate CommandResult
+
+CommandResult --> MeetingCommand
+deactivate CommandResult
+
+MeetingCommand --> LogicManager : CommandResult
+deactivate MeetingCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml

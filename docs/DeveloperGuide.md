@@ -12,6 +12,7 @@ title: Developer Guide
 * Used Windsurf to generate some of the JavaDocs
 * Used Windsurf to help with most tests
 * Used AI to generate sample data
+* Used AI to identify bugs
 
 --------------------------------------------------------------------------------------------------------------------
 
