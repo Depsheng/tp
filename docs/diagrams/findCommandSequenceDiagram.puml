@@ -1,0 +1,49 @@
+@startuml FindCommand_SequenceDiagram
+
+skinparam sequenceArrowColor #555555
+skinparam sequenceParticipantBackgroundColor #F8F8F8
+skinparam sequenceParticipantBorderColor #AAAAAA
+skinparam sequenceLifeLineBorderColor #BBBBBB
+
+participant FindCommand
+participant SearchPersonForKeyword
+participant "NameContainsKeyword\nPredicate" as NamePred
+participant "PhoneContainsKeyword\nPredicate" as PhonePred
+participant Model
+
+-> FindCommand : execute(model)
+activate FindCommand
+
+FindCommand -> Model : updateFilteredPersonList(predicate)
+activate Model
+
+loop for each Person in list
+  Model -> SearchPersonForKeyword : test(person)
+  activate SearchPersonForKeyword
+
+  SearchPersonForKeyword -> NamePred : test(person)
+  activate NamePred
+  NamePred --> SearchPersonForKeyword : true/false
+  deactivate NamePred
+
+  SearchPersonForKeyword -> PhonePred : test(person)
+  activate PhonePred
+  PhonePred --> SearchPersonForKeyword : true/false
+  deactivate PhonePred
+
+  note right of SearchPersonForKeyword
+    returns true only if
+    ALL predicates return true
+  end note
+
+  SearchPersonForKeyword --> Model : true/false
+  deactivate SearchPersonForKeyword
+end
+
+Model --> FindCommand : (filtered list updated)
+deactivate Model
+
+FindCommand --> : CommandResult (n persons listed)
+deactivate FindCommand
+
+@enduml

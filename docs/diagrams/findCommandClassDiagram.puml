@@ -1,0 +1,78 @@
+@startuml FindCommand_ClassDiagram
+
+skinparam classAttributeIconSize 0
+skinparam classFontStyle Bold
+skinparam arrowColor #555555
+skinparam classBackgroundColor #F8F8F8
+skinparam classBorderColor #AAAAAA
+
+interface "Predicate<Person>" as Predicate {
+  + test(person: Person): boolean
+}
+
+abstract class ObjectContainsKeywordsPredicate<T> {
+  # keywords: List<String>
+  + test(object: T): boolean
+  # getFieldValue(object: T): String
+  + equals(other: Object): boolean
+  + toString(): String
+}
+
+class SearchPersonForKeyword {
+  + GENERAL_KEY: String
+  - fieldKeywordsMap: Map<String, List<String>>
+  - predicates: List<Predicate<Person>>
+  + test(person: Person): boolean
+  - buildPredicates(): void
+  - buildPredicateForPrefix(prefix: String, keywords: List<String>): Predicate<Person>
+  + equals(other: Object): boolean
+  + toString(): String
+}
+
+class NameContainsKeywordPredicate {
+  # getFieldValue(person: Person): String
+}
+
+class PhoneContainsKeywordPredicate {
+  # getFieldValue(person: Person): String
+}
+
+class EmailContainsKeywordPredicate {
+  # getFieldValue(person: Person): String
+}
+
+class AddressContainsKeywordPredicate {
+  # getFieldValue(person: Person): String
+}
+
+class DetailsContainsKeywordPredicate {
+  # getFieldValue(person: Person): String
+}
+
+class GeneralContainsKeywordPredicate {
+  # getFieldValue(person: Person): String
+}
+
+class FindCommand {
+  + COMMAND_WORD: String
+  + MESSAGE_USAGE: String
+  - predicate: SearchPersonForKeyword
+  + execute(model: Model): CommandResult
+  + equals(other: Object): boolean
+  + toString(): String
+}
+
+ObjectContainsKeywordsPredicate ..|> Predicate
+SearchPersonForKeyword ..|> Predicate
+
+NameContainsKeywordPredicate --|> ObjectContainsKeywordsPredicate
+PhoneContainsKeywordPredicate --|> ObjectContainsKeywordsPredicate
+EmailContainsKeywordPredicate --|> ObjectContainsKeywordsPredicate
+AddressContainsKeywordPredicate --|> ObjectContainsKeywordsPredicate
+DetailsContainsKeywordPredicate --|> ObjectContainsKeywordsPredicate
+GeneralContainsKeywordPredicate --|> ObjectContainsKeywordsPredicate
+
+FindCommand *-- SearchPersonForKeyword : holds
+SearchPersonForKeyword o-- ObjectContainsKeywordsPredicate : builds list of
+
+@enduml

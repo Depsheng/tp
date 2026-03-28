@@ -21,14 +21,14 @@ import seedu.address.commons.util.ToStringBuilder;
  *
  * <p>Entries with empty or null keyword lists are ignored.
  */
-public class PersonContainsKeywordsPredicate implements Predicate<Person> {
+public class SearchPersonForKeyword implements Predicate<Person> {
     public static final String GENERAL_KEY = "general";
 
     private final Map<String, List<String>> fieldKeywordsMap;
     private final List<Predicate<Person>> predicates;
 
     /**
-     * Constructs a {@code PersonContainsKeywordsPredicate} using a mapping of field prefixes
+     * Constructs a {@code SearchPersonForKeyword} using a mapping of field prefixes
      * to their corresponding keyword lists.
      *
      * <p>Each entry in the map represents a field-specific search condition. Based on the prefix,
@@ -48,10 +48,21 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
      *
      * @param fieldKeywordsMap A map of prefixes to lists of keywords to match against a {@code Person}.
      */
-    public PersonContainsKeywordsPredicate(Map<String, List<String>> fieldKeywordsMap) {
+    public SearchPersonForKeyword(Map<String, List<String>> fieldKeywordsMap) {
         this.fieldKeywordsMap = fieldKeywordsMap;
         this.predicates = new ArrayList<>();
+        buildPredicates();
+    }
 
+    /**
+     * Iterates over all entries in {@code fieldKeywordsMap} and builds the corresponding
+     * field-specific predicates, appending each to {@code predicates}.
+     *
+     * <p>Entries with null or empty keyword lists are skipped. Each recognized prefix maps
+     * to a specific {@code Predicate<Person>} implementation. An assertion error is raised
+     * if an unexpected prefix is encountered, as this indicates a programming error.
+     */
+    private void buildPredicates() {
         for (Map.Entry<String, List<String>> entry : fieldKeywordsMap.entrySet()) {
             String prefix = entry.getKey();
             List<String> keywords = entry.getValue();
@@ -60,28 +71,37 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 continue;
             }
 
-            switch (prefix) {
-            case GENERAL_KEY:
-                predicates.add(new GeneralContainsKeywordPredicate(keywords));
-                break;
-            case "n/":
-                predicates.add(new NameContainsKeywordPredicate(keywords));
-                break;
-            case "p/":
-                predicates.add(new PhoneContainsKeywordPredicate(keywords));
-                break;
-            case "a/":
-                predicates.add(new AddressContainsKeywordPredicate(keywords));
-                break;
-            case "d/":
-                predicates.add(new DetailsContainsKeywordPredicate(keywords));
-                break;
-            case "e/":
-                predicates.add(new EmailContainsKeywordPredicate(keywords));
-                break;
-            default:
-                assert false : "Unexpected prefix: " + prefix;
-            }
+            Predicate<Person> predicate = buildPredicateForPrefix(prefix, keywords);
+            predicates.add(predicate);
+        }
+    }
+
+    /**
+     * Maps a single field prefix and its associated keywords to the corresponding
+     * {@code Predicate<Person>} implementation.
+     *
+     * @param prefix   The field prefix (e.g. {@code "n/"}, {@code "p/"}, {@code GENERAL_KEY}).
+     * @param keywords The non-empty list of keywords to match against the field.
+     * @return The appropriate {@code Predicate<Person>} for the given prefix.
+     * @throws AssertionError If the prefix is not one of the recognized values.
+     */
+    private Predicate<Person> buildPredicateForPrefix(String prefix, List<String> keywords) {
+        switch (prefix) {
+        case GENERAL_KEY:
+            return new GeneralContainsKeywordPredicate(keywords);
+        case "n/":
+            return new NameContainsKeywordPredicate(keywords);
+        case "p/":
+            return new PhoneContainsKeywordPredicate(keywords);
+        case "a/":
+            return new AddressContainsKeywordPredicate(keywords);
+        case "d/":
+            return new DetailsContainsKeywordPredicate(keywords);
+        case "e/":
+            return new EmailContainsKeywordPredicate(keywords);
+        default:
+            assert false : "Unexpected prefix: " + prefix;
+            return null; // unreachable, but required for compilation
         }
     }
 
@@ -106,7 +126,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     /**
      * Compares this predicate with another object for equality.
      *
-     * <p>Two {@code PersonContainsKeywordsPredicate} objects are considered equal if
+     * <p>Two {@code SearchPersonForKeyword} objects are considered equal if
      * they have the same field-to-keywords mapping.
      *
      * @param other The object to compare with.
@@ -118,11 +138,11 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
             return true;
         }
 
-        if (!(other instanceof PersonContainsKeywordsPredicate)) {
+        if (!(other instanceof SearchPersonForKeyword)) {
             return false;
         }
 
-        PersonContainsKeywordsPredicate otherPredicate = (PersonContainsKeywordsPredicate) other;
+        SearchPersonForKeyword otherPredicate = (SearchPersonForKeyword) other;
         return fieldKeywordsMap.equals(otherPredicate.fieldKeywordsMap);
     }
 

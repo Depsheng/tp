@@ -26,7 +26,7 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.MeetingCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.PersonContainsKeywordsPredicate;
+import seedu.address.model.person.SearchPersonForKeyword;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -79,8 +79,8 @@ public class AddressBookParserTest {
 
         assertEquals(
                 new FindCommand(
-                        new PersonContainsKeywordsPredicate(
-                                Map.of(PersonContainsKeywordsPredicate.GENERAL_KEY, keywords))),
+                        new SearchPersonForKeyword(
+                                Map.of(SearchPersonForKeyword.GENERAL_KEY, keywords))),
                 command);
     }
 

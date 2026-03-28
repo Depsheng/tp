@@ -12,7 +12,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
-import seedu.address.model.person.PersonContainsKeywordsPredicate;
+import seedu.address.model.person.SearchPersonForKeyword;
 
 public class FindCommandParserTest {
 
@@ -27,8 +27,8 @@ public class FindCommandParserTest {
     @Test
     public void parse_untaggedArgs_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonContainsKeywordsPredicate(
-                        Map.of(PersonContainsKeywordsPredicate.GENERAL_KEY,
+                new SearchPersonForKeyword(
+                        Map.of(SearchPersonForKeyword.GENERAL_KEY,
                                 Arrays.asList("Alice Bob"))));
 
         assertParseSuccess(parser, "Alice Bob", expectedFindCommand);
@@ -37,8 +37,8 @@ public class FindCommandParserTest {
     @Test
     public void parse_untaggedArgsWithExtraWhitespace_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonContainsKeywordsPredicate(
-                        Map.of(PersonContainsKeywordsPredicate.GENERAL_KEY,
+                new SearchPersonForKeyword(
+                        Map.of(SearchPersonForKeyword.GENERAL_KEY,
                                 Arrays.asList("Alice", "Bob", "Charlie"))));
 
         assertParseSuccess(parser, " \n Alice, \t Bob,   Charlie \n ", expectedFindCommand);
@@ -59,16 +59,28 @@ public class FindCommandParserTest {
     @Test
     public void parse_namePrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonContainsKeywordsPredicate(
+                new SearchPersonForKeyword(
                         Map.of("n/", Arrays.asList("john doe", "betty boo"))));
 
         assertParseSuccess(parser, "n/john doe, betty boo", expectedFindCommand);
     }
 
     @Test
+    public void parse_invalidPrefix_throwsParseException() {
+        assertParseFailure(parser, "x/invalid identifier",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_validAndInvalidPrefix_throwsParseException() {
+        assertParseFailure(parser, "n/hello world x/invalid identifier",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
     public void parse_phonePrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonContainsKeywordsPredicate(
+                new SearchPersonForKeyword(
                         Map.of("p/", Arrays.asList("12345678", "87654321"))));
 
         assertParseSuccess(parser, "p/12345678, 87654321", expectedFindCommand);
@@ -77,7 +89,7 @@ public class FindCommandParserTest {
     @Test
     public void parse_emailPrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonContainsKeywordsPredicate(
+                new SearchPersonForKeyword(
                         Map.of("e/", Arrays.asList("alice@example.com", "bob@example.com"))));
 
         assertParseSuccess(parser, "e/alice@example.com, bob@example.com", expectedFindCommand);
@@ -86,7 +98,7 @@ public class FindCommandParserTest {
     @Test
     public void parse_addressPrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonContainsKeywordsPredicate(
+                new SearchPersonForKeyword(
                         Map.of("a/", Arrays.asList("123 Main Street", "Jurong West"))));
 
         assertParseSuccess(parser, "a/123 Main Street, Jurong West", expectedFindCommand);
@@ -95,7 +107,7 @@ public class FindCommandParserTest {
     @Test
     public void parse_detailsPrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonContainsKeywordsPredicate(
+                new SearchPersonForKeyword(
                         Map.of("d/", Arrays.asList("good friend", "teammate"))));
 
         assertParseSuccess(parser, "d/good friend, teammate", expectedFindCommand);
@@ -104,7 +116,7 @@ public class FindCommandParserTest {
     @Test
     public void parse_multipleTaggedPrefixes_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonContainsKeywordsPredicate(
+                new SearchPersonForKeyword(
                         Map.of(
                                 "n/", List.of("john doe", "betty boo"),
                                 "p/", List.of("12345678"),
@@ -127,7 +139,7 @@ public class FindCommandParserTest {
     @Test
     public void parse_taggedArgsWithEmptyCommaEntries_skipsEmptyValues() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonContainsKeywordsPredicate(
+                new SearchPersonForKeyword(
                         Map.of("n/", Arrays.asList("Alice", "Bob"))));
 
         assertParseSuccess(parser, "n/Alice, , Bob,   ", expectedFindCommand);

@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.PersonContainsKeywordsPredicate;
+import seedu.address.model.person.SearchPersonForKeyword;
 
 /**
  * Parses input arguments and creates a new FindCommand object.
@@ -44,7 +45,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         Map<String, List<String>> fieldMap = parseFindArguments(trimmedArgs);
         assert !fieldMap.isEmpty() : "fieldMap should not be empty after parsing";
-        return new FindCommand(new PersonContainsKeywordsPredicate(fieldMap));
+        return new FindCommand(new SearchPersonForKeyword(fieldMap));
     }
 
     /**
@@ -68,21 +69,49 @@ public class FindCommandParser implements Parser<FindCommand> {
     private Map<String, List<String>> parseFindArguments(String input) throws ParseException {
         Map<String, List<String>> fieldMap = new HashMap<>();
 
-        boolean hasPrefix = input.matches(".*[npaed]/.*");
+        Pattern anyPrefixPattern = Pattern.compile("(^|\\s)[a-zA-Z]/");
+        Pattern invalidPrefixPattern = Pattern.compile("(^|\\s)[^npaed\\s]/");
 
-        if (!hasPrefix) {
-            addGeneralValues(fieldMap, input);
-            return fieldMap;
-        }
+        boolean hasAnyPrefixPattern = anyPrefixPattern.matcher(input).find();
+        boolean hasInvalidPrefix = invalidPrefixPattern.matcher(input).find();
 
-
-        // Shouldn't have a prefix in the string and not start with it as it indicates that it is searching
-        // by general search first and then prefix search next
-        if (!input.trim().matches("^[npaed]/.*")) {
+        if (hasInvalidPrefix) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
+        if (hasAnyPrefixPattern && !input.matches("^[npaed]/.*")) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+
+        if (!hasAnyPrefixPattern) {
+            addGeneralValues(fieldMap, input);
+            return fieldMap;
+        }
+
+        parsePrefixedSegments(fieldMap, input);
+        return fieldMap;
+    }
+
+    /**
+     * Splits a prefixed input string by recognized prefix tokens and populates the field map
+     * with the corresponding keyword values.
+     *
+     * <p>The input is expected to be a valid prefixed search string that has already passed
+     * prefix validation. It is split using {@code PREFIX_REGEX} and each resulting segment
+     * must begin with one of the recognized prefixes: {@code n/}, {@code p/}, {@code e/},
+     * {@code a/}, or {@code d/}.
+     *
+     * <p>For each segment, the prefix is used as the map key and the remainder of the segment
+     * is passed to {@link #addTaggedValues} to be parsed and stored.
+     *
+     * @param fieldMap The map to populate with prefix-to-keyword-list entries.
+     * @param input    The validated prefixed input string to parse.
+     * @throws ParseException If a segment does not begin with a recognized prefix.
+     */
+    private void parsePrefixedSegments(Map<String, List<String>> fieldMap, String input)
+            throws ParseException {
         String[] parts = input.split(PREFIX_REGEX);
 
         for (String part : parts) {
@@ -92,37 +121,21 @@ public class FindCommandParser implements Parser<FindCommand> {
             }
             assert part.matches("[npaed]/.*") : "Invalid prefix encountered: " + part;
 
-            // Each part is expected to start with a valid prefix followed by its value.
-            // We identify the prefix and extract the corresponding value.
             if (part.startsWith("n/")) {
-                // Name field: store the keywords as values for the key "n/" in the dict
                 addTaggedValues(fieldMap, "n/", part.substring(2));
-
             } else if (part.startsWith("p/")) {
-                // Phone field
                 addTaggedValues(fieldMap, "p/", part.substring(2));
-
             } else if (part.startsWith("e/")) {
-                // Email field
                 addTaggedValues(fieldMap, "e/", part.substring(2));
-
             } else if (part.startsWith("a/")) {
-                // Address field
                 addTaggedValues(fieldMap, "a/", part.substring(2));
-
             } else if (part.startsWith("d/")) {
-                // Details field
                 addTaggedValues(fieldMap, "d/", part.substring(2));
-
             } else {
-                // Any segment that does not match a valid prefix is considered invalid input
-                // and should result in a parsing failure
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
             }
         }
-
-        return fieldMap;
     }
 
     /**
@@ -163,13 +176,13 @@ public class FindCommandParser implements Parser<FindCommand> {
     private void addGeneralValues(Map<String, List<String>> fieldMap, String raw) {
         String[] values = raw.split(",");
 
-        fieldMap.putIfAbsent(PersonContainsKeywordsPredicate.GENERAL_KEY, new ArrayList<>());
+        fieldMap.putIfAbsent(SearchPersonForKeyword.GENERAL_KEY, new ArrayList<>());
 
         for (String value : values) {
             String cleaned = value.trim();
 
             if (!cleaned.isEmpty()) {
-                fieldMap.get(PersonContainsKeywordsPredicate.GENERAL_KEY).add(cleaned);
+                fieldMap.get(SearchPersonForKeyword.GENERAL_KEY).add(cleaned);
             }
         }
     }

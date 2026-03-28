@@ -20,7 +20,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.PersonContainsKeywordsPredicate;
+import seedu.address.model.person.SearchPersonForKeyword;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 
 /**
@@ -130,7 +130,7 @@ public class CommandTestUtil {
         Map<String, List<String>> fieldMap = new HashMap<>();
         fieldMap.put("n/", List.of(splitName[0]));
 
-        model.updateFilteredPersonList(new PersonContainsKeywordsPredicate(fieldMap));
+        model.updateFilteredPersonList(new SearchPersonForKeyword(fieldMap));
 
         assertEquals(1, model.getFilteredPersonList().size());
     }
