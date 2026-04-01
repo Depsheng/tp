@@ -1,0 +1,26 @@
+@startuml
+!include style.puml
+skin rose
+skinparam ActivityFontSize 15
+skinparam ArrowFontSize 12
+
+start
+:User enters mark command;
+:System processes command;
+
+if () then ([Valid Index])
+    :Identify selected person;
+
+    if () then ([Person already in favourites])
+        :Show already-favourite message;
+    else ([Else])
+        :Mark person as favourite;
+        :Show success message;
+    endif
+
+else ([Else])
+    :Show invalid index error;
+endif
+
+stop
+@enduml
