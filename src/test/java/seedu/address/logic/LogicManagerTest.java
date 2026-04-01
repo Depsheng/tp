@@ -23,6 +23,7 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -228,5 +229,47 @@ public class LogicManagerTest {
 
         assertCommandSuccess(deleteCommand, expectedConfirmationMessage, expectedModel);
         assertCommandSuccess(confirmCommand, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_undoAfterAdd_success() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
+                + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
+
+        Person expectedPerson = new PersonBuilder(AMY).withTags().withDetails("No details").build();
+        Model expectedModelAfterAdd = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModelAfterAdd.addPerson(expectedPerson);
+
+        assertCommandSuccess(addCommand, String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(expectedPerson)),
+                expectedModelAfterAdd);
+        assertCommandSuccess(UndoCommand.COMMAND_WORD,
+                String.format(UndoCommand.MESSAGE_SUCCESS, addCommand), new ModelManager());
+    }
+
+    @Test
+    public void execute_undoWithNoHistory_throwsCommandException() {
+        assertCommandException(UndoCommand.COMMAND_WORD, UndoCommand.MESSAGE_NO_HISTORY);
+    }
+
+    @Test
+    public void execute_undoAfterDeleteConfirmation_success() throws Exception {
+        String deleteCommand = "delete 12345678";
+
+        Person personToDelete = new PersonBuilder(AMY).withTags().withDetails("No details")
+                .withPhone("12345678").build();
+        model.addPerson(personToDelete);
+
+        Model expectedModelAfterDelete = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModelAfterDelete.deletePerson(personToDelete);
+        Model expectedModelAfterUndo = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        assertCommandSuccess(deleteCommand,
+                String.format(DeleteCommand.MESSAGE_CONFIRMATION_PROMPT, Messages.format(personToDelete)),
+                expectedModelAfterUndo);
+        assertCommandSuccess("y",
+                String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)),
+                expectedModelAfterDelete);
+        assertCommandSuccess(UndoCommand.COMMAND_WORD,
+                String.format(UndoCommand.MESSAGE_SUCCESS, deleteCommand), expectedModelAfterUndo);
     }
 }

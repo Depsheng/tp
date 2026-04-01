@@ -66,7 +66,7 @@ public class DeleteCommandTest {
     @Test
     public void confirmationCommand_invalidInput_returnsConfirmationRequired() throws CommandException {
         DeleteCommand deleteCommand = new DeleteCommand(ALICE.getPhone());
-        deleteCommand.requestConfirmation(model);
+        deleteCommand.requestConfirmation(model, "delete " + ALICE.getPhone());
 
         CommandResult result = DeleteCommand.confirmationCommand(model, "maybe");
 

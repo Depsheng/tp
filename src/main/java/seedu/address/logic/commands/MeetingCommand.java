@@ -80,6 +80,11 @@ public class MeetingCommand extends Command {
                 updatedPerson.getName(), getFormattedMeeting()));
     }
 
+    @Override
+    public boolean modifiesAddressBook() {
+        return true;
+    }
+
     /**
      * Returns true if both commands target the same person and meeting.
      */

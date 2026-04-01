@@ -131,6 +131,11 @@ public class EditCommand extends Command {
     }
 
     @Override
+    public boolean modifiesAddressBook() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("index", index)

@@ -89,4 +89,19 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Saves the current address book state so it can be restored later.
+     */
+    void saveAddressBookState(ReadOnlyAddressBook addressBook, String commandText);
+
+    /**
+     * Returns true if there is at least one saved address book state to undo to.
+     */
+    boolean canUndoAddressBook();
+
+    /**
+     * Restores the most recently saved address book state.
+     */
+    String undoAddressBook();
 }

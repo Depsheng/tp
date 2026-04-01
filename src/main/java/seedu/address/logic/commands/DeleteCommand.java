@@ -29,6 +29,7 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETION_CANCELLED = "Deletion cancelled.";
 
     private static DeleteCommand pendingDeleteCommand;
+    private static String pendingDeleteCommandText;
 
     private final Phone targetPhone;
 
@@ -51,15 +52,22 @@ public class DeleteCommand extends Command {
         throw new CommandException(String.format(MESSAGE_PHONE_NOT_FOUND, targetPhone));
     }
 
+    @Override
+    public boolean modifiesAddressBook() {
+        return true;
+    }
+
     /**
      * Stores this command as the pending delete and returns the confirmation prompt.
      */
-    public CommandResult requestConfirmation(Model model) throws CommandException {
+    public CommandResult requestConfirmation(Model model, String commandText) throws CommandException {
         requireNonNull(model);
+        requireNonNull(commandText);
 
         Person personToDelete = getTargetPerson(model);
 
         pendingDeleteCommand = this;
+        pendingDeleteCommandText = commandText.trim();
         return new CommandResult(String.format(MESSAGE_CONFIRMATION_PROMPT, Messages.format(personToDelete)));
     }
 
@@ -84,11 +92,13 @@ public class DeleteCommand extends Command {
         if (commandText.equalsIgnoreCase("y")) {
             DeleteCommand commandToExecute = pendingDeleteCommand;
             pendingDeleteCommand = null;
+            pendingDeleteCommandText = null;
             return commandToExecute.execute(model);
         }
 
         if (commandText.equalsIgnoreCase("n")) {
             pendingDeleteCommand = null;
+            pendingDeleteCommandText = null;
             return new CommandResult(MESSAGE_DELETION_CANCELLED);
         }
 
@@ -109,6 +119,13 @@ public class DeleteCommand extends Command {
      */
     public String getNotFoundMessage() {
         return String.format(MESSAGE_PHONE_NOT_FOUND, targetPhone);
+    }
+
+    /**
+     * Returns the original delete command text that is currently awaiting confirmation.
+     */
+    public static String getPendingCommandText() {
+        return pendingDeleteCommandText;
     }
 
     private Person getTargetPerson(Model model) throws CommandException {

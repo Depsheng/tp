@@ -5,6 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.Stack;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -29,6 +30,8 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final SortedList<Person> sortedFilteredPersons;
+    private final Stack<AddressBook> addressBookStateHistory;
+    private final Stack<String> commandHistory;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -40,6 +43,8 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
+        addressBookStateHistory = new Stack<>();
+        commandHistory = new Stack<>();
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         sortedFilteredPersons = new SortedList<>(filteredPersons);
         sortedFilteredPersons.setComparator(FAVOURITES_FIRST_COMPARATOR);
@@ -141,6 +146,25 @@ public class ModelManager implements Model {
     public void updateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         filteredPersons.setPredicate(predicate);
+    }
+
+    @Override
+    public void saveAddressBookState(ReadOnlyAddressBook addressBook, String commandText) {
+        requireAllNonNull(addressBook, commandText);
+        addressBookStateHistory.push(new AddressBook(addressBook));
+        commandHistory.push(commandText);
+    }
+
+    @Override
+    public boolean canUndoAddressBook() {
+        return !addressBookStateHistory.isEmpty();
+    }
+
+    @Override
+    public String undoAddressBook() {
+        addressBook.resetData(addressBookStateHistory.pop());
+        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        return commandHistory.pop();
     }
 
     @Override

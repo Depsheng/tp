@@ -30,7 +30,7 @@ in fast-paced environments.
 
 ## :rocket: Quick Start
 
-1. Ensure you have Java `17` or above installed on your Computer.<br>
+1. Ensure you h.ave Java `17` or above installed on your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
    1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
@@ -83,20 +83,21 @@ in fast-paced environments.
   * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
-Action | Description                                                   | Format, Examples
---------|---------------------------------------------------------------|------------------
-**Add** | [Adds a new person](#adding-a-person-add)                     | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [d/DETAILS] [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 d/Looking to buy in north t/BUYER`
-**Edit** | [Edits an existing person](#editing-a-person-edit)            | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com d/Updated work details`
-**Find** | [Finds persons by name or phone](#locating-persons-find)      | `find KEYWORD [MORE_KEYWORDS]` for name search<br> `find p/PHONE_NUMBER` for phone search<br> e.g., `find James Jake` or `find p/98765432`
-**Delete** | [Deletes a person](#deleting-a-person--delete)                | `delete PHONE`<br> e.g., `delete 91234567`
-**Clear** | [Clears all entries](#clearing-all-entries--clear)            | `clear`
-**Mark** | [Adds contact into favourites](#favourites-mark-and-unmark)   | `mark INDEX` <br> Example: `mark 1`
+Action | Description                                                    | Format, Examples
+--------|----------------------------------------------------------------|------------------
+**Add** | [Adds a new person](#adding-a-person-add)                      | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [d/DETAILS] [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 d/Looking to buy in north t/BUYER`
+**Edit** | [Edits an existing person](#editing-a-person-edit)             | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com d/Updated work details`
+**Find** | [Finds persons by name or phone](#locating-persons-find)       | `find KEYWORD [MORE_KEYWORDS]` for name search<br> `find p/PHONE_NUMBER` for phone search<br> e.g., `find James Jake` or `find p/98765432`
+**Delete** | [Deletes a person](#deleting-a-person--delete)                 | `delete PHONE`<br> e.g., `delete 91234567`
+**Clear** | [Clears all entries](#clearing-all-entries--clear)             | `clear`
+**Mark** | [Adds contact into favourites](#favourites-mark-and-unmark)    | `mark INDEX` <br> Example: `mark 1`
 **Unmark** | [Removes contact from favourites](#favourites-mark-and-unmark) | `unmark INDEX` <br> Example: `mark 1`
-**Meeting** | [Adds meeting datetime to contact](#adding-a-meeting-meeting) | `meeting INDEX DATE_TIME` <br> Example: `meeting 1 mon 2pm`
-**List** | [Lists all persons](#listing-all-persons-list)                | `list`
-**Favourites** | [View favourites](#Viewing-favourites)                    | `favourite`
-**Help** | [Shows help message](#viewing-help-help)                      | `help`
-**Exit** | [Exits the app](#exiting-the-program-exit)                    | `exit`
+**Meeting** | [Adds meeting datetime to contact](#adding-a-meeting-meeting)  | `meeting INDEX DATE_TIME` <br> Example: `meeting 1 mon 2pm`
+**Undo** | [Undo previous changes](#Undo-previous-changes-undo)           | `undo`
+**List** | [Lists all persons](#listing-all-persons-list)                 | `list`
+**Favourites** | [View favourites](#Viewing-favourites)                         | `favourite`
+**Help** | [Shows help message](#viewing-help-help)                       | `help`
+**Exit** | [Exits the app](#exiting-the-program-exit)                     | `exit`
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -299,17 +300,27 @@ Format: `clear`
 
 ### Favourites: `mark` and `unmark`
 
-*Add or remove contacts from favourites*
+Add or remove contacts from favourites
 
 Format: `mark INDEX` or `unmark INDEX`
-* Mark `INDEX` adds the contact at the specified index to favourites
-  * Unmark `INDEX` removes the contact at INDEX from favourites
-  * `INDEX` refers to the index number shown on the displayed person list
-    * `INDEX` must be a valid number in the list
+* Mark `INDEX` adds the contact at the specified index to favourites.  
+* Unmark `INDEX` removes the contact at INDEX from favourites
+* `INDEX` refers to the index number shown on the displayed person list
+* `INDEX` must be a valid number in the list
 
 Examples:
 * `mark 1` <br> ![mark 1 image](./images/mark_1_image.png)
-  * `unmark 1` <br> ![unmark_2_iumage](./images/unmark_2_image.png)
+
+
+### Undo previous changes: `undo`
+
+Reverts the most recent change made to Client Tracker contacts.
+
+Format: `undo`
+
+* Restores the contact list to its previous state before the last modifying command
+* If there are no previous changes to undo in the current session, an error message is shown
+
 
 ### Listing all persons: `list`
 

@@ -96,6 +96,11 @@ public class MarkAsFavouriteCommand extends Command {
     }
 
     @Override
+    public boolean modifiesAddressBook() {
+        return true;
+    }
+
+    @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;

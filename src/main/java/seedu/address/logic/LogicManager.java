@@ -14,6 +14,7 @@ import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
@@ -50,7 +51,16 @@ public class LogicManager implements Logic {
         CommandResult commandResult;
 
         if (DeleteCommand.hasPendingConfirmation()) {
+            AddressBook previousState = null;
+            String executedCommandText = null;
+            if (commandText.equalsIgnoreCase("y")) {
+                previousState = new AddressBook(model.getAddressBook());
+                executedCommandText = DeleteCommand.getPendingCommandText();
+            }
             commandResult = DeleteCommand.confirmationCommand(model, commandText);
+            if (previousState != null) {
+                model.saveAddressBookState(previousState, executedCommandText);
+            }
             saveAddressBook();
             return commandResult;
         }
@@ -59,10 +69,20 @@ public class LogicManager implements Logic {
 
         if (command instanceof DeleteCommand) {
             DeleteCommand deleteCommand = (DeleteCommand) command;
-            return deleteCommand.requestConfirmation(model);
+            return deleteCommand.requestConfirmation(model, commandText);
+        }
+
+        AddressBook previousState = null;
+        String executedCommandText = null;
+        if (command.modifiesAddressBook()) {
+            previousState = new AddressBook(model.getAddressBook());
+            executedCommandText = commandText.trim();
         }
 
         commandResult = command.execute(model);
+        if (previousState != null) {
+            model.saveAddressBookState(previousState, executedCommandText);
+        }
         saveAddressBook();
 
         return commandResult;

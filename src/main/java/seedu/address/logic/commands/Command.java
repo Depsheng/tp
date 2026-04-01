@@ -17,4 +17,11 @@ public abstract class Command {
      */
     public abstract CommandResult execute(Model model) throws CommandException;
 
+    /**
+     * Returns true if executing this command mutates the address book data.
+     */
+    public boolean modifiesAddressBook() {
+        return false;
+    }
+
 }

@@ -110,6 +110,27 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void canUndoAddressBook_noSavedState_returnsFalse() {
+        assertFalse(modelManager.canUndoAddressBook());
+    }
+
+    @Test
+    public void undoAddressBook_savedState_restoresDataAndResetsFilter() {
+        modelManager = new ModelManager(new AddressBookBuilder().withPerson(ALICE).withPerson(BENSON).build(),
+                new UserPrefs());
+        modelManager.saveAddressBookState(modelManager.getAddressBook(), "delete 11111111");
+
+        modelManager.updateFilteredPersonList(person -> person.equals(ALICE));
+        modelManager.deletePerson(ALICE);
+
+        String undoneCommand = modelManager.undoAddressBook();
+
+        assertEquals("delete 11111111", undoneCommand);
+        assertEquals(Arrays.asList(ALICE, BENSON), modelManager.getAddressBook().getPersonList());
+        assertEquals(Arrays.asList(ALICE, BENSON), modelManager.getFilteredPersonList());
+    }
+
+    @Test
     public void equals() {
         AddressBook addressBook = new AddressBookBuilder().withPerson(ALICE).withPerson(BENSON).build();
         AddressBook differentAddressBook = new AddressBook();
