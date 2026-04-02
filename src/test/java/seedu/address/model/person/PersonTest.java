@@ -151,4 +151,16 @@ public class PersonTest {
         assertTrue(person.hasMeeting());
         assertEquals(LocalDateTime.of(2030, 3, 25, 14, 30), person.getMeeting().orElseThrow().getDateTime());
     }
+
+    @Test
+    public void getEmail_withEmptyEmail_returnsEmptyString() {
+        Person person = new PersonBuilder(ALICE).withEmail("").build();
+        assertEquals("", person.getEmail().toString());
+    }
+
+    @Test
+    public void getEmail_withValidEmail_returnsEmail() {
+        Person person = new PersonBuilder(ALICE).withEmail("test@example.com").build();
+        assertEquals("test@example.com", person.getEmail().toString());
+    }
 }

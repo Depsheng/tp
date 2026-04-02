@@ -15,7 +15,7 @@ public class EmailTest {
 
     @Test
     public void constructor_invalidEmail_throwsIllegalArgumentException() {
-        String invalidEmail = "";
+        String invalidEmail = "a";
         assertThrows(IllegalArgumentException.class, () -> new Email(invalidEmail));
     }
 
@@ -25,8 +25,16 @@ public class EmailTest {
         assertThrows(NullPointerException.class, () -> Email.isValidEmail(null));
 
         // blank email
-        assertFalse(Email.isValidEmail("")); // empty string
+        assertTrue(Email.isValidEmail("")); // empty string is valid (no email)
         assertFalse(Email.isValidEmail(" ")); // spaces only
+
+        // create a 255 character email (too long)
+        String longEmail = "a".repeat(252) + "@c.com";
+        assertFalse(Email.isValidEmail(longEmail)); // length = 255 (too long)
+
+        // create a 254 character email (maximum valid)
+        String maxEmail = "a".repeat(248) + "@c.com";
+        assertTrue(Email.isValidEmail(maxEmail)); // length = 254 (maximum valid)
 
         // missing parts
         assertFalse(Email.isValidEmail("@example.com")); // missing local part
