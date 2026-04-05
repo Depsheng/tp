@@ -79,7 +79,7 @@ public class DateTimeUtilTest {
 
         result = DateTimeUtil.parseDateTime("Tomorrow");
         assertEquals(LocalDate.now().plusDays(1), result.getDate());
-        assertEquals(LocalTime.of(0, 0), result.getTime());
+        assertEquals(LocalTime.of(23, 59), result.getTime());
     }
 
     @Test
@@ -154,15 +154,15 @@ public class DateTimeUtilTest {
 
         result = DateTimeUtil.parseDateTime("Monday");
         assertEquals(today.plusDays(getDaysUntilNext(DayOfWeek.MONDAY)), result.getDate());
-        assertEquals(LocalTime.of(0, 0), result.getTime());
+        assertEquals(LocalTime.of(23, 59), result.getTime());
 
         result = DateTimeUtil.parseDateTime("Tue");
         assertEquals(today.plusDays(getDaysUntilNext(DayOfWeek.TUESDAY)), result.getDate());
-        assertEquals(LocalTime.of(0, 0), result.getTime());
+        assertEquals(LocalTime.of(23, 59), result.getTime());
 
         result = DateTimeUtil.parseDateTime("Friday");
         assertEquals(today.plusDays(getDaysUntilNext(DayOfWeek.FRIDAY)), result.getDate());
-        assertEquals(LocalTime.of(0, 0), result.getTime());
+        assertEquals(LocalTime.of(23, 59), result.getTime());
     }
 
     @Test
