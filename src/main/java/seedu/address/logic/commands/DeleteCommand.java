@@ -60,7 +60,7 @@ public class DeleteCommand extends Command {
         Person personToDelete = getTargetPerson(model);
 
         pendingDeleteCommand = this;
-        return new CommandResult(String.format(MESSAGE_CONFIRMATION_PROMPT, Messages.format(personToDelete)));
+        return new CommandResult(String.format(MESSAGE_CONFIRMATION_PROMPT, personToDelete.getName()));
     }
 
     /**

@@ -20,11 +20,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
@@ -199,7 +201,7 @@ public class LogicManagerTest {
         model.addPerson(personToDelete);
 
         String expectedConfirmationMessage = String.format(DeleteCommand.MESSAGE_CONFIRMATION_PROMPT,
-                Messages.format(personToDelete));
+                personToDelete.getName());
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
                 Messages.format(personToDelete));
 
@@ -221,12 +223,48 @@ public class LogicManagerTest {
         model.addPerson(personToDelete);
 
         String expectedConfirmationMessage = String.format(DeleteCommand.MESSAGE_CONFIRMATION_PROMPT,
-                Messages.format(personToDelete));
+                personToDelete.getName());
         String expectedMessage = DeleteCommand.MESSAGE_DELETION_CANCELLED;
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
 
         assertCommandSuccess(deleteCommand, expectedConfirmationMessage, expectedModel);
+        assertCommandSuccess(confirmCommand, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_clearCommand_withConfirmation() throws Exception {
+        String clearCommand = ClearCommand.COMMAND_WORD;
+        String confirmCommand = "y";
+
+        Person person = new PersonBuilder(AMY).withTags().withDetails("No details").build();
+        model.addPerson(person);
+
+        String expectedConfirmationMessage = ClearCommand.MESSAGE_CONFIRMATION_PROMPT;
+        String expectedMessage = ClearCommand.MESSAGE_SUCCESS;
+
+        Model expectedModelAfterClearCommand = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModelAfterConfirmation = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModelAfterConfirmation.setAddressBook(new AddressBook());
+
+        assertCommandSuccess(clearCommand, expectedConfirmationMessage, expectedModelAfterClearCommand);
+        assertCommandSuccess(confirmCommand, expectedMessage, expectedModelAfterConfirmation);
+    }
+
+    @Test
+    public void execute_clearCommand_withoutConfirmation() throws Exception {
+        String clearCommand = ClearCommand.COMMAND_WORD;
+        String confirmCommand = "n";
+
+        Person person = new PersonBuilder(AMY).withTags().withDetails("No details").build();
+        model.addPerson(person);
+
+        String expectedConfirmationMessage = ClearCommand.MESSAGE_CONFIRMATION_PROMPT;
+        String expectedMessage = ClearCommand.MESSAGE_CLEAR_CANCELLED;
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        assertCommandSuccess(clearCommand, expectedConfirmationMessage, expectedModel);
         assertCommandSuccess(confirmCommand, expectedMessage, expectedModel);
     }
 }
