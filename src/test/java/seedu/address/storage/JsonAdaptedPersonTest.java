@@ -173,11 +173,12 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
-    public void toModelType_pastMeetingDate_throwsIllegalArgumentException() {
+    public void toModelType_pastMeetingDate_returnsPersonWithoutMeeting() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(
                 VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_DETAILS, VALID_TAGS,
                 NOT_FAVOURITE, "2020-01-01T10:00");
-        assertThrows(IllegalArgumentException.class, person::toModelType);
+        Person modelPerson = person.toModelType();
+        assertFalse(modelPerson.hasMeeting());
     }
 
 

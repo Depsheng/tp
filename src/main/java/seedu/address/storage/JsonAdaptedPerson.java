@@ -147,6 +147,8 @@ class JsonAdaptedPerson {
                 modelMeeting = new Meeting(LocalDateTime.parse(meeting));
             } catch (DateTimeParseException exception) {
                 throw new IllegalValueException("Meeting date/time must be stored in ISO-8601 format.");
+            } catch (IllegalArgumentException exception) {
+                modelMeeting = null;
             }
         }
 
