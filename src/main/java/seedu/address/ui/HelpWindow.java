@@ -19,16 +19,18 @@ public class HelpWindow extends UiPart<Stage> {
     public static final String HELP_MESSAGE = "Refer to the user guide: " + USERGUIDE_URL;
     public static final String COMMAND_SUMMARY =
         "Quick Command Summary:\n\n"
-        + "• add n/NAME p/PHONE [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAGS] [m/MEETING]\n"
-        + "• edit INDEX [p/PHONE] [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAGS] [m/MEETING]\n"
-        + "• delete INDEX\n"
+        + "• add n/NAME p/PHONE [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAGS]\n"
+        + "• edit INDEX [p/PHONE] [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAGS]\n"
+        + "• delete PHONE\n"
         + "• clear\n"
         + "• list\n"
         + "• find KEYWORD\n"
         + "• find n/NAME p/PHONE e/EMAIL a/ADDRESS\n"
         + "• meeting INDEX DATETIME\n"
-        + "• favourite INDEX\n"
-        + "• unfavourite INDEX\n"
+        + "• meeting INDEX clear\n"
+        + "• mark INDEX\n"
+        + "• unmark INDEX\n"
+        + "• favourites\n"
         + "• help\n\n"
         + "For detailed usage, refer to the user guide.\n";
 
