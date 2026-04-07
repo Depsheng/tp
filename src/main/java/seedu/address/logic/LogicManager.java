@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.DeleteCommand;
@@ -65,11 +66,31 @@ public class LogicManager implements Logic {
             return commandResult;
         }
 
+        if (ClearCommand.hasPendingConfirmation()) {
+            AddressBook previousState = null;
+            String executedCommandText = null;
+            if (commandText.equalsIgnoreCase("y")) {
+                previousState = new AddressBook(model.getAddressBook());
+                executedCommandText = ClearCommand.getPendingCommandText();
+            }
+            commandResult = ClearCommand.confirmationCommand(model, commandText);
+            if (previousState != null) {
+                model.saveAddressBookState(previousState, executedCommandText);
+            }
+            saveAddressBook();
+            return commandResult;
+        }
+
         Command command = addressBookParser.parseCommand(commandText);
 
         if (command instanceof DeleteCommand) {
             DeleteCommand deleteCommand = (DeleteCommand) command;
             return deleteCommand.requestConfirmation(model, commandText);
+        }
+
+        if (command instanceof ClearCommand) {
+            ClearCommand clearCommand = (ClearCommand) command;
+            return clearCommand.requestConfirmation(model, commandText);
         }
 
         AddressBook previousState = null;
