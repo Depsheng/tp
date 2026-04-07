@@ -67,7 +67,7 @@ Action | Description                                                    | Format
 **Meeting** | [Adds meeting datetime to contact](#adding-a-meeting-meeting)  | `meeting INDEX DATE_TIME` <br> Example: `meeting 1 mon 2pm`
 **Undo** | [Undo previous changes](#undo)                                 | `undo`
 **List** | [Lists all persons](#listing-all-persons-list)                 | `list`
-**Favourites** | [View favourites](#Viewing-favourites)                         | `favourite`
+**Favourites** | [View favourites](#Viewing-favourites)                         | `favourites`
 **Help** | [Shows help message](#viewing-help-help)                       | `help`
 **Exit** | [Exits the app](#exiting-the-program-exit)                     | `exit`
 
