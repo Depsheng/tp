@@ -15,17 +15,27 @@ note right
 end note
 
 :AddressBookParser creates ClearCommand;
-:Execute ClearCommand on Model;
+:Display confirmation prompt;
 
-:Create new empty AddressBook instance;
-:Model replaces current AddressBook
-with the empty instance;
+if () then ([y])
+  :Execute ClearCommand on Model;
 
-:Return CommandResult with
-success message;
+  :Create new empty AddressBook instance;
+  :Model replaces current AddressBook
+  with the empty instance;
 
-:Display "Address book has
-been cleared!" to user;
+  :Return CommandResult with
+  success message;
+
+  :Display "Address book has
+  been cleared!" to user;
+else ([n])
+  :Return CommandResult with
+  cancel message;
+
+  :Display "Clear cancelled."
+  to user;
+endif
 
 stop
 @enduml

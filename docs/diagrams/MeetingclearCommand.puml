@@ -1,0 +1,20 @@
+@startuml
+!include style.puml
+skin rose
+skinparam ActivityFontSize 15
+skinparam ArrowFontSize 12
+
+start
+:User enters `meeting INDEX clear` command;
+:System processes command;
+
+if () then ([Valid index])
+    :Identify selected person;
+    :Clear the person's meeting;
+    :Show success message;
+else ([Else])
+    :Show invalid index error;
+endif
+
+stop
+@enduml

@@ -94,9 +94,9 @@ Here's a (partial) class diagram of the `Logic` component:
 
 <img src="images/LogicClassDiagram.png" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 91234567")` API call as an example.
 
-![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
+![Interactions Inside the Logic Component for the `delete 91234567` Command](images/DeleteSequenceDiagram.png)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </div>
@@ -104,8 +104,9 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 How the `Logic` component works:
 
 1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
+1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is handled by the `LogicManager`.
+1. For commands that require confirmation, such as `delete` and `clear`, `LogicManager` first returns a confirmation prompt and waits for the user to enter `y` or `n`.
+1. Once confirmed, the command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
@@ -158,25 +159,30 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
+### Undo feature
 
-#### Proposed Implementation
+#### Implementation
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+The undo mechanism is implemented in `ModelManager` using stacks to store previous address book states and the
+corresponding command text.
 
 * `VersionedAddressBook#commit()` — Saves the current address book state in its history.
 * `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
 * `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
 
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+These operations are exposed in the `Model` interface as `Model#saveAddressBookState(ReadOnlyAddressBook, String)`,
+`Model#canUndoAddressBook()`, and `Model#undoAddressBook()`.
 
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
+Before a command that modifies the address book is executed, `LogicManager` saves the current address book state
+together with the command text. Given below is an example usage scenario and how the undo mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+Step 1. The user launches the application for the first time. The undo history is initially empty because no modifying
+commands have been executed yet.
 
 ![UndoRedoState0](images/UndoRedoState0.png)
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `delete 91234567`. After confirmation, `LogicManager` saves the current address book state
+using `Model#saveAddressBookState(...)` before the deletion is applied.
 
 ![UndoRedoState1](images/UndoRedoState1.png)
 
@@ -188,12 +194,15 @@ Step 3. The user executes `add n/David …​` to add a new person. The `add` co
 
 </div>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the
+`undo` command. The `undo` command calls `Model#undoAddressBook()`, which restores the most recently saved address book
+state.
 
 ![UndoRedoState3](images/UndoRedoState3.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If the undo history is empty, there are no
+previous address book states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check this before
+attempting the undo.
 
 </div>
 
@@ -205,7 +214,7 @@ The following sequence diagram shows how an undo operation goes through the `Log
 
 </div>
 
-Similarly, how an undo operation goes through the `Model` component is shown below:
+How an undo operation goes through the `Model` component is shown below:
 
 ![UndoSequenceDiagram](images/UndoSequenceDiagram-Model.png)
 
@@ -215,7 +224,8 @@ The `redo` command does the opposite — it calls `Model#redoAddressBook()`,
 
 </div>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book do not save
+any new state to the undo history.
 
 ![UndoRedoState4](images/UndoRedoState4.png)
 
@@ -229,37 +239,36 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 #### Design considerations:
 
-**Aspect: How undo & redo executes:**
+**Aspect: How undo executes:**
 
 * **Alternative 1 (current choice):** Saves the entire address book.
   * Pros: Easy to implement.
   * Cons: May have performance issues in terms of memory usage.
 
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
+* **Alternative 2:** Individual command knows how to undo by itself.
   * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
-_{more aspects and alternatives to be added}_
 
 ### Meetings feature
 
-The `meeting` command allows users to assign a meeting date and time to a person in the currently displayed list.
+The `meeting` command allows users to assign or clear a meeting for a person in the currently displayed list.
 Its implementation is split into two main parts:
 
 1. parsing the user-provided date/time string into a valid `Meeting`
-2. executing the command to replace the target `Person` with an updated copy containing the new meeting
+2. executing the command to replace the target `Person` with an updated copy containing the new meeting, or no meeting when `clear` is used
 
 #### How the command works
 
-When the user enters a command such as `meeting 1 15 Mar 2026 4pm`, `LogicManager` passes the full input to
+When the user enters a command such as `meeting 1 15 Mar 2026 4pm` or `meeting 1 clear`, `LogicManager` passes the full input to
 `AddressBookParser`, which creates a `MeetingCommandParser` for the `meeting` command word.
 
 `MeetingCommandParser#parse(String args)` then:
 
 * separates the target index from the remaining date/time text
 * parses the index using `ParserUtil#parseIndex(...)`
-* parses the remaining date/time string using `DateTimeUtil#parseDateTime(...)`
+* if the remaining input is `clear`, returns a `MeetingCommand` configured to remove the meeting
+* otherwise, parses the remaining date/time string using `DateTimeUtil#parseDateTime(...)`
 * constructs a `Meeting` from the parsed `LocalDateTime`
 * returns a `MeetingCommand` containing the parsed index and meeting
 
@@ -269,7 +278,7 @@ During execution, `MeetingCommand#execute(Model model)`:
 * validates that the provided index refers to an existing displayed person
 * creates a new `Person` object that copies the original person's fields and replaces only the meeting field
 * updates the model through `Model#setPerson(personToEdit, updatedPerson)`
-* returns a `CommandResult` containing the formatted confirmation message
+* returns a `CommandResult` containing either the meeting-added or meeting-cleared message
 
 The sequence of interactions across the `Logic`, `commons.util`, and `Model` components is split into two diagrams:
 
@@ -304,11 +313,6 @@ The control flow of these parsing branches is also split into two smaller diagra
 <img src="images/RelativeMeetingDateParsingActivityDiagram.png"/>
 * explicit-format parsing: [`ExplicitMeetingDateParsingActivityDiagram.puml`](diagrams/ExplicitMeetingDateParsingActivityDiagram.puml)\
 <img src="images/ExplicitMeetingDateParsingActivityDiagram.png"/>
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -396,7 +400,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-* 1b. 1b. The person already exists in CLIentTracker.
+* 1b. The person already exists in CLIentTracker.
 
   * 1b1. CLIentTracker shows an error message.
 
@@ -406,47 +410,26 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  User requests to list persons
-2.  CLIentTracker shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  CLIentTracker deletes the person
+1.  User requests to delete a specific person by phone number.
+2.  CLIentTracker asks for confirmation.
+3.  User confirms the deletion.
+4.  CLIentTracker deletes the person.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. No person matches the given phone number.
 
-  Use case ends.
-
-* 3a. The given index is invalid.
-
-    * 3a1. CLIentTracker shows an error message.
-
-      Use case resumes at step 2.
-
-**Use case: Delete a person**
-
-**MSS**
-
-1.  User requests to list persons
-2.  CLIentTracker shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  CLIentTracker deletes the person
+  * 1a1. CLIentTracker shows an error message.
 
     Use case ends.
 
-**Extensions**
+* 2a. The user cancels the deletion.
 
-* 2a. The list is empty.
+  * 2a1. CLIentTracker shows a cancellation message.
 
-  Use case ends.
-
-* 3a. The given index is invalid.
-
-    * 3a1. CLIentTracker shows an error message.
-
-      Use case resumes at step 2.
+    Use case ends.
 
 **Use case: Search for a person by detail**
 
@@ -504,38 +487,25 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case resumes at step 4.
 
-**Use case: Delete contacts in bulk**
+**Use case: Clear all contacts**
 
 **MSS**
 
-1. User requests to list persons.
-2. CLIentTracker shows a list of persons.
-3. User requests to delete multiple persons in the list.
-4. User provides the indices of the persons to delete.
-5. CLIentTracker deletes the specified persons.
-6. CLIentTracker shows a confirmation message.
+1. User requests to clear all contacts.
+2. CLIentTracker asks for confirmation.
+3. User confirms the clear command.
+4. CLIentTracker clears all contacts.
+5. CLIentTracker shows a confirmation message.
 
    Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 2a. The user cancels the clear command.
+
+  * 2a1. CLIentTracker shows a cancellation message.
 
     Use case ends.
-
-* 4a. One or more given indices are invalid.
-
-  * 4a1. CLIentTracker shows an error message.
-
-    Use case resumes at step 2.
-
-* 4b. The user provides duplicate indices.
-
-  * 4b1. CLIentTracker shows an error message.
-
-    Use case resumes at step 2.
-
-*{More to be added}*
 
 ### Non-Functional Requirements
 
