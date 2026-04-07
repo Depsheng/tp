@@ -167,39 +167,53 @@ Search for persons using keywords across all fields or within specific fields.
 - `e/` — email
 - `d/` — details
 
+> ⚠️ Prefix rules:
+> - Prefixes are **case-sensitive** and must be in lowercase
+    >   - ❌ `N/Alex` is invalid
+>   - ✅ `n/Alex` is valid
+> - Prefixes must appear at the **start** of the input or be **preceded by a space**
+    >   - ❌ `find n/Alexp/1234`
+>   - ✅ `find n/Alex p/1234`
 
 #### **General Search:**
 - Searches across **all fields**
 - Case-insensitive (`alex` = `Alex`)
 - Supports partial matches (`lex` → `Alex`)
-- Keywords must be **separated by commas**
+- Keywords are **comma-separated**
+- If no commas are used, the entire input is treated as a **single keyword**
 - Matches if **any keyword** is found (**OR** logic)
-- Examples:
-  - `find alex`
-  - `find alex, bob`
-  - `find 9876`
+
+**Examples:**
+- `find alex`
+- `find alex, bob`
+- `find alex bob` *(searches for "alex bob" as one phrase)*
+- `find 9876`
+
 
 #### **Field-Specific Search:**
 - Searches only within specified field(s)
 - Case-insensitive and supports partial matches
-- Keywords must be **separated by commas**
-- Examples:
-  - `find n/Alex`
-  - `find p/9876`
-  - `find n/Alex, Bob p/9123`
+- Keywords must be **comma-separated**
 
-**Rules:**
+**Examples:**
+- `find n/Alex`
+- `find p/9876`
+- `find n/Alex, Bob p/9123`
+
+
+#### **Rules:**
 - Keywords within the same prefix use **OR**
-    - `find n/Alex, Bob` → name contains *Alex* or *Bob*
+  - `find n/Alex, Bob` → name contains *Alex* or *Bob*
 - Different prefixes use **AND**
-    - `find n/Alex p/9123` → name contains *Alex* AND phone contains *9123*
+  - `find n/Alex p/9123` → name contains *Alex* AND phone contains *9123*
+
 
 #### **Important Notes:**
 - You **cannot mix general search and prefix search**
-    - ❌ `find alex p/9876`
-- All keywords must be **comma-separated**
-    - ❌ `find n/Alex Bob`
-    - ✅ `find n/Alex, Bob`
+  - ❌ `find alex p/9876`
+- Commas are required if you want to separate multiple keywords
+  - ❌ `find n/Alex Bob` 
+  - ✅ `find n/Alex, Bob`
 
 
 ---
