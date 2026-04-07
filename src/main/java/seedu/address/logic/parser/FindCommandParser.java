@@ -125,7 +125,20 @@ public class FindCommandParser implements Parser<FindCommand> {
             }
 
             String prefix = part.substring(0, 2);
-            String value = part.substring(2);
+            String value = part.substring(2).trim();
+            String[] values = value.split(",");
+
+            boolean hasValidValue = false;
+            for (String v : values) {
+                if (!v.trim().isEmpty()) {
+                    hasValidValue = true;
+                    break;
+                }
+            }
+            if (!hasValidValue) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            }
 
             addTaggedValues(fieldMap, prefix, value);
         }
