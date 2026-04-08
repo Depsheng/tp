@@ -12,7 +12,7 @@ title: ClientTracker
 ClientTracker is designed for fast day-to-day workflows such as adding clients, finding contact details, scheduling meetings, and updating records without depending on an internet connection.
 
 * If you want to start using ClientTracker, head over to the dedicated [**User Guide**](UserGuide.html).
-* If you want the setup steps first, visit the [**Quick Start**](QuickStart.html).
+* If you want the setup steps first, visit the [**Quick Start**](UserGuide.html#quick-start).
 * If you are working on the product itself, the [**Developer Guide**](DeveloperGuide.html) is the best place to begin.
 
 **Acknowledgements**

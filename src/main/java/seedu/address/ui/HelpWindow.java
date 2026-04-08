@@ -32,6 +32,7 @@ public class HelpWindow extends UiPart<Stage> {
         + "• unmark INDEX\n"
         + "• favourites\n"
         + "• help\n\n"
+        + "Want to start fresh? Use `clear` and confirm with `y` to remove the sample contacts and begin with an empty contact list.\n\n"
         + "For detailed usage, refer to the user guide.\n";
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
