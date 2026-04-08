@@ -63,7 +63,7 @@ Action | Description                                                    | Format
 **Delete** | [Deletes a person](#deleting-a-person--delete)                 | `delete PHONE`<br> e.g., `delete 91234567`
 **Clear** | [Clears all entries](#clearing-all-entries--clear)             | `clear`
 **Mark** | [Adds contact into favourites](#favourites-mark-and-unmark)    | `mark INDEX` <br> Example: `mark 1`
-**Unmark** | [Removes contact from favourites](#favourites-mark-and-unmark) | `unmark INDEX` <br> Example: `mark 1`
+**Unmark** | [Removes contact from favourites](#favourites-mark-and-unmark) | `unmark INDEX` <br> Example: `unmark 1`
 **Meeting** | [Adds or clears a meeting for a contact](#adding-a-meeting-meeting)  | `meeting INDEX DATE_TIME` or `meeting INDEX clear` <br> Example: `meeting 1 mon 2pm`
 **Undo** | [Undo previous changes](#undo)                                 | `undo`
 **List** | [Lists all persons](#listing-all-persons-list)                 | `list`
@@ -98,7 +98,7 @@ Behavior:
 * If a contact with the same phone number already exists, the new contact will not be added.
 * Name must be 1-50 characters and contain only alphanumeric characters and spaces.
 * Details will default to empty if parameter not used.
-* Details must not be over512 characters and cannot be empty.
+* Details must not be over 512 characters and cannot be empty.
 * Email will default to empty if parameter not used.
 * Email must be 2-254 characters if provided, or empty to represent no email.
 * Address will default to empty if parameter not used.
@@ -106,7 +106,7 @@ Behavior:
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe a/Newgate Prison p/1234567 t/BUYER`
+* `add n/Betsy Crowe a/Newgate Prison p/12345678 t/BUYER`
 * `add n/Alex Yeoh p/87438807 e/alexyeoh@example.com a/Blk 30 Geylang Street 29, #06-40 d/Looking for apartment near city`
 
 ---
@@ -127,7 +127,7 @@ Parameters:
 * `t/` : Tags of the new contact [optional] (*Valid tags: "Renter", "Landlord", "Buyer", "Seller"*)
 
 Behavior:
-* The index field is mandatory and **must be a positive integer smaller than the number of contacts**
+* The index field is mandatory and **must be a positive integer smaller than the number of contacts in the shown list**
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
@@ -146,6 +146,12 @@ Examples:
 *  `edit 3 d/` Clears the details of the 3rd person.
 *  `edit 4 e/` Clears the email of the 4th person.
 *  `edit 5 a/` Clears the address of the 5th person.
+
+#### **Important Notes:**
+- If you want to change a specific field, **remember to have a white space before the prefix**
+  - ❌ `edit 1 a/yishunp/12345678`
+  - ✅ `edit 1 a/yishun p/12345678`
+  - ✅ `edit 1 d/want Sentosa/Yishun`
 
 ---
 
@@ -171,7 +177,7 @@ Search for persons using keywords across all fields or within specific fields.
 > - Prefixes are **case-sensitive** and must be in lowercase
     >   - ❌ `N/Alex` is invalid
 >   - ✅ `n/Alex` is valid
-> - Prefixes must appear at the **start** of the input or be **preceded by a space**
+> - Prefixes must be **preceded by a space**
     >   - ❌ `find n/Alexp/1234`
 >   - ✅ `find n/Alex p/1234`
 
