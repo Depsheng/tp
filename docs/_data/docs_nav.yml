@@ -5,7 +5,7 @@
   url: /UserGuide.html
   children:
     - title: Quick Start
-      url: /QuickStart.html
+      url: /UserGuide.html#quick-start
     - title: Command Summary
       url: /UserGuide.html#command-summary
     - title: Features

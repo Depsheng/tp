@@ -20,14 +20,47 @@ Built for agents who value speed, reliability, and control, CLIentTracker helps 
 in fast-paced environments.
 
 ## :page_facing_up: Contents
-- [:rocket: Quick Start](QuickStart.html)
+- [:rocket: Quick Start](#quick-start)
 - [:clipboard: Command Summary](#command-summary)
 - [:gear: Features](#features)
 - [:question: FAQ](#faq)
 - [:warning: Known Issues](#known-issues)
 
 ---
-Need help getting started fast? Head to the dedicated [Quick Start guide](QuickStart.html) for installation and your first commands.
+## :rocket: Quick Start
+{: #quick-start }
+
+CLIentTracker is a desktop CRM designed for property agents who prefer working quickly from the command line while
+still having a clean desktop interface.
+
+### Installation
+
+1. Ensure you have Java `17` or above installed on your computer.<br>
+   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+
+1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+
+1. Copy the file to the folder you want to use as the _home folder_ for your CLIentTracker.
+
+1. Open the folder where your CLIentTracker is currently located, double click to run CLIentTracker and a User Interface similar to the one below should appear in a few seconds with some sample data loaded.<br>
+   ![Ui](images/Ui.png)
+
+### Try It Out
+
+1. Type commands into the command box and press Enter to execute them.
+
+1. Try these example commands:
+
+   * `list` to list all contacts
+   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` to add a contact
+   * `delete 3` to delete the 3rd displayed contact
+   * `clear` to delete all contacts
+   * `find n/John` to search for contacts by name
+   * `exit` to close the application
+
+1. Continue with the sections below for full command details, or jump straight to the [Command Summary](#command-summary).
+
+Want to start fresh? Use `clear` and confirm with `y` to remove the sample contacts and begin with an empty contact list.
 
 ---
 ## :clipboard: Command Summary
@@ -385,6 +418,9 @@ There is **no need to press a save button**. Everything is stored locally on you
 All data is stored in:
 
 `[CLIentTracker file location]/data/addressbook.json`
+
+CLIentTracker is intended for **medium to moderately large contact lists**. Performance may degrade for very large
+datasets, especially above **50,000 to 100,000 contacts**, depending on your device's memory and CPU.
 
 ---
 
