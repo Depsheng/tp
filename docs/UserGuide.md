@@ -162,7 +162,7 @@ Parameters:
 * `a/` : Address of the new contact [optional] (*Must be 1-255 characters, or empty to represent no address*)
 * `d/` : Details of the new contact [optional] (*Must be under 512 characters, or empty to represent no details*)
 * `t/` : Tags of the new contact [optional] (*Valid tags: "Renter", "Landlord", "Buyer", "Seller"*)
-S
+
 Behavior:
 * The index field is mandatory and **must be a positive integer smaller than the number of contacts**.
 * At least one of the fields must be provided.
@@ -321,7 +321,6 @@ Examples:
 * `meeting 3 Today 2359` Adds meeting for today at 11:59 PM
 * `meeting 4 Monday 9am` Adds meeting for next Monday at 9:00 AM
 * `meeting 1 clear` Clears meeting for 1st person
-
 ---
 
 ### Deleting a person : `delete`

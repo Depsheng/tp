@@ -26,7 +26,6 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 ## **Design**
 
 <div markdown="span" class="alert alert-primary">
-
 :bulb: **Tip:** The `.puml` files used to create diagrams are in this document `docs/diagrams` folder. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
 </div>
 
@@ -182,7 +181,6 @@ Step 3. The user executes `add n/David …​` to add a new person. Before the `
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails before completing, no new
 address book state is pushed onto the undo history.
-
 </div>
 
 Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the
@@ -192,7 +190,6 @@ state.
 <div markdown="span" class="alert alert-info">:information_source: **Note:** If the undo history is empty, there are no
 previous address book states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check this before
 attempting the undo.
-
 </div>
 
 The sequence of interactions for undo is shown below:
