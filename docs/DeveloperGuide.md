@@ -39,7 +39,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S2-CS2103T-T14-2/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S2-CS2103T-T14-2/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -54,7 +54,7 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 91234567`.
 
 <img src="images/ArchitectureSequenceDiagram.png" width="574" />
 
@@ -71,13 +71,13 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S2-CS2103T-T14-2/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S2-CS2103T-T14-2/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S2-CS2103T-T14-2/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -88,7 +88,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S2-CS2103T-T14-2/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -119,7 +119,7 @@ How the parsing works:
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-T14-2/tp/tree/master/src/main/java/seedu/address/model/Model.java)
 
 <img src="images/ModelClassDiagram.png" width="450" />
 
@@ -140,7 +140,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S2-CS2103T-T14-2/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
 <img src="images/StorageClassDiagram.png" width="550" />
 
@@ -163,14 +163,13 @@ This section describes some noteworthy details on how certain features are imple
 
 #### Implementation
 
-The undo mechanism is implemented in `ModelManager` using stacks to store previous address book states and the
-corresponding command text.
+The undo mechanism is implemented in `ModelManager` using two stacks:
 
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
+* `addressBookStateHistory` stores snapshots of earlier `AddressBook` states
+* `commandHistory` stores the original command text associated with each saved state
 
-These operations are exposed in the `Model` interface as `Model#saveAddressBookState(ReadOnlyAddressBook, String)`,
+These operations are exposed through the `Model` interface as
+`Model#saveAddressBookState(ReadOnlyAddressBook, String)`,
 `Model#canUndoAddressBook()`, and `Model#undoAddressBook()`.
 
 Before a command that modifies the address book is executed, `LogicManager` saves the current address book state
@@ -186,11 +185,13 @@ using `Model#saveAddressBookState(...)` before the deletion is applied.
 
 ![UndoRedoState1](images/UndoRedoState1.png)
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/David …​` to add a new person. Before the `add` command modifies the address book,
+`LogicManager` saves the current state by calling `Model#saveAddressBookState(...)`.
 
 ![UndoRedoState2](images/UndoRedoState2.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails before completing, no new
+address book state is pushed onto the undo history.
 
 </div>
 
@@ -218,18 +219,13 @@ How an undo operation goes through the `Model` component is shown below:
 
 ![UndoSequenceDiagram](images/UndoSequenceDiagram-Model.png)
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
-
-</div>
-
 Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book do not save
 any new state to the undo history.
 
 ![UndoRedoState4](images/UndoRedoState4.png)
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`. Before the command clears the address book, `LogicManager` again saves the previous
+state using `Model#saveAddressBookState(...)`, allowing the clear operation to be undone later.
 
 ![UndoRedoState5](images/UndoRedoState5.png)
 
@@ -352,29 +348,29 @@ fast keyboard-driven commands.
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                   | I want to …​                                                      | So that I can…​                                                    |
-|----------|---------------------------|-------------------------------------------------------------------|--------------------------------------------------------------------|
-| `* * *`  | user                      | have a list view of client's details like addresses, banking info | easily see only the information I need                             |
-| `* * *`  | user                      | be able to sort my contacts by importance/date                    | look at key contacts without scrolling through my full contact list |
-| `* * *`  | user                      | delete a person                                                   | remove a client that is no longer working with me                  |
-| `* * *`  | user                      | add a person                                                      |                                                                    |
-| `* * *`  | user                      | exit app                                                          |                                                                    |
-| `* *`    | user with many contacts   | search by details (phone number, address, name etc.)              | locate information of a particular person by that detail           |
-| `* *`    | user                      | hide private contact details                                      | minimize chance of someone else seeing them by accident            |
-| `* *`    | user                      | edit details                                                      | change client's details instead of deleting their current account  |
-| `* *`    | user                      | track my commissions                                              | view which client makes me most money (prioritize  them)           |
-| `* *`    | responsible user          | see overdue follow ups with my clients                            | follow up with my overdue follow ups with my clients               |
-| `* *`    | efficient and busy user   | configure importance metric (commission or client relation years) | add existing clients in my phone into the address book             |
-| `* *`    | user                      | clear my contacts in bulk                                         | start a new contacts list quickly                                  |
-| `* *`    | client centric user       | add interest and hobbies of my clients                            | buy them appreciative gifts before my meeting with them            |
-| `* *`    | responsible   user        | set reminders for things regarding the clients                    | keep track of things or events I have with my clients              |
-| `* *`    | helpful and friendly user | share my contacts to my colleague                                 | share my client's inforation to my colleague for follow up         |
-| `* *`    | responsible user          | document notes about potential clients                            | remember key details for follow-up                                 |
-| `* *`    | responsible user          | maintain records of my client's preferences                       | better treat my clients for customer relation                      |
-| `* *`    | efficient and busy user   | group my clients in different groups                              | look for a person based on the category or group of people         |
-| `*`      | lazy user                 | access past commands                                              | easily repeat my commands with a key                               |
-| `*`      | creative user             | change the colour scheme of my address book                       | see better and edit the address book to my liking                  |
-| `*`      | clumsy user               | easily backup my contact information                              | restore old client information in case I accidentally lose it      |
+| Priority | As a …​                   | I want to …​                                                        | So that I can…​                                                    |
+|----------|---------------------------|---------------------------------------------------------------------|--------------------------------------------------------------------|
+| `* * *`  | user                      | have a list view of client's details like addresses and preferences | easily see only the information I need                             |
+| `* * *`  | user                      | be able to sort my contacts by importance/date                      | look at key contacts without scrolling through my full contact list |
+| `* * *`  | user                      | delete a person                                                     | remove a client that is no longer working with me                  |
+| `* * *`  | user                      | add a person                                                        |                                                                    |
+| `* * *`  | user                      | exit app                                                            |                                                                    |
+| `* *`    | user with many contacts   | search by details (phone number, address, name etc.)                | locate information of a particular person by that detail           |
+| `* *`    | user                      | hide private contact details                                        | minimize chance of someone else seeing them by accident            |
+| `* *`    | user                      | edit details                                                        | change client's details instead of deleting their current account  |
+| `* *`    | user                      | track my commissions                                                | view which client makes me most money (prioritize  them)           |
+| `* *`    | responsible user          | see overdue follow ups with my clients                              | follow up with my overdue follow ups with my clients               |
+| `* *`    | efficient and busy user   | configure importance metric (commission or client relation years)   | add existing clients in my phone into the address book             |
+| `* *`    | user                      | clear my contacts in bulk                                           | start a new contacts list quickly                                  |
+| `* *`    | client centric user       | add interest and hobbies of my clients                              | buy them appreciative gifts before my meeting with them            |
+| `* *`    | responsible   user        | set reminders for things regarding the clients                      | keep track of things or events I have with my clients              |
+| `* *`    | helpful and friendly user | share my contacts to my colleague                                   | share my client's inforation to my colleague for follow up         |
+| `* *`    | responsible user          | document notes about potential clients                              | remember key details for follow-up                                 |
+| `* *`    | responsible user          | maintain records of my client's preferences                         | better treat my clients for customer relation                      |
+| `* *`    | efficient and busy user   | group my clients in different groups                                | look for a person based on the category or group of people         |
+| `*`      | lazy user                 | access past commands                                                | easily repeat my commands with a key                               |
+| `*`      | creative user             | change the colour scheme of my address book                         | see better and edit the address book to my liking                  |
+| `*`      | clumsy user               | easily backup my contact information                                | restore old client information in case I accidentally lose it      |
 
 *{More to be added}*
 
@@ -565,13 +561,17 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+   1. Test case: `delete 91234567`<br>
+      Expected: The contact with phone number `91234567` is deleted after confirmation. Details of the deleted contact
+      are shown in the status message. Timestamp in the status bar is updated.
 
    1. Test case: `delete 0`<br>
       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   1. Test case: `delete 91234567`, followed by `n` at the confirmation prompt<br>
+      Expected: The deletion is cancelled and the contact list remains unchanged.
+
+   1. Other incorrect delete commands to try: `delete`, `delete x` <br>
       Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
