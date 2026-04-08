@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.commons.util.DateTimeUtil.MESSAGE_DATE_TIME_PAST;
+import static seedu.address.commons.util.DateTimeUtil.MESSAGE_INVALID_DATE;
 import static seedu.address.commons.util.DateTimeUtil.MESSAGE_INVALID_DATE_TIME_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -111,7 +112,8 @@ public class MeetingCommandParserTest {
     @Test
     public void parse_invalidDate_throwsParseException() {
         assertParseFailure(parser, "1 2026-03-23 14:30", MESSAGE_INVALID_DATE_TIME_FORMAT);
-        assertParseFailure(parser, "1 32 Mar 2026 4pm", MESSAGE_INVALID_DATE_TIME_FORMAT);
+        assertParseFailure(parser, "1 32 Mar 2026 4pm", MESSAGE_INVALID_DATE);
+        assertParseFailure(parser, "1 30 Feb 2027 1:30pm", MESSAGE_INVALID_DATE);
         assertParseFailure(parser, "1 15 Foo 2026 4pm", MESSAGE_INVALID_DATE_TIME_FORMAT);
         assertParseFailure(parser, "1 15 Mar 2026 25:00", MESSAGE_INVALID_DATE_TIME_FORMAT);
         assertParseFailure(parser, "1 invalid date", MESSAGE_INVALID_DATE_TIME_FORMAT);

@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.commons.util.DateTimeUtil.MESSAGE_DATE_TIME_PAST;
+import static seedu.address.commons.util.DateTimeUtil.MESSAGE_INVALID_DATE;
 import static seedu.address.commons.util.DateTimeUtil.MESSAGE_INVALID_DATE_TIME_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
@@ -57,6 +58,8 @@ public class MeetingCommandParser implements Parser<MeetingCommand> {
             String message = exception.getMessage();
             if (message.equals(MESSAGE_DATE_TIME_PAST)) {
                 throw new ParseException(MESSAGE_DATE_TIME_PAST);
+            } else if (message.equals(MESSAGE_INVALID_DATE)) {
+                throw new ParseException(MESSAGE_INVALID_DATE);
             } else if (message.equals(MESSAGE_INVALID_DATE_TIME_FORMAT)) {
                 throw new ParseException(MESSAGE_INVALID_DATE_TIME_FORMAT);
             } else {

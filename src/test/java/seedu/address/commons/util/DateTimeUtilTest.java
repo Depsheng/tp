@@ -344,11 +344,21 @@ public class DateTimeUtilTest {
     public void parseDateTime_invalidFormat_throwsException() {
         // Test invalid formats
         assertThrows(IllegalArgumentException.class, () -> DateTimeUtil.parseDateTime("invalid date"));
-        assertThrows(IllegalArgumentException.class, () -> DateTimeUtil.parseDateTime("32 Mar 2025 4pm"));
         assertThrows(IllegalArgumentException.class, () -> DateTimeUtil.parseDateTime("15 Foo 2025 4pm"));
         assertThrows(IllegalArgumentException.class, () -> DateTimeUtil.parseDateTime("15 Mar 2025 25:00"));
         assertThrows(IllegalArgumentException.class, () -> DateTimeUtil.parseDateTime("todayyyyy 4pm"));
         assertThrows(IllegalArgumentException.class, () -> DateTimeUtil.parseDateTime("mondayyy 2pm"));
+    }
+
+    @Test
+    public void parseDateTime_invalidCalendarDate_throwsInvalidDateMessage() {
+        IllegalArgumentException invalidDayException = assertThrows(IllegalArgumentException.class, () ->
+                DateTimeUtil.parseDateTime("32 Mar 2025 4pm"));
+        assertEquals(DateTimeUtil.MESSAGE_INVALID_DATE, invalidDayException.getMessage());
+
+        IllegalArgumentException invalidMonthDayException = assertThrows(IllegalArgumentException.class, () ->
+                DateTimeUtil.parseDateTime("30 Feb 2027 1:30pm"));
+        assertEquals(DateTimeUtil.MESSAGE_INVALID_DATE, invalidMonthDayException.getMessage());
     }
 
     @Test
@@ -400,6 +410,13 @@ public class DateTimeUtilTest {
                            + pastDate.getYear();
 
         assertThrows(IllegalArgumentException.class, () -> DateTimeUtil.parseDate(pastDateStr));
+    }
+
+    @Test
+    public void parseDate_invalidCalendarDate_throwsException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                DateTimeUtil.parseDate("30 Feb 2027"));
+        assertEquals(DateTimeUtil.MESSAGE_INVALID_DATE, exception.getMessage());
     }
 
     @Test

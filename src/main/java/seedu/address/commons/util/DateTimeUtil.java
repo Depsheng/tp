@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalAdjusters;
@@ -20,6 +21,7 @@ import java.util.Locale;
 public class DateTimeUtil {
 
     public static final String MESSAGE_DATE_TIME_PAST = "Date and time cannot be in the past";
+    public static final String MESSAGE_INVALID_DATE = "That's an invalid date!";
     public static final String MESSAGE_INVALID_DATE_TIME_FORMAT = "Invalid date/time format."
             + " Supported formats include:\n"
             + "- 15 Mar 2025 4pm\n"
@@ -45,12 +47,13 @@ public class DateTimeUtil {
         // d MMM yyyy + time (4pm, 4:30pm, 4.30pm, 1600)
         new DateTimeFormatterBuilder()
                 .parseCaseInsensitive()
-                .appendPattern("d MMM yyyy")
+                .appendPattern("d MMM uuuu")
                 .optionalStart()
                 .appendLiteral(' ')
                 .appendPattern("[h[:mm][.mm]a][HHmm]")
                 .optionalEnd()
-                .toFormatter(Locale.ENGLISH),
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT),
 
         // d MMM + time (default year)
         new DateTimeFormatterBuilder()
@@ -61,17 +64,19 @@ public class DateTimeUtil {
                 .appendLiteral(' ')
                 .appendPattern("[h[:mm][.mm]a][HHmm]")
                 .optionalEnd()
-                .toFormatter(Locale.ENGLISH),
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT),
 
         // d MMMM yyyy + time
         new DateTimeFormatterBuilder()
                 .parseCaseInsensitive()
-                .appendPattern("d MMMM yyyy")
+                .appendPattern("d MMMM uuuu")
                 .optionalStart()
                 .appendLiteral(' ')
                 .appendPattern("[h[:mm][.mm]a][HHmm]")
                 .optionalEnd()
-                .toFormatter(Locale.ENGLISH),
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT),
 
         // d MMMM + time (default year)
         new DateTimeFormatterBuilder()
@@ -82,67 +87,74 @@ public class DateTimeUtil {
                 .appendLiteral(' ')
                 .appendPattern("[h[:mm][.mm]a][HHmm]")
                 .optionalEnd()
-                .toFormatter(Locale.ENGLISH),
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT),
 
         // d/M/yyyy + time
         new DateTimeFormatterBuilder()
                 .parseCaseInsensitive()
-                .appendPattern("d/M/yyyy")
-                .optionalStart()
-                .appendLiteral(' ')
-                .appendPattern("[h:mm a][h.mm a][h a][h:mma][h.mma][ha][H:mm][HHmm]")
-                .optionalEnd()
-                .toFormatter(Locale.ENGLISH),
-
-        // d-M-yyyy + time
-        new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .appendPattern("d-M-yyyy")
-                .optionalStart()
-                .appendLiteral(' ')
-                .appendPattern("[h:mm a][h.mm a][h a][h:mma][h.mma][ha][H:mm][HHmm]")
-                .optionalEnd()
-                .toFormatter(Locale.ENGLISH),
-
-        // d.M.yyyy + time
-        new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .appendPattern("d.M.yyyy")
-                .optionalStart()
-                .appendLiteral(' ')
-                .appendPattern("[h:mm a][h.mm a][h a][h:mma][h.mma][ha][H:mm][HHmm]")
-                .optionalEnd()
-                .toFormatter(Locale.ENGLISH),
-
-        // dd/MM/yyyy + time
-        new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .appendPattern("dd/MM/yyyy")
-                .optionalStart()
-                .appendLiteral(' ')
-                .appendPattern("[h:mm a][h.mm a][h a][h:mma][h.mma][ha][H:mm][HHmm]")
-                .optionalEnd()
-                .toFormatter(Locale.ENGLISH),
-
-        // dd-MM-yyyy + time
-        new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .appendPattern("dd-MM-yyyy")
-                .optionalStart()
-                .appendLiteral(' ')
-                .appendPattern("[h:mm a][h.mm a][h a][h:mma][h.mma][ha][H:mm][HHmm]")
-                .optionalEnd()
-                .toFormatter(Locale.ENGLISH),
-
-        // dd.MM.yyyy + time
-        new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .appendPattern("dd.MM.yyyy")
+                .appendPattern("d/M/uuuu")
                 .optionalStart()
                 .appendLiteral(' ')
                 .appendPattern("[h:mm a][h.mm a][h a][h:mma][h.mma][ha][H:mm][HHmm]")
                 .optionalEnd()
                 .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT),
+
+        // d-M-yyyy + time
+        new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern("d-M-uuuu")
+                .optionalStart()
+                .appendLiteral(' ')
+                .appendPattern("[h:mm a][h.mm a][h a][h:mma][h.mma][ha][H:mm][HHmm]")
+                .optionalEnd()
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT),
+
+        // d.M.yyyy + time
+        new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern("d.M.uuuu")
+                .optionalStart()
+                .appendLiteral(' ')
+                .appendPattern("[h:mm a][h.mm a][h a][h:mma][h.mma][ha][H:mm][HHmm]")
+                .optionalEnd()
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT),
+
+        // dd/MM/yyyy + time
+        new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern("dd/MM/uuuu")
+                .optionalStart()
+                .appendLiteral(' ')
+                .appendPattern("[h:mm a][h.mm a][h a][h:mma][h.mma][ha][H:mm][HHmm]")
+                .optionalEnd()
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT),
+
+        // dd-MM-yyyy + time
+        new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern("dd-MM-uuuu")
+                .optionalStart()
+                .appendLiteral(' ')
+                .appendPattern("[h:mm a][h.mm a][h a][h:mma][h.mma][ha][H:mm][HHmm]")
+                .optionalEnd()
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT),
+
+        // dd.MM.yyyy + time
+        new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern("dd.MM.uuuu")
+                .optionalStart()
+                .appendLiteral(' ')
+                .appendPattern("[h:mm a][h.mm a][h a][h:mma][h.mma][ha][H:mm][HHmm]")
+                .optionalEnd()
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT)
     };
 
     /**
@@ -166,6 +178,11 @@ public class DateTimeUtil {
             return parseRelativeDate(trimmedStr, 1);
         } else if (isWeekday(trimmedStr)) {
             return parseWeekday(trimmedStr);
+        }
+
+        String invalidDateMessage = detectInvalidDateMessage(trimmedStr);
+        if (invalidDateMessage != null) {
+            throw new IllegalArgumentException(invalidDateMessage);
         }
 
         // Try all other formats
@@ -202,6 +219,7 @@ public class DateTimeUtil {
         checkArgument(dateStr != null && !dateStr.trim().isEmpty(), "Date string cannot be null or empty");
 
         String trimmedStr = dateStr.trim();
+        boolean hasInvalidDate = false;
 
         // Handle relative dates
         if (trimmedStr.equalsIgnoreCase("today")) {
@@ -213,15 +231,16 @@ public class DateTimeUtil {
         }
 
         // Try date-only formats with year first
-        String[] dateWithYearFormats = {"d MMM yyyy", "d MMMM yyyy", "d/M/yyyy", "d-M-yyyy", "d.M.yyyy",
-            "dd/MM/yyyy", "dd-MM-yyyy", "dd.MM.yyyy"};
+        String[] dateWithYearFormats = {"d MMM uuuu", "d MMMM uuuu", "d/M/uuuu", "d-M-uuuu", "d.M.uuuu",
+            "dd/MM/uuuu", "dd-MM-uuuu", "dd.MM.uuuu"};
 
         for (String pattern : dateWithYearFormats) {
             try {
                 DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                         .parseCaseInsensitive()
                         .appendPattern(pattern)
-                        .toFormatter(Locale.ENGLISH);
+                        .toFormatter(Locale.ENGLISH)
+                        .withResolverStyle(ResolverStyle.STRICT);
 
                 LocalDate date = LocalDate.parse(trimmedStr, formatter);
 
@@ -232,6 +251,7 @@ public class DateTimeUtil {
 
                 return date;
             } catch (DateTimeParseException e) {
+                hasInvalidDate = hasInvalidDate || isInvalidDateParseException(e);
                 // Continue to next format
             }
         }
@@ -245,7 +265,8 @@ public class DateTimeUtil {
                         .parseCaseInsensitive()
                         .appendPattern(pattern)
                         .parseDefaulting(ChronoField.YEAR, LocalDate.now().getYear())
-                        .toFormatter(Locale.ENGLISH);
+                        .toFormatter(Locale.ENGLISH)
+                        .withResolverStyle(ResolverStyle.STRICT);
 
                 LocalDate date = LocalDate.parse(trimmedStr, formatter);
 
@@ -256,8 +277,13 @@ public class DateTimeUtil {
 
                 return date;
             } catch (DateTimeParseException e) {
+                hasInvalidDate = hasInvalidDate || isInvalidDateParseException(e);
                 // Continue to next format
             }
+        }
+
+        if (hasInvalidDate) {
+            throw new IllegalArgumentException(MESSAGE_INVALID_DATE);
         }
 
         throw new IllegalArgumentException(MESSAGE_INVALID_DATE_TIME_FORMAT);
@@ -417,6 +443,33 @@ public class DateTimeUtil {
 
         // Default to 2359hrs if no time specified
         return LocalTime.of(23, 59);
+    }
+
+    private static String detectInvalidDateMessage(String dateTimeStr) {
+        String[] parts = dateTimeStr.trim().split("\\s+");
+
+        for (int tokenCount = 1; tokenCount <= Math.min(parts.length, 3); tokenCount++) {
+            String candidateDate = String.join(" ", java.util.Arrays.copyOfRange(parts, 0, tokenCount));
+            try {
+                parseDate(candidateDate);
+                return null;
+            } catch (IllegalArgumentException exception) {
+                String message = exception.getMessage();
+                if (MESSAGE_INVALID_DATE.equals(message)) {
+                    return MESSAGE_INVALID_DATE;
+                }
+                if (MESSAGE_DATE_TIME_PAST.equals(message)) {
+                    return null;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static boolean isInvalidDateParseException(DateTimeParseException exception) {
+        String message = exception.getMessage();
+        return message != null && (message.contains("Invalid date") || message.contains("Invalid value for"));
     }
 
     /**
