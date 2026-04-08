@@ -312,31 +312,9 @@ The control flow of these parsing branches is also split into two smaller diagra
 
 ### Favourites feature
 
-The favourites feature allows users to mark important contacts as favourites and filter the contact list to show only favourite persons. This feature consists of three main commands:
-
-1. `mark INDEX` - Mark a person as favourite
-2. `unmark INDEX` - Remove a person from favourites
-3. `favourites` - Display only favourite persons
+The `favourites` command allows users to filter the contact list to display only persons marked as favourites.
 
 #### Implementation
-
-The favourites functionality is implemented through the `isFavourite` field in the `Person` class. This boolean field tracks whether a contact has been marked as a favourite.
-
-##### Mark/Unmark Commands
-
-When a user executes `mark INDEX` or `unmark INDEX`, the system:
-
-* Parses the command to extract the target index
-* Retrieves the person at that index from the currently displayed list
-* Creates a new `Person` object with the `isFavourite` field toggled
-* Updates the model through `Model#setPerson(personToEdit, updatedPerson)`
-
-The following activity diagram shows how the mark command processes user input:
-
-[`MarkAsFavouriteActivityDiagram.puml`](diagrams/MarkAsFavouriteActivityDiagram.puml)\
-<img src="images/MarkAsFavouriteActivityDiagram.png"/>
-
-##### Favourites Command
 
 The `favourites` command filters the contact list to display only persons marked as favourites. Unlike `mark` and `unmark`, this command requires no parser as it takes no arguments.
 
