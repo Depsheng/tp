@@ -310,6 +310,47 @@ The control flow of these parsing branches is also split into two smaller diagra
 * explicit-format parsing: [`ExplicitMeetingDateParsingActivityDiagram.puml`](diagrams/ExplicitMeetingDateParsingActivityDiagram.puml)\
 <img src="images/ExplicitMeetingDateParsingActivityDiagram.png"/>
 
+### Favourites feature
+
+The `favourites` command allows users to filter the contact list to display only persons marked as favourites.
+
+#### Implementation
+
+The `favourites` command filters the contact list to display only persons marked as favourites. Unlike `mark` and `unmark`, this command requires no parser as it takes no arguments.
+
+When a user executes `favourites`, the system:
+
+* Creates a `FavouritesCommand` directly from `AddressBookParser`
+* Executes the command, which updates the filtered person list using a predicate: `person -> person.getIsFavourite()`
+* Returns a `CommandResult` with the success message
+
+The class structure of the `FavouritesCommand` is shown below:
+
+[`FavouritesCommandClassDiagram.puml`](diagrams/FavouritesCommandClassDiagram.puml)\
+<img src="images/FavouritesCommandClassDiagram.png"/>
+
+The sequence diagram below illustrates the interactions within the `Logic` and `Model` components when executing the `favourites` command:
+
+[`FavouritesCommandSequenceDiagram.puml`](diagrams/FavouritesCommandSequenceDiagram.puml)\
+<img src="images/FavouritesCommandSequenceDiagram.png"/>
+
+The activity diagram below shows the overall flow of the `favourites` command:
+
+[`FavouritesCommandActivityDiagram.puml`](diagrams/FavouritesCommandActivityDiagram.puml)\
+<img src="images/FavouritesCommandActivityDiagram.png"/>
+
+#### Design considerations:
+
+**Aspect: How favourites are stored:**
+
+* **Alternative 1 (current choice):** Store as a boolean field in the `Person` class.
+  * Pros: Simple to implement and easy to serialize/deserialize with JSON.
+  * Cons: Adds an extra field to every person object even if favourites are rarely used.
+
+* **Alternative 2:** Maintain a separate list of favourite person identifiers.
+  * Pros: More memory-efficient if only a few persons are marked as favourites.
+  * Cons: More complex implementation requiring synchronization between the person list and favourites list.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
