@@ -66,7 +66,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveFileName = 'CLIentTracker-1.4.0.jar'
+    archiveFileName = 'CLIentTracker-1.5.0.jar'
 }
 
 run {
