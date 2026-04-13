@@ -120,7 +120,8 @@ Format: `add n/NAME p/PHONE_NUMBER [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAG]…�
 Parameters:
 * `p/` : Phone number of the new contact (*Unique identifier*)
 * `n/` : Name of the new contact (*Must be 1-50 characters*)
-* `e/` : Email of the new contact [optional] (*Must be 2-254 characters, or empty to represent no email*)
+* `e/` : Email of the new contact [optional]
+  - Must follow the [Email rules](#email-rules)
 * `a/` : Address of the new contact [optional] (*Must be 1-255 characters, or empty to represent no address*)
 * `d/` : Details of the new contact [optional] (*Must be under 512 characters, or empty to represent no details*)
 * `t/` : Tags of the new contact [optional] (*Valid tags: "Renter", "Landlord", "Buyer", "Seller"*)
@@ -134,10 +135,10 @@ Behavior:
 * Name must be 1-50 characters and contain only alphanumeric characters and spaces.
 * Details will default to empty if parameter not used.
 * Details must not be over 512 characters and cannot be empty.
-* Email will default to empty if parameter not used.
-* Email must be 2-254 characters if provided, or empty to represent no email.
 * Address will default to empty if parameter not used.
 * Address must be 1-255 characters if provided, or empty to represent no address.
+
+
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
@@ -158,7 +159,8 @@ Parameters:
 * `INDEX` : The index of the person to edit. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * `p/` : Phone number of the new contact (*Unique identifier*)
 * `n/` : Name of the new contact (*Must be 1-50 characters*)
-* `e/` : Email of the new contact [optional] (*Must be 2-254 characters, or empty to represent no email*)
+* `e/` : Email of the contact [optional]
+  - Must follow the [Email rules](#email-rules)
 * `a/` : Address of the new contact [optional] (*Must be 1-255 characters, or empty to represent no address*)
 * `d/` : Details of the new contact [optional] (*Must be under 512 characters, or empty to represent no details*)
 * `t/` : Tags of the new contact [optional] (*Valid tags: "Renter", "Landlord", "Buyer", "Seller"*)
@@ -456,6 +458,29 @@ If your changes to the data file makes its format invalid, CLIentTracker will di
 Furthermore, certain edits can cause CLIentTracker to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
+---
+
+### Email {: #email-rules }
+
+Emails must follow the format `local-part@domain`.
+
+#### Format rules
+- The local-part:
+  - May contain alphanumeric characters and `+ - . _`
+  - Parentheses (`(` and `)`) are not allowed
+  - Must not start or end with a special character
+- The `@` symbol separates the local-part and the domain
+
+#### Domain rules
+- The domain consists of labels separated by periods (`.`)
+- Each label:
+  - Is at least 2 characters long
+  - Starts and ends with an alphanumeric character
+  - May contain hyphens (`-`) in between
+
+#### Length and optionality
+- Email length must be between **1 and 254 characters**
+- If the email parameter is omitted or left empty (`e/`), the contact will have **no email**
 
 ---
 
