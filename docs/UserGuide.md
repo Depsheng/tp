@@ -479,25 +479,25 @@ Furthermore, certain edits can cause CLIentTracker to behave in unexpected ways 
 
 ---
 
-### Email {: #email-rules }
+## Email Rules {: #email-rules }
 
 Emails must follow the format `local-part@domain`.
 
-#### Format rules
+### Format rules
 - The local-part:
   - May contain alphanumeric characters and `+ - . _`
   - Parentheses (`(` and `)`) are not allowed
   - Must not start or end with a special character
 - The `@` symbol separates the local-part and the domain
 
-#### Domain rules
+### Domain rules
 - The domain consists of labels separated by periods (`.`)
 - Each label:
   - Is at least 2 characters long
   - Starts and ends with an alphanumeric character
   - May contain hyphens (`-`) in between
 
-#### Length and optionality
+### Length and optionality
 - Email length must be between **1 and 254 characters**
 - If the email parameter is omitted or left empty (`e/`), the contact will have **no email**
 
