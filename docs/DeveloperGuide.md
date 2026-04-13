@@ -870,3 +870,5 @@ Team size: 5
 
 1. Currently, modifying commands do not handle search filters consistently. Commands such as mark, unmark, and meeting preserve the active filter, while edit and undo reset the view to show the full contact list. This may cause unexpected changes to the displayed list when users are working within a filtered view. A future improvement is to standardise filter handling so all modifying commands behave consistently.
 
+1. When multiple inputs in an add command are invalid, only the first validation error is reported. This requires users to fix errors one at a time instead of seeing all issues at once. A potential improvement is to support reporting multiple validation errors together.
+
