@@ -8,7 +8,7 @@ import static java.util.Objects.requireNonNull;
  */
 public class Tag {
 
-    public static final String MESSAGE_CONSTRAINTS = "Tag must be of Renter, Landlord, buyer or seller only";
+    public static final String MESSAGE_CONSTRAINTS = "Invalid tag. Valid tags are: Renter, Landlord, Buyer, Seller.";
     public static final String VALIDATION_REGEX = "\\p{Alnum}+";
 
     public final ClientTag tagName;
