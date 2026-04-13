@@ -103,9 +103,9 @@ Action | Description                                                       | For
 **Mark** | [Adds contact into favourites](#favourites-mark-and-unmark)       | `mark INDEX` <br> e.g., `mark 1`
 **Unmark** | [Removes contact from favourites](#favourites-mark-and-unmark)    | `unmark INDEX` <br> e.g., `unmark 1`
 **Meeting** | [Adds or clears a meeting for a contact](#adding-a-meeting-meeting) | `meeting INDEX DATE_TIME` or `meeting INDEX clear` <br> e.g., `meeting 1 mon 2pm`
-**Undo** | [Undo previous changes](#Undo-previous-changes-undo)              | `undo`
+**Undo** | [Undo previous changes](#undo-previous-changes-undo)               | `undo`
 **List** | [Lists all persons](#listing-all-persons-list)                    | `list`
-**Favourites** | [View favourites](#Viewing-favourites-favourites)                 | `favourites`
+**Favourites** | [View favourites](#viewing-favourites-favourites)                 | `favourites`
 **Help** | [Shows help message](#viewing-help-help)                          | `help`
 **Exit** | [Exits the app](#exiting-the-program-exit)                        | `exit`
 
@@ -390,7 +390,6 @@ Examples:
 ---
 
 ### Undo previous changes: `undo`
-{: #undo }
 
 Reverts the most recent change made to CLIentTracker contacts.
 
