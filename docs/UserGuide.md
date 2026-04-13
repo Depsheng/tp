@@ -88,25 +88,26 @@ Want to start fresh? Use `clear` and confirm with `y` to remove the sample conta
     * e.g. if the command specifies `help 123`, it will be interpreted as `help`.
   * `clear` does not accept trailing arguments.<br>
     * e.g. `clear` and `clear   ` are accepted, but `clear 123` is invalid.
+  * `TAG` is not case-sensitive. Valid tags: ("Renter", "Landlord", "Buyer", "Seller").
 
   * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
-Action | Description                                                         | Format, Examples
---------|---------------------------------------------------------------------|------------------
-**Add** | [Adds a new person](#adding-a-person-add)                           | `add n/NAME p/PHONE_NUMBER [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 d/Looking to buy in north t/BUYER`
-**Edit** | [Edits an existing person](#editing-a-person-edit)                  | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com d/Updated work details`
-**Find** | [Finds persons by name or phone](#locating-persons-find)            | `find KEYWORD [MORE_KEYWORDS]` for name search<br> `find p/PHONE_NUMBER` for phone search<br> e.g., `find James Jake` or `find p/98765432`
-**Delete** | [Deletes a person](#deleting-a-person--delete)                      | `delete PHONE`<br> e.g., `delete 91234567`
-**Clear** | [Clears all entries](#clearing-all-entries--clear)                  | `clear`
-**Mark** | [Adds contact into favourites](#favourites-mark-and-unmark)         | `mark INDEX` <br> e.g., `mark 1`
-**Unmark** | [Removes contact from favourites](#favourites-mark-and-unmark)      | `unmark INDEX` <br> e.g., `unmark 1`
+Action | Description                                                       | Format, Examples
+--------|-------------------------------------------------------------------|------------------
+**Add** | [Adds a new person](#adding-a-person-add)                         | `add n/NAME p/PHONE_NUMBER [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 d/Looking to buy in north t/BUYER`
+**Edit** | [Edits an existing person](#editing-a-person-edit)                | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com d/Updated work details`
+**Find** | [Finds persons by name or phone](#locating-persons-find)          | `find KEYWORD [MORE_KEYWORDS]` for name search<br> `find p/PHONE_NUMBER` for phone search<br> e.g., `find James Jake` or `find p/98765432`
+**Delete** | [Deletes a person](#deleting-a-person--delete)                    | `delete PHONE`<br> e.g., `delete 91234567`
+**Clear** | [Clears all entries](#clearing-all-entries--clear)                | `clear`
+**Mark** | [Adds contact into favourites](#favourites-mark-and-unmark)       | `mark INDEX` <br> e.g., `mark 1`
+**Unmark** | [Removes contact from favourites](#favourites-mark-and-unmark)    | `unmark INDEX` <br> e.g., `unmark 1`
 **Meeting** | [Adds or clears a meeting for a contact](#adding-a-meeting-meeting) | `meeting INDEX DATE_TIME` or `meeting INDEX clear` <br> e.g., `meeting 1 mon 2pm`
-**Undo** | [Undo previous changes](#undo)                                      | `undo`
-**List** | [Lists all persons](#listing-all-persons-list)                      | `list`
-**Favourites** | [View favourites](#Viewing-favourites-favourites)                   | `favourites`
-**Help** | [Shows help message](#viewing-help-help)                            | `help`
-**Exit** | [Exits the app](#exiting-the-program-exit)                          | `exit`
+**Undo** | [Undo previous changes](#Undo-previous-changes-undo)              | `undo`
+**List** | [Lists all persons](#listing-all-persons-list)                    | `list`
+**Favourites** | [View favourites](#Viewing-favourites-favourites)                 | `favourites`
+**Help** | [Shows help message](#viewing-help-help)                          | `help`
+**Exit** | [Exits the app](#exiting-the-program-exit)                        | `exit`
 
 
 ---
@@ -396,6 +397,8 @@ Format: `undo`
 * Restores the contact list to its previous state before the last modifying command
 * If there are no previous changes to undo in the current session, an error message is shown
 * `undo` works with or without trailing arguments. Any trailing arguments are ignored.
+### ⚠️ Important Notes
+  * Undo will reset any active filters applied on the list.
 
 ---
 
