@@ -862,10 +862,11 @@ testers are expected to do more *exploratory* testing.
 
 Team size: 5
 
-1. Allow contact deletion by displayed index: The current `delete` command only deletes a contact by full phone number, e.g. `delete 91234567`. We plan to also allow deletion by the displayed list index, e.g. `delete 1`, so users can delete a contact directly after using commands such as `list`, `find`, or `favourites` without copying the phone number.
-
 1. Allow multiple meetings per contact: The current `meeting` command stores only one meeting per contact, so adding a new meeting replaces the existing meeting. We plan to allow each contact to store multiple meetings, e.g. `meeting 1 15 Mar 2030 4pm` followed by `meeting 1 20 Mar 2030 2pm` would keep both meetings for the first displayed contact instead of replacing the first one.
 
 1. Allow phone numbers from other countries: The current phone number validation only accepts local Singapore phone numbers. We plan to allow phone numbers with country codes, e.g. `+60 123456789` or `+1 2125551234`, so users can store contacts from other countries without removing the country code.
 
 1. Notify users when past meetings are removed: The current meeting cleanup removes past meetings when the app opens, but users are not explicitly notified when this happens. We plan to display a startup notification such as `1 past meeting(s) removed.` when past meetings are removed from loaded contact data.
+
+1. Currently, modifying commands do not handle search filters consistently. Commands such as mark, unmark, and meeting preserve the active filter, while edit and undo reset the view to show the full contact list. This may cause unexpected changes to the displayed list when users are working within a filtered view. A future improvement is to standardise filter handling so all modifying commands behave consistently.
+
