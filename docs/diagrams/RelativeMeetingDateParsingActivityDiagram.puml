@@ -7,32 +7,23 @@ skinparam ArrowFontSize 12
 start
 :Input date/time string;
 
-if () then ([String starts with "today"?])
+if () then ([Relative date?])
+    :Resolve base date;
+    note right
+    today -> current date
+    tomorrow -> current date + 1
+    weekday -> next matching weekday
+    end note
+
     if () then ([Has time component?])
-        :Parse as 0 days + time;
-        :Validate not in past;
+        :Parse provided time;
     else ([else])
-        :Parse as 0 days + 23:59;
+        :Use default time 23:59;
     endif
+
+    :Validate not in past;
 else ([else])
-    if () then ([String starts with "tomorrow"?])
-        if () then ([Has time component?])
-            :Parse as 1 day + time;
-            :Validate not in past;
-        else ([else])
-            :Parse as 1 day + 23:59;
-        endif
-    else ([else])
-        if () then ([String is weekday?])
-            if () then ([Has time component?])
-                :Parse as days to next weekday + time;
-            else ([else])
-                :Parse as days to next weekday (23:59);
-            endif
-        else ([else])
-            :Pass input to explicit date/time parsing;
-        endif
-    endif
+    :Pass input to explicit date/time parsing;
 endif
 
 :Return DateTimeParseResult;
