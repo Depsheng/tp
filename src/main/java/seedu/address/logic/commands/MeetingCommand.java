@@ -30,6 +30,7 @@ public class MeetingCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1 25/03/2030 14:30\n"
             + "Example: " + COMMAND_WORD + " 1 " + CLEAR_KEYWORD + "\n"
             + DateTimeUtil.MESSAGE_INVALID_DATE_TIME_FORMAT;
+    public static final String MESSAGE_NO_MEETINGS = "There are currently no scheduled meetings for %1$s";
 
     private final Index index;
     private final Meeting meeting;
@@ -87,6 +88,10 @@ public class MeetingCommand extends Command {
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
+        if (isClearMeeting && !personToEdit.hasMeeting()) {
+            return new CommandResult(String.format(MESSAGE_NO_MEETINGS, personToEdit.getName()));
+        }
+
         Person updatedPerson = new Person(
                 personToEdit.getName(),
                 personToEdit.getPhone(),

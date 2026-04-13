@@ -1,5 +1,6 @@
 package seedu.address.ui;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
@@ -24,12 +25,21 @@ public class UiManager implements Ui {
 
     private Logic logic;
     private MainWindow mainWindow;
+    private Optional<String> startupNotification;
 
     /**
      * Creates a {@code UiManager} with the given {@code Logic}.
      */
     public UiManager(Logic logic) {
+        this(logic, Optional.empty());
+    }
+
+    /**
+     * Creates a {@code UiManager} with the given startup notification.
+     */
+    public UiManager(Logic logic, Optional<String> startupNotification) {
         this.logic = logic;
+        this.startupNotification = startupNotification;
     }
 
     @Override
@@ -40,7 +50,7 @@ public class UiManager implements Ui {
         primaryStage.getIcons().add(getImage(ICON_APPLICATION));
 
         try {
-            mainWindow = new MainWindow(primaryStage, logic);
+            mainWindow = new MainWindow(primaryStage, logic, startupNotification);
             mainWindow.show(); //This should be called before creating other UI parts
             mainWindow.fillInnerParts();
 
