@@ -84,8 +84,12 @@ public class PersonCard extends UiPart<Region> {
             photo.setVisible(true);
         }
 
-        person.getTags().stream()
-                .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName.name())));
+        if (person.getTags().isEmpty()) {
+            tags.getChildren().add(new Label("No tags"));
+        } else {
+            person.getTags().stream()
+                    .sorted(Comparator.comparing(tag -> tag.tagName))
+                    .forEach(tag -> tags.getChildren().add(new Label(tag.tagName.name())));
+        }
     }
 }

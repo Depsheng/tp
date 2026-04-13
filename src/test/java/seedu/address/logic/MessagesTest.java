@@ -25,7 +25,7 @@ public class MessagesTest {
 
         String formatted = Messages.format(person);
         assertEquals("Amy Bee; Phone: 85355255; Email: amy@gmail.com; Address: 123, Jurong West Ave 6, #08-111"
-                + "; Details: No details; Tags: ", formatted);
+                + "; Details: No details; Tags: No tags", formatted);
         assertFalse(formatted.contains("; Meeting: "));
     }
 
@@ -43,7 +43,7 @@ public class MessagesTest {
 
         String formatted = Messages.format(person);
         assertEquals("Amy Bee; Phone: 85355255; Email: amy@gmail.com; Address: 123, Jurong West Ave 6, #08-111"
-                + "; Details: No details; Tags: ; Meeting: 23 Mar 2030 2:30 pm", formatted);
+                + "; Details: No details; Tags: No tags; Meeting: 23 Mar 2030 2:30 pm", formatted);
         assertTrue(formatted.contains("; Meeting: 23 Mar 2030 2:30 pm"));
     }
 }

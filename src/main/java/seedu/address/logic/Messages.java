@@ -45,7 +45,8 @@ public class Messages {
                 .append(person.getAddress().value.isEmpty() ? "No address" : person.getAddress())
                 .append("; Details: ")
                 .append(person.getDetails().value.isEmpty() ? "No details" : person.getDetails())
-                .append("; Tags: ");
+                .append("; Tags: ")
+                .append(person.getTags().isEmpty() ? "No tags" : "");
         person.getTags().forEach(builder::append);
         if (person.hasMeeting()) {
             builder.append("; Meeting: ")
