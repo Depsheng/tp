@@ -119,6 +119,7 @@ Format: `add n/NAME p/PHONE_NUMBER [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAG]…�
 
 Parameters:
 * `p/` : Phone number of the new contact (*Unique identifier; must contain only digits and be 8-15 digits long*)
+  * **Note:** For international numbers with country codes, omit the plus (+) and any spaces. For example, use `6512345678` instead of `+65 1234 5678`.
 * `n/` : Name of the new contact (*Must be 1-50 characters*)
 * `e/` : Email of the new contact [optional] (*Must be 2-254 characters, or empty to represent no email*)
 * `a/` : Address of the new contact [optional] (*Must be 1-255 characters, or empty to represent no address*)
@@ -158,6 +159,7 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [d/DETAILS] [t/TAG]
 Parameters:
 * `INDEX` : The index of the person to edit. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * `p/` : Phone number of the new contact (*Unique identifier; must contain only digits and be 8-15 digits long*)
+  * **Note:** For international numbers with country codes, omit the plus (+) and any spaces. For example, use `6512345678` instead of `+65 1234 5678`.
 * `n/` : Name of the new contact (*Must be 1-50 characters*)
 * `e/` : Email of the new contact [optional] (*Must be 2-254 characters, or empty to represent no email*)
 * `a/` : Address of the new contact [optional] (*Must be 1-255 characters, or empty to represent no address*)
