@@ -18,7 +18,8 @@ public class ClearCommand extends Command {
             + "Example: " + COMMAND_WORD;
     public static final String MESSAGE_SUCCESS = "Address book has been cleared!";
     public static final String MESSAGE_CONFIRMATION_PROMPT = "Are you sure you want to clear your contact book? (y/n)";
-    public static final String MESSAGE_CONFIRMATION_REQUIRED = "Please enter 'y' to confirm or 'n' to cancel.";
+    public static final String MESSAGE_CONFIRMATION_REQUIRED =
+            "All commands are locked until confirmation is done. Please enter 'y' to confirm or 'n' to cancel.";
     public static final String MESSAGE_CLEAR_CANCELLED = "Clear cancelled.";
 
     private static ClearCommand pendingClearCommand;

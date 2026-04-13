@@ -867,3 +867,5 @@ Team size: 5
 1. Allow multiple meetings per contact: The current `meeting` command stores only one meeting per contact, so adding a new meeting replaces the existing meeting. We plan to allow each contact to store multiple meetings, e.g. `meeting 1 15 Mar 2030 4pm` followed by `meeting 1 20 Mar 2030 2pm` would keep both meetings for the first displayed contact instead of replacing the first one.
 
 1. Allow phone numbers from other countries: The current phone number validation only accepts local Singapore phone numbers. We plan to allow phone numbers with country codes, e.g. `+60 123456789` or `+1 2125551234`, so users can store contacts from other countries without removing the country code.
+
+1. Notify users when past meetings are removed: The current meeting cleanup removes past meetings when the app opens, but users are not explicitly notified when this happens. We plan to display a startup notification such as `1 past meeting(s) removed.` when past meetings are removed from saved contact data.
