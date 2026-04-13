@@ -22,7 +22,6 @@ public class JsonAddressBookStorage implements AddressBookStorage {
     private static final Logger logger = LogsCenter.getLogger(JsonAddressBookStorage.class);
 
     private Path filePath;
-    private int removedPastMeetingCount;
 
     public JsonAddressBookStorage(Path filePath) {
         this.filePath = filePath;
@@ -49,22 +48,15 @@ public class JsonAddressBookStorage implements AddressBookStorage {
         Optional<JsonSerializableAddressBook> jsonAddressBook = JsonUtil.readJsonFile(
                 filePath, JsonSerializableAddressBook.class);
         if (!jsonAddressBook.isPresent()) {
-            removedPastMeetingCount = 0;
             return Optional.empty();
         }
 
         try {
-            ReadOnlyAddressBook addressBook = jsonAddressBook.get().toModelType();
-            removedPastMeetingCount = jsonAddressBook.get().getRemovedPastMeetingCount();
-            return Optional.of(addressBook);
+            return Optional.of(jsonAddressBook.get().toModelType());
         } catch (IllegalValueException ive) {
             logger.info("Illegal values found in " + filePath + ": " + ive.getMessage());
             throw new DataLoadingException(ive);
         }
-    }
-
-    public int getRemovedPastMeetingCount() {
-        return removedPastMeetingCount;
     }
 
     @Override

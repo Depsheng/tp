@@ -516,11 +516,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-* 2a. The given index is invalid.
+  * 2a. The given index is invalid.
 
-  * 2a1. CLIentTracker shows an error message.
+    * 2a1. CLIentTracker shows an error message.
 
-    Use case resumes at step 1.
+      Use case resumes at step 1.
 
 * 3a. The user provides invalid detail(s).
 

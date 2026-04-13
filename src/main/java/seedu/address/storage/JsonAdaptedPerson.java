@@ -36,7 +36,6 @@ class JsonAdaptedPerson {
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final boolean isFavourite;
     private final String meeting;
-    private boolean removedPastMeeting;
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -144,14 +143,11 @@ class JsonAdaptedPerson {
 
         Meeting modelMeeting = null;
         if (meeting != null) {
-            LocalDateTime parsedMeeting = null;
             try {
-                parsedMeeting = LocalDateTime.parse(meeting);
-                modelMeeting = new Meeting(parsedMeeting);
+                modelMeeting = new Meeting(LocalDateTime.parse(meeting));
             } catch (DateTimeParseException exception) {
                 throw new IllegalValueException("Meeting date/time must be stored in ISO-8601 format.");
             } catch (IllegalArgumentException exception) {
-                removedPastMeeting = parsedMeeting.isBefore(LocalDateTime.now());
                 modelMeeting = null;
             }
         }
@@ -160,7 +156,4 @@ class JsonAdaptedPerson {
                 modelTags, modelIsFavourite, modelMeeting);
     }
 
-    public boolean hasRemovedPastMeeting() {
-        return removedPastMeeting;
-    }
 }

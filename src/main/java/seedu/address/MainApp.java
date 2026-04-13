@@ -22,6 +22,7 @@ import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
+import seedu.address.storage.AddressBookStorage;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.Storage;
@@ -44,7 +45,6 @@ public class MainApp extends Application {
     protected Storage storage;
     protected Model model;
     protected Config config;
-    private String startupNotification;
 
     @Override
     public void init() throws Exception {
@@ -57,28 +57,14 @@ public class MainApp extends Application {
 
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
-        JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(userPrefs.getAddressBookFilePath());
+        AddressBookStorage addressBookStorage = new JsonAddressBookStorage(userPrefs.getAddressBookFilePath());
         storage = new StorageManager(addressBookStorage, userPrefsStorage);
 
         model = initModelManager(storage, userPrefs);
 
         logic = new LogicManager(model, storage);
 
-        setPastMeetingNotification(addressBookStorage);
-        ui = new UiManager(logic, Optional.ofNullable(startupNotification));
-    }
-
-    private void setPastMeetingNotification(JsonAddressBookStorage addressBookStorage) {
-        int count = addressBookStorage.getRemovedPastMeetingCount();
-        if (count == 0) {
-            return;
-        }
-        startupNotification = count + " past meeting(s) removed.";
-        try {
-            storage.saveAddressBook(model.getAddressBook());
-        } catch (IOException e) {
-            logger.warning("Failed to save address book after removing past meetings: " + StringUtil.getDetails(e));
-        }
+        ui = new UiManager(logic);
     }
 
     /**

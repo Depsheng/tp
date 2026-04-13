@@ -2,7 +2,6 @@ package seedu.address.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.storage.JsonAdaptedPerson.MISSING_FIELD_MESSAGE_FORMAT;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.BENSON;
@@ -180,7 +179,6 @@ public class JsonAdaptedPersonTest {
                 NOT_FAVOURITE, "2020-01-01T10:00");
         Person modelPerson = person.toModelType();
         assertFalse(modelPerson.hasMeeting());
-        assertTrue(person.hasRemovedPastMeeting());
     }
 
 
