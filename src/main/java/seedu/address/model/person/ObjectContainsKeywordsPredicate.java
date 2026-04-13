@@ -11,7 +11,7 @@ import seedu.address.commons.util.ToStringBuilder;
  * contains any of the given keywords.
  *
  * <p>Subclasses are required to implement {@link #getFieldValue(Object)}
- * to specify which field(s) of the object should be evaluated.
+ * to specify which field of the object should be evaluated.
  *
  * @param <T> The type of object to be tested.
  */
@@ -22,30 +22,30 @@ public abstract class ObjectContainsKeywordsPredicate<T> implements Predicate<T>
      * Constructs an {@code ObjectContainsKeywordsPredicate} with the specified keywords.
      *
      * <p>The keywords are used to perform case-insensitive substring matching
-     * against the target field value(s).
+     * against the target field value.
      *
-     * @param keywords A list of keywords to match against the object's field(s).
+     * @param keywords A list of keywords to match against the object's field.
      */
     public ObjectContainsKeywordsPredicate(List<String> keywords) {
         this.keywords = keywords;
     }
 
     /**
-     * Returns the string value(s) of the field from the given object to be tested.
+     * Returns the string value of the field from the given object to be tested.
      *
-     * <p>This method must be implemented by subclasses to define which field(s)
+     * <p>This method must be implemented by subclasses to define which field
      * of the object are used for keyword matching.
      *
-     * @param object The object whose field value(s) are to be retrieved.
-     * @return The string value(s) of the relevant field(s).
+     * @param object The object whose field value are to be retrieved.
+     * @return The string value of the relevant field.
      */
     protected abstract List<String> getFieldValue(T object);
 
     /**
      * Evaluates whether the specified object contains any of the keywords
-     * in its target field(s).
+     * in its target field.
      *
-     * <p>The comparison is case-insensitive and checks if any keyword is a
+     * <p>The comparison is case-insensitive and checks if the keyword is a
      * substring of any field value.
      *
      * @param object The object to test.
