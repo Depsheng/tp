@@ -46,8 +46,12 @@ public class Messages {
                 .append("; Details: ")
                 .append(person.getDetails().value.isEmpty() ? "No details" : person.getDetails())
                 .append("; Tags: ")
-                .append(person.getTags().isEmpty() ? "No tags" : "");
-        person.getTags().forEach(builder::append);
+                .append(person.getTags().isEmpty()
+                        ? "No tags"
+                        : person.getTags().stream()
+                                .map(Object::toString)
+                                .sorted()
+                                .collect(Collectors.joining(", ")));
         if (person.hasMeeting()) {
             builder.append("; Meeting: ")
                     .append(person.getMeeting().orElseThrow().getFormattedDateTime());
