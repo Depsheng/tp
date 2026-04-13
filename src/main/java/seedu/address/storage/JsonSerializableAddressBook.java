@@ -22,6 +22,7 @@ class JsonSerializableAddressBook {
     public static final String MESSAGE_DUPLICATE_PERSON = "Persons list contains duplicate person(s).";
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
+    private int removedPastMeetingCount;
 
     /**
      * Constructs a {@code JsonSerializableAddressBook} with the given persons.
@@ -47,14 +48,20 @@ class JsonSerializableAddressBook {
      */
     public AddressBook toModelType() throws IllegalValueException {
         AddressBook addressBook = new AddressBook();
+        removedPastMeetingCount = 0;
         for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
             Person person = jsonAdaptedPerson.toModelType();
             if (addressBook.hasPerson(person)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
             }
+            removedPastMeetingCount += jsonAdaptedPerson.hasRemovedPastMeeting() ? 1 : 0;
             addressBook.addPerson(person);
         }
         return addressBook;
+    }
+
+    public int getRemovedPastMeetingCount() {
+        return removedPastMeetingCount;
     }
 
 }

@@ -9,6 +9,7 @@ import static seedu.address.testutil.TypicalPersons.IDA;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -84,6 +85,25 @@ public class JsonAddressBookStorageTest {
         readBack = jsonAddressBookStorage.readAddressBook().get(); // file path not specified
         assertEquals(original, new AddressBook(readBack));
 
+    }
+
+    @Test
+    public void readAddressBook_pastMeeting_countRemovedMeeting() throws Exception {
+        Path filePath = testFolder.resolve("PastMeetingAddressBook.json");
+        Files.writeString(filePath, "{ \"persons\" : [ {"
+                + "\"name\" : \"Alice Pauline\","
+                + "\"phone\" : \"94351253\","
+                + "\"email\" : \"alice@example.com\","
+                + "\"address\" : \"123, Jurong West Ave 6, #08-111\","
+                + "\"tags\" : [ \"Renter\" ],"
+                + "\"meeting\" : \"2020-01-01T10:00\""
+                + "} ] }");
+        JsonAddressBookStorage jsonAddressBookStorage = new JsonAddressBookStorage(filePath);
+
+        ReadOnlyAddressBook readBack = jsonAddressBookStorage.readAddressBook().get();
+
+        assertEquals(1, jsonAddressBookStorage.getRemovedPastMeetingCount());
+        assertFalse(readBack.getPersonList().get(0).hasMeeting());
     }
 
     @Test

@@ -1,5 +1,6 @@
 package seedu.address.ui;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
@@ -29,6 +30,7 @@ public class MainWindow extends UiPart<Stage> {
 
     private Stage primaryStage;
     private Logic logic;
+    private Optional<String> startupNotification;
 
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
@@ -54,11 +56,19 @@ public class MainWindow extends UiPart<Stage> {
      * Creates a {@code MainWindow} with the given {@code Stage} and {@code Logic}.
      */
     public MainWindow(Stage primaryStage, Logic logic) {
+        this(primaryStage, logic, Optional.empty());
+    }
+
+    /**
+     * Creates a {@code MainWindow} with the given startup notification.
+     */
+    public MainWindow(Stage primaryStage, Logic logic, Optional<String> startupNotification) {
         super(FXML, primaryStage);
 
         // Set dependencies
         this.primaryStage = primaryStage;
         this.logic = logic;
+        this.startupNotification = startupNotification;
 
         // Configure the UI
         setWindowDefaultSize(logic.getGuiSettings());
@@ -114,6 +124,7 @@ public class MainWindow extends UiPart<Stage> {
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
+        startupNotification.ifPresent(resultDisplay::setFeedbackToUser);
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
         StatusBarFooter statusBarFooter = new StatusBarFooter(logic.getAddressBookFilePath());

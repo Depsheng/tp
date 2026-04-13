@@ -106,6 +106,25 @@ public class MeetingCommandTest {
     }
 
     @Test
+    public void execute_clearNoMeeting_returnsNoMeetingMessage() throws Exception {
+        Model actualModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        int zeroBasedIndex = 0;
+        while (expectedModel.getFilteredPersonList().get(zeroBasedIndex).hasMeeting()) {
+            zeroBasedIndex++;
+        }
+        Index index = Index.fromZeroBased(zeroBasedIndex);
+
+        Person personToEdit = expectedModel.getFilteredPersonList().get(index.getZeroBased());
+        MeetingCommand command = MeetingCommand.clear(index);
+        CommandResult commandResult = command.execute(actualModel);
+
+        assertEquals(String.format(MeetingCommand.MESSAGE_NO_MEETINGS, personToEdit.getName()),
+                commandResult.getFeedbackToUser());
+        assertEquals(expectedModel, actualModel);
+    }
+
+    @Test
     public void execute_nullModel_throwsNullPointerException() {
         Meeting meeting = new Meeting(LocalDateTime.of(2030, 3, 25, 14, 30));
         MeetingCommand meetingCommand = new MeetingCommand(Index.fromOneBased(1), meeting);
@@ -118,6 +137,12 @@ public class MeetingCommandTest {
         assertThrows(NullPointerException.class, () -> new MeetingCommand(null, meeting));
         assertThrows(NullPointerException.class, () -> new MeetingCommand(Index.fromOneBased(1), null));
         assertThrows(NullPointerException.class, () -> MeetingCommand.clear(null));
+    }
+
+    @Test
+    public void modifiesAddressBook_returnsTrue() {
+        Meeting meeting = new Meeting(LocalDateTime.of(2030, 3, 25, 14, 30));
+        assertTrue(new MeetingCommand(Index.fromOneBased(1), meeting).modifiesAddressBook());
     }
 
     @Test
