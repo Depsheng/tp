@@ -34,7 +34,7 @@ public class MarkAsFavouriteCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1";
 
     /** Success message when a person is successfully marked as favourite. */
-    public static final String MESSAGE_MARK_PERSON_SUCCESS = "Add to favourites, Person: %1$s ";
+    public static final String MESSAGE_MARK_PERSON_SUCCESS = "Added to favourites, Person: %1$s ";
 
     /** Error message when the person is already marked as favourite. */
     public static final String MESSAGE_MARK_PERSON_DUPLICATE = "Person already in favourites: %1$s";
