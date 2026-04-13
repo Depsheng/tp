@@ -200,13 +200,11 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
     }
 
-
     private void validateKeyword(String cleaned) throws ParseException {
         if (!cleaned.matches(".*[a-zA-Z0-9].*")) {
             throw new ParseException("Keywords must contain at least one letter or number.");
         }
     }
-
 
     private void validateTagKeyword(String key, String cleaned) throws ParseException {
         if (Objects.equals(key, "t/") && !ALLOWED_TAGS.contains(cleaned.toLowerCase())) {
