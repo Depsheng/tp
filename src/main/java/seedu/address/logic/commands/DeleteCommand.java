@@ -25,7 +25,8 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_PHONE_NOT_FOUND = "No person found with this specific phone number: %1$s";
     public static final String MESSAGE_CONFIRMATION_PROMPT = "Are you sure you want to delete this contact? %1$s (y/n)";
-    public static final String MESSAGE_CONFIRMATION_REQUIRED = "Please enter 'y' to confirm or 'n' to cancel.";
+    public static final String MESSAGE_CONFIRMATION_REQUIRED =
+            "All commands are locked until confirmation is done. Please enter 'y' to confirm or 'n' to cancel.";
     public static final String MESSAGE_DELETION_CANCELLED = "Deletion cancelled.";
 
     private static DeleteCommand pendingDeleteCommand;

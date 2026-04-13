@@ -91,6 +91,11 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void modifiesAddressBook_returnsTrue() {
+        assertTrue(new DeleteCommand(ALICE.getPhone()).modifiesAddressBook());
+    }
+
+    @Test
     public void equals() {
         DeleteCommand deleteAliceCommand = new DeleteCommand(ALICE.getPhone());
         DeleteCommand deleteBensonCommand = new DeleteCommand(BENSON.getPhone());
