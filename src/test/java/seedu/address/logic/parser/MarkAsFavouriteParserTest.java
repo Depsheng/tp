@@ -1,6 +1,6 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
@@ -22,14 +22,22 @@ public class MarkAsFavouriteParserTest {
     @Test
     public void parse_invalidArgument_throwsParseException() {
         assertParseFailure(parser, "abc",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                        MarkAsFavouriteCommand.MESSAGE_USAGE));
+                MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
     public void parse_nullArgument_throwsParseException() {
         assertParseFailure(parser, "",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                        MarkAsFavouriteCommand.MESSAGE_USAGE));
+                MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void parse_nonPositiveInteger_throwsParseException() {
+        assertParseFailure(parser, "-1", MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void parse_nonInteger_throwsParseException() {
+        assertParseFailure(parser, "1.5", MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 }
