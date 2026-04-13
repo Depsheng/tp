@@ -55,8 +55,8 @@ still having a clean desktop interface.
 
    * `list` to list all contacts
    * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` to add a contact
-   * `delete 3` to delete the 3rd displayed contact
-   * `clear` to delete all contacts
+   * `delete 87438807` to delete the contact with the phone number `87438807` (`y` to confirm deletion)
+   * `clear` to delete all contacts (`y` to confirm clear)
    * `find n/John` to search for contacts by name
    * `exit` to close the application
 
@@ -84,8 +84,10 @@ Want to start fresh? Use `clear` and confirm with `y` to remove the sample conta
   * Parameters can be in any order.<br>
     *  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
-  * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
+  * Extraneous parameters for `help`, `list`, `exit`, `favourites`, and `undo` will be ignored.<br>
     * e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+  * `clear` does not accept trailing arguments.<br>
+    * e.g. `clear` and `clear   ` are accepted, but `clear 123` is invalid.
 
   * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
@@ -351,7 +353,7 @@ Format: `delete PHONE`
 * Deletes the person with `PHONE`.
   * The PHONE refers to the index number shown in the displayed person list.
   * The PHONE **must match fully** ​
-  * Confirm with y/n after delete command was entered
+  * Confirm with `y`/`n` after the delete command is entered. Confirmation input is case-insensitive, so `y`, `Y`, `n`, and `N` are accepted.
 
 Examples:
 * `delete 91234567` deletes the person with said phone number in CLIentTracker.
@@ -362,7 +364,8 @@ Examples:
 ### Clearing all entries : `clear`
 
 Deletes all entries from CLIentTracker, including favourites. 
-* Confirm with y/n after clear command was entered
+* Confirm with `y`/`n` after the clear command is entered. Confirmation input is case-insensitive, so `y`, `Y`, `n`, and `N` are accepted.
+* `clear` only works without trailing arguments. `clear` and `clear   ` are accepted, but `clear 123` is invalid.
 
 Format: `clear`
 
@@ -392,6 +395,7 @@ Format: `undo`
 
 * Restores the contact list to its previous state before the last modifying command
 * If there are no previous changes to undo in the current session, an error message is shown
+* `undo` works with or without trailing arguments. Any trailing arguments are ignored.
 
 ---
 
@@ -400,6 +404,8 @@ Format: `undo`
 Shows a list of all persons in CLIentTracker.
 
 Format: `list`
+
+* `list` works with or without trailing arguments. Any trailing arguments are ignored.
 
 ---
 
@@ -410,6 +416,8 @@ Displays a list containing only contacts marked as favourites. Favourite contact
 ![favourites message](images/favourites.png)
 
 Format: `favourites`
+
+* `favourites` works with or without trailing arguments. Any trailing arguments are ignored.
 
 ---
 
@@ -422,6 +430,8 @@ The user can open their preferred browser and paste the provided URL to access i
 
 Format: `help`
 
+* `help` works with or without trailing arguments. Any trailing arguments are ignored.
+
 ---
 
 ### Exiting the program: `exit`
@@ -429,6 +439,8 @@ Format: `help`
 Exits the program.
 
 Format: `exit`
+
+* `exit` works with or without trailing arguments. Any trailing arguments are ignored.
 
 ---
 

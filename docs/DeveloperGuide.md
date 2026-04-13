@@ -105,7 +105,7 @@ How the `Logic` component works:
 
 1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
 1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is handled by the `LogicManager`.
-1. For commands that require confirmation, such as `delete` and `clear`, `LogicManager` first returns a confirmation prompt and waits for the user to enter `y` or `n`.
+1. For commands that require confirmation, such as `delete` and `clear`, `LogicManager` first returns a confirmation prompt and waits for the user to enter `y` or `n`. Confirmation input is case-insensitive, so `y`, `Y`, `n`, and `N` are accepted.
 1. Once confirmed, the command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
@@ -454,7 +454,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1.  User requests to delete a specific person by phone number.
 2.  CLIentTracker asks for confirmation.
-3.  User confirms the deletion.
+3.  User confirms the deletion using `y` or `Y`.
 4.  CLIentTracker deletes the person.
 
     Use case ends.
@@ -467,7 +467,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-* 2a. The user cancels the deletion.
+* 2a. The user cancels the deletion using `n` or `N`.
 
   * 2a1. CLIentTracker shows a cancellation message.
 
@@ -534,7 +534,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. User requests to clear all contacts.
 2. CLIentTracker asks for confirmation.
-3. User confirms the clear command.
+3. User confirms the clear command using `y` or `Y`.
 4. CLIentTracker clears all contacts.
 5. CLIentTracker shows a confirmation message.
 
@@ -542,7 +542,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. The user cancels the clear command.
+* 2a. The user cancels the clear command using `n` or `N`.
 
   * 2a1. CLIentTracker shows a cancellation message.
 
@@ -740,10 +740,10 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: Ensure a contact with phone number `81234567` exists. If not, add one using
       `add n/Delete Me p/81234567`.
 
-   1. Test case: `delete 81234567`, followed by `y`<br>
+   1. Test case: `delete 81234567`, followed by `y` or `Y`<br>
       Expected: The contact is deleted. A success message is shown and the person disappears from the displayed list.
 
-   1. Test case: `delete 81234567`, followed by `n`<br>
+   1. Test case: `delete 81234567`, followed by `n` or `N`<br>
       Expected: The deletion is cancelled. The contact list remains unchanged.
 
    1. Test case: `delete 00000000`<br>
@@ -758,10 +758,10 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: The list contains at least one person.
 
-   1. Test case: `clear`, followed by `n`<br>
+   1. Test case: `clear`, followed by `n` or `N`<br>
       Expected: The clear operation is cancelled. The contact list remains unchanged.
 
-   1. Test case: `clear`, followed by `y`<br>
+   1. Test case: `clear`, followed by `y` or `Y`<br>
       Expected: All contacts are removed from the list. A success message is shown.
 
 ### Marking and unmarking favourites
@@ -855,3 +855,15 @@ testers are expected to do more *exploratory* testing.
       Expected: The application starts with an empty address book and creates a fresh valid data file.
 
    1. Restore the backup copy after testing.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Planned Enhancements**
+
+Team size: 5
+
+1. Allow contact deletion by displayed index: The current `delete` command only deletes a contact by full phone number, e.g. `delete 91234567`. We plan to also allow deletion by the displayed list index, e.g. `delete 1`, so users can delete a contact directly after using commands such as `list`, `find`, or `favourites` without copying the phone number.
+
+1. Allow multiple meetings per contact: The current `meeting` command stores only one meeting per contact, so adding a new meeting replaces the existing meeting. We plan to allow each contact to store multiple meetings, e.g. `meeting 1 15 Mar 2030 4pm` followed by `meeting 1 20 Mar 2030 2pm` would keep both meetings for the first displayed contact instead of replacing the first one.
+
+1. Allow phone numbers from other countries: The current phone number validation only accepts local Singapore phone numbers. We plan to allow phone numbers with country codes, e.g. `+60 123456789` or `+1 2125551234`, so users can store contacts from other countries without removing the country code.
