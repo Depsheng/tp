@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
@@ -28,9 +29,8 @@ public class FavouritesCommandTest {
     }
 
     @Test
-    public void execute_noFavourites_showsEmptyList() {
-        expectedModel.updateFilteredPersonList(person -> person.getIsFavourite());
-        assertCommandSuccess(new FavouritesCommand(), model, FavouritesCommand.MESSAGE_SUCCESS, expectedModel);
+    public void execute_noFavourites_throwsCommandException() {
+        assertCommandFailure(new FavouritesCommand(), model, FavouritesCommand.MESSAGE_NO_FAVOURITES);
     }
 
     @Test
