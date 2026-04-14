@@ -90,15 +90,14 @@ public class DeleteCommand extends Command {
             throw new IllegalStateException("No pending delete command to confirm.");
         }
 
-        String confirmation = commandText.trim();
-        if (confirmation.equalsIgnoreCase("y")) {
+        if (commandText.equalsIgnoreCase("y")) {
             DeleteCommand commandToExecute = pendingDeleteCommand;
             pendingDeleteCommand = null;
             pendingDeleteCommandText = null;
             return commandToExecute.execute(model);
         }
 
-        if (confirmation.equalsIgnoreCase("n")) {
+        if (commandText.equalsIgnoreCase("n")) {
             pendingDeleteCommand = null;
             pendingDeleteCommandText = null;
             return new CommandResult(MESSAGE_DELETION_CANCELLED);

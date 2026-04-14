@@ -66,4 +66,15 @@ public class ClearCommandTest {
         assertTrue(ClearCommand.hasPendingConfirmation());
     }
 
+    @Test
+    public void confirmationCommand_confirmationWithWhitespace_returnsConfirmationRequired() throws CommandException {
+        ClearCommand clearCommand = new ClearCommand();
+        clearCommand.requestConfirmation(model, "clear");
+
+        CommandResult result = ClearCommand.confirmationCommand(model, " y ");
+
+        assertEquals(ClearCommand.MESSAGE_CONFIRMATION_REQUIRED, result.getFeedbackToUser());
+        assertTrue(ClearCommand.hasPendingConfirmation());
+    }
+
 }

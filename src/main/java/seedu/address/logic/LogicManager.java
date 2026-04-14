@@ -54,7 +54,7 @@ public class LogicManager implements Logic {
         if (DeleteCommand.hasPendingConfirmation()) {
             AddressBook previousState = null;
             String executedCommandText = null;
-            if (commandText.trim().equalsIgnoreCase("y")) {
+            if (commandText.equalsIgnoreCase("y")) {
                 previousState = new AddressBook(model.getAddressBook());
                 executedCommandText = DeleteCommand.getPendingCommandText();
             }
@@ -69,7 +69,7 @@ public class LogicManager implements Logic {
         if (ClearCommand.hasPendingConfirmation()) {
             AddressBook previousState = null;
             String executedCommandText = null;
-            if (commandText.trim().equalsIgnoreCase("y")) {
+            if (commandText.equalsIgnoreCase("y")) {
                 previousState = new AddressBook(model.getAddressBook());
                 executedCommandText = ClearCommand.getPendingCommandText();
             }

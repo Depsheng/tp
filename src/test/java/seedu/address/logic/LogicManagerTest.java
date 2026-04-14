@@ -201,7 +201,7 @@ public class LogicManagerTest {
     @Test
     public void execute_deleteCommand_withConfirmation() throws Exception {
         String deleteCommand = "delete 12345678";
-        String confirmCommand = " y ";
+        String confirmCommand = "y";
 
         Person personToDelete = new PersonBuilder(AMY).withTags().withDetails("")
                 .withPhone("12345678").build();
@@ -258,7 +258,7 @@ public class LogicManagerTest {
     @Test
     public void execute_clearCommand_withConfirmation() throws Exception {
         String clearCommand = ClearCommand.COMMAND_WORD;
-        String confirmCommand = " y ";
+        String confirmCommand = "y";
 
         Person person = new PersonBuilder(AMY).withTags().withDetails("").build();
         model.addPerson(person);

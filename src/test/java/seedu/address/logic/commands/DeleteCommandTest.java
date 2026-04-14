@@ -75,6 +75,17 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void confirmationCommand_confirmationWithWhitespace_returnsConfirmationRequired() throws CommandException {
+        DeleteCommand deleteCommand = new DeleteCommand(ALICE.getPhone());
+        deleteCommand.requestConfirmation(model, "delete " + ALICE.getPhone());
+
+        CommandResult result = DeleteCommand.confirmationCommand(model, " y ");
+
+        assertEquals(DeleteCommand.MESSAGE_CONFIRMATION_REQUIRED, result.getFeedbackToUser());
+        assertTrue(DeleteCommand.hasPendingConfirmation());
+    }
+
+    @Test
     public void isValidTarget_nullModel_throwsNullPointerException() {
         DeleteCommand deleteCommand = new DeleteCommand(ALICE.getPhone());
 
